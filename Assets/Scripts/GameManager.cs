@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -140,11 +141,17 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Failed save data");
         }
 
-        // 비활성화 (하나만 선택 가능)
+        // 선택된 캐릭터의 ID를 세션에 저장
+        GameSession.SelectedCharacterId = selectedCharacter.characterId;
+
+        // 비활성화 (셋 중 하나만 선택 가능)
         foreach (var button in characterSelectButtons)
         {
             button.interactable = false;
         }
+
+        // 게임 Scene 진입
+        SceneManager.LoadScene("GameScene");
     }
 
     // 배경 제거 (특정 색 범위 투명화 alpha=0) (파일 따로?)
