@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // 조준 방향 표시 오브젝트
-    [SerializeField] private Transform directionIndicator;
+    // 공격
+    [Header("Attack")]
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private Transform directionIndicator; // 조준 방향
+    [SerializeField] private Transform firePoint;          // 발사 지점
 
-    // 움직임 관련 변수
+    // 움직임
+    [Header("Movement")]
     [SerializeField]  public float speed = 5f; // 테스트용 (캐릭터 스탯으로 업데이트)
 
     private Rigidbody2D rb;
@@ -30,6 +34,12 @@ public class PlayerController : MonoBehaviour
             lastAimDirection = movement.normalized;
             UpdateDirectionIndicator();
         }
+
+        // 기본 공격 발사 (Space)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Fire();
+        }
     }
 
     // 방향 표시
@@ -37,7 +47,13 @@ public class PlayerController : MonoBehaviour
     {
         // 방향 벡터 -> 각도
         float angle = Mathf.Atan2(lastAimDirection.y, lastAimDirection.x) * Mathf.Rad2Deg;
-        directionIndicator.rotation = Quaternion.Euler(0f, 0f, angle + 90f); // 아래가 기준
+        directionIndicator.rotation = Quaternion.Euler(0f, 0f, angle + 90f); // 캐릭터는 아래를 보고 있는 것이 기본값
+    }
+
+    // 발사
+    private void Fire()
+    {
+        Instantiate(projectile, firePoint.position, directionIndicator.rotation);
     }
 
     // 물리처리
