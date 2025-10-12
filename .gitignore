@@ -97,3 +97,7 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Import from Asset store
+/[Aa]ssets/Rectangle World Tiles - Free/
+/[Aa]ssets/Rectangle World Tiles - Free.meta
