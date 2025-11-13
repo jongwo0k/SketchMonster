@@ -1,40 +1,23 @@
 using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
+
 {
-    // 덮어씌울 캐릭터 템플릿
     [Header("Player Template")]
     [SerializeField] private GameObject playerTemplate;
 
-    void Start()
+    public void SpawnPlayer()
     {
-        // 캐릭터 ID 불러오기
+        Vector3 spawnPoint = new Vector3(0, -5, 0); // 중앙 오브젝트 아래
         string characterIdToLoad = GameSession.SelectedCharacterId;
-
-        if (string.IsNullOrEmpty(characterIdToLoad))
-        {
-            Debug.LogError("Character Load failed - Check ID");
-            return;
-        }
-
-        // 캐릭터 데이터 불러오기
         var (data, sprite) = DataManager.LoadCharacter(characterIdToLoad);
 
-        if (data == null || sprite == null)
-        {
-            Debug.LogError($"Character Load failed - Check Data: {characterIdToLoad}");
-            return;
-        }
-
-        // 프리팹 생성
-        GameObject playerInstance = Instantiate(playerTemplate, Vector3.zero, Quaternion.identity);
+        // 캐릭터 생성
+        GameObject playerInstance = Instantiate(playerTemplate, spawnPoint, Quaternion.identity);
 
         // 능력치 적용
         PlayerController playerController = playerInstance.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.Initialize(data, sprite);
-            Debug.Log($"'{data.className}' Character Load Succeed");
-        }
+
+        playerController.Initialize(data, sprite);
     }
 }

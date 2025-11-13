@@ -101,3 +101,5 @@ InitTestScene*.unity*
 # Import from Asset store
 /[Aa]ssets/Rectangle World Tiles - Free/
 /[Aa]ssets/Rectangle World Tiles - Free.meta
+/[Aa]ssets/TileAssets/
+/[Aa]ssets/TileAssets.meta
