@@ -37,4 +37,12 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
+
+    public void ClearMap()
+    {
+        if (tilemap != null)
+        {
+            tilemap.ClearAllTiles();
+        }
+    }
 }
