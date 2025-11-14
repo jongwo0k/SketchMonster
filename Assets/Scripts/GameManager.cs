@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour
     // 캐릭터 생성 (시작)
     public void StartCharacterCreation(Texture2D sketchTexture, int strokeCount, int remainSeconds)
     {
+        GameSession.OriginalSketch = sketchTexture; // 원본 스케치 저장
+
         Debug.Log($"Sketch submission complete - Stroke Count: {strokeCount}, Remain Time: {remainSeconds} sec");
         StartCoroutine(CharacterCreationRoutine(sketchTexture, strokeCount, remainSeconds)); // 게임이 멈추는 것 방지
     }

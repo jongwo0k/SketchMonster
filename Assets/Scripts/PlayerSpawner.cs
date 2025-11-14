@@ -8,7 +8,7 @@ public class PlayerSpawner : MonoBehaviour
 
     public void SpawnPlayer()
     {
-        Vector3 spawnPoint = new Vector3(0, -5, 0); // 중앙 오브젝트 아래
+        Vector3 spawnPoint = new Vector3(0, -6, 0); // 중앙 오브젝트 아래
         string characterIdToLoad = GameSession.SelectedCharacterId;
         var (data, sprite) = DataManager.LoadCharacter(characterIdToLoad);
 
