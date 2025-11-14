@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float attack = 10f;
     [SerializeField] public float speed = 5f;
     [SerializeField] public int level = 1;
+
+    // UI
+    [Header("UI")]
+    [SerializeField] private Slider HP_Bar;
+    [SerializeField] private Slider XP_Bar;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;

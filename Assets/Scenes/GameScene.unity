@@ -479,6 +479,7 @@ GameObject:
   - component: {fileID: 145647246}
   - component: {fileID: 145647245}
   - component: {fileID: 145647244}
+  - component: {fileID: 145647248}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -561,11 +562,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 25104521}
   - {fileID: 1289210741}
   - {fileID: 502905246}
-  - {fileID: 2004459179}
+  - {fileID: 25104521}
   - {fileID: 518595805}
+  - {fileID: 2004459179}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -573,6 +574,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &145647248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145647243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822c8fc161788174b919015d68615c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageSlider: {fileID: 518595806}
+  stageText: {fileID: 2004459180}
+  gameOver: {fileID: 1289210740}
+  levelUp: {fileID: 502905245}
+  nextStage: {fileID: 25104520}
 --- !u!1 &287591663
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +810,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 354905455}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 145647248}
+        m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
+        m_MethodName: LevelUP_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &354905455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24864,7 +24894,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 491406247}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 145647248}
+        m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
+        m_MethodName: LevelUP_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &491406247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26051,7 +26093,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1450118464}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 145647248}
+        m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
+        m_MethodName: Next_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1450118464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26446,7 +26500,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1678204273}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 145647248}
+        m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
+        m_MethodName: Retry_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1678204273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26567,7 +26633,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1773334595}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 145647248}
+        m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
+        m_MethodName: LevelUP_Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1773334595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27214,6 +27292,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 2039359521}
   playerSpawner: {fileID: 2039359520}
+  remainTime: 0
+  stageDuration: 60
+  stageLevel: 1
 --- !u!4 &2039359523
 Transform:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private TileBase floorTile;
     // 배열로 수정해서 스테이지마다 다른 타일 랜덤 생성
 
+    [ContextMenu("EDITOR: Generate Map")]
     public void GenerateMap()
     {
         int minX = -width / 2;
@@ -38,6 +39,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    [ContextMenu("EDITOR: Destroy Map")]
     public void ClearMap()
     {
         if (tilemap != null)
