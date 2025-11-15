@@ -8,7 +8,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     // 중앙 관리 지점, 모든 스크립트에서 접근 가능
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     // AI 모델 관리
     [Header("Managers")]
@@ -145,6 +145,16 @@ public class GameManager : MonoBehaviour
 
         // 선택된 캐릭터의 ID를 세션에 저장
         GameSession.SelectedCharacterId = selectedCharacter.characterId;
+
+        // 선택되지 않은 캐릭터는 적으로 등장
+        GameSession.EnemyTextures = new List<Texture2D>();
+        for (int i = 0; i < characterResultImages.Count; i++)
+        {
+            if (i != index)
+            {
+                GameSession.EnemyTextures.Add(characterResultImages[i].texture as Texture2D);
+            }
+        }
 
         // 비활성화 (셋 중 하나만 선택 가능)
         foreach (var button in characterSelectButtons)

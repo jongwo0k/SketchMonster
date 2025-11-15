@@ -7,7 +7,7 @@ public class MapController : MonoBehaviour
 
     [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private PlayerSpawner playerSpawner;
-    // [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private EnemySpawner enemySpawner;
 
     [SerializeField] private CameraController mainCamera;
 
@@ -76,17 +76,35 @@ public class MapController : MonoBehaviour
     private void StartNewStage()
     {
         mapGenerator.ClearMap();
+        ClearRemainObjects();
         mapGenerator.GenerateMap();
 
         remainTime = stageDuration;
 
         UI_Manager.Instance.UpdateStagePanel(stageLevel);
         UI_Manager.Instance.UpdateStageSlider(0f);
+        enemySpawner.StartSpawnEnemy(stageLevel);
     }
 
     public void StartNextStage()
     {
         stageLevel++;
         StartNewStage();
+    }
+
+    // 이전 스테이지에 남은 enemy, projectile 제거
+    private void ClearRemainObjects()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectile");
+        foreach (GameObject proj in projectiles)
+        {
+            Destroy(proj);
+        }
     }
 }
