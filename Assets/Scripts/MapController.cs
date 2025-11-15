@@ -9,6 +9,8 @@ public class MapController : MonoBehaviour
     [SerializeField] private PlayerSpawner playerSpawner;
     // [SerializeField] private EnemySpawner enemySpawner;
 
+    [SerializeField] private CameraController mainCamera;
+
     // Stage 包府
     [Header("Stage")]
     public float remainTime;
@@ -30,9 +32,22 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
-        // Map, Player 鉴辑肺 积己
-        mapGenerator.GenerateMap();
-        playerSpawner.SpawnPlayer();
+        // Player 积己
+        GameObject playerObject = playerSpawner.SpawnPlayer();
+
+        // 积己等 Player俊 墨皋扼 楷搬
+        mainCamera.target = playerObject.transform;
+
+        float cameraHeight = Camera.main.orthographicSize;
+        float cameraWidth = cameraHeight * Camera.main.aspect;
+
+        RectInt mapBounds = mapGenerator.MapBounds;
+        float minX = mapBounds.xMin + cameraWidth;
+        float maxX = mapBounds.xMax - cameraWidth;
+        float minY = mapBounds.yMin + cameraHeight;
+        float maxY = mapBounds.yMax - cameraHeight;
+
+        mainCamera.MapRange(minX, maxX, minY, maxY);
 
         StartNewStage();
     }
@@ -60,6 +75,9 @@ public class MapController : MonoBehaviour
 
     private void StartNewStage()
     {
+        mapGenerator.ClearMap();
+        mapGenerator.GenerateMap();
+
         remainTime = stageDuration;
 
         UI_Manager.Instance.UpdateStagePanel(stageLevel);

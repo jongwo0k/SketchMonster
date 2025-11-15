@@ -6,7 +6,7 @@ public class PlayerSpawner : MonoBehaviour
     [Header("Player Template")]
     [SerializeField] private GameObject playerTemplate;
 
-    public void SpawnPlayer()
+    public GameObject SpawnPlayer()
     {
         Vector3 spawnPoint = new Vector3(0, -6, 0); // 중앙 오브젝트 아래
         string characterIdToLoad = GameSession.SelectedCharacterId;
@@ -19,5 +19,7 @@ public class PlayerSpawner : MonoBehaviour
         PlayerController playerController = playerInstance.GetComponent<PlayerController>();
 
         playerController.Initialize(data, sprite);
+
+        return playerInstance;
     }
 }
