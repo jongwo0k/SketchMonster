@@ -1,16 +1,42 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainTower : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer sketchField;
+    public static MainTower Instance { get; private set; }
 
-    // Tower 체력
-    public float maxHealth = 100f;
-    public float currentHealth;
+    [SerializeField] private SpriteRenderer sketchField;
+    [SerializeField] private GameObject projectileObject;
+
+    bool isUpgrade = false;
+
+    // Tower 능력치
+    public float maxHP = 100f;
+    public float HP;
+    public float attack = 10f;
+    public float attackCoolTime = 3f;
+    public float fireTimer;
+    public int towerLevel = 1;
+
+    // UI
+    [SerializeField] private Slider HP_Bar;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     void Start()
     {
-        currentHealth = maxHealth;
+        HP = maxHP;
 
         // 텍스쳐 불러오기
         Texture2D sketchTexture = GameSession.OriginalSketch;
@@ -36,12 +62,80 @@ public class MainTower : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (!isUpgrade || Time.timeScale == 0f)
+        {
+            return;
+        }
+
+        fireTimer -= Time.deltaTime;
+        if (fireTimer <= 0f)
+        {
+            Fire();
+            fireTimer = attackCoolTime;
+        }
+    }
+
+    // 피격
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
+        HP -= damage;
+
+        HP_Bar.value = HP / maxHP;
+        if (HP_Bar.gameObject.activeSelf == false)
+        {
+            HP_Bar.gameObject.SetActive(true);
+        }
+
+        if (HP <= 0)
         {
             UI_Manager.Instance.GameIsOver();
         }
+    }
+
+    // 레벨업 선택지
+    public void TowerLevelUP()
+    {
+        isUpgrade = true;
+
+        fireTimer = 0f;
+        attackCoolTime = Mathf.Max(0.5f, attackCoolTime * 0.9f);
+        maxHP += towerLevel * 15f;
+        attack += towerLevel * 1.1f;
+        towerLevel++;
+
+        HP_Bar.value = HP / maxHP;
+    }
+
+    // 사방으로 Projectile 발사
+    public void Fire()
+    {
+        Quaternion rotationUp = Quaternion.Euler(0, 0, 90f + 90f);
+        Quaternion rotationDown = Quaternion.Euler(0, 0, -90f + 90f);
+        Quaternion rotationRight = Quaternion.Euler(0, 0, 0f + 90f);
+        Quaternion rotationLeft = Quaternion.Euler(0, 0, 180f + 90f);
+
+        SpawnProjectile(rotationUp);
+        SpawnProjectile(rotationDown);
+        SpawnProjectile(rotationRight);
+        SpawnProjectile(rotationLeft);
+    }
+
+    // Projectile 생성
+    private void SpawnProjectile(Quaternion rotation)
+    {
+        GameObject projInstance = Instantiate(projectileObject, transform.position, rotation);
+        Projectile projectileScript = projInstance.GetComponent<Projectile>();
+        if (projectileScript != null)
+        {
+            projectileScript.SetDamage(this.attack);
+        }
+    }
+
+    public void RecoverHP()
+    {
+        HP = maxHP;
+        HP_Bar.value = HP / maxHP;
     }
 }

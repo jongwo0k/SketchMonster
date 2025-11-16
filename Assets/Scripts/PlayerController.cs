@@ -13,10 +13,13 @@ public class PlayerController : MonoBehaviour
 
     // 움직임
     [Header("Movement")]
-    [SerializeField] public float hp = 100f; // 테스트용 (캐릭터 스탯으로 업데이트)
+    [SerializeField] public float HP = 100f; // 테스트용 (캐릭터 스탯으로 업데이트)
+    [SerializeField] public float XP = 1f;
     [SerializeField] public float attack = 10f;
     [SerializeField] public float speed = 5f;
     [SerializeField] public int level = 1;
+    private float maxHP;
+    private float maxXP = 100f;
 
     // UI
     [Header("UI")]
@@ -76,8 +79,26 @@ public class PlayerController : MonoBehaviour
         // 기본 공격 발사 (Space)
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(projectile, firePoint.position, directionIndicator.rotation);
+            Fire();
         }
+    }
+
+    // 물리처리
+    void FixedUpdate()
+    {
+        rb.linearVelocity = movement.normalized * speed; // 대각선 보정
+    }
+
+    // 충돌
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("ExperienceOrb")) // 경험치 구슬
+        {
+            float xpValue = collision.GetComponent<ExpOrb>().expValue;
+            GetXP(xpValue);
+            Destroy(collision.gameObject);
+        }
+        
     }
 
     // 방향 표시
@@ -88,22 +109,77 @@ public class PlayerController : MonoBehaviour
         directionIndicator.rotation = Quaternion.Euler(0f, 0f, angle + 90f); // 캐릭터는 아래를 보고 있는 것이 기본값
     }
 
-    // 물리처리
-    void FixedUpdate()
-    {
-        rb.linearVelocity = movement.normalized * speed; // 대각선 보정
-    }
-
     // templete을 선택된 캐릭터로 교체
     public void Initialize(CharacterData data, Sprite characterSprite)
     {
         // 능력치 적용
-        hp = data.hp;
+        HP = data.hp;
+        maxHP = data.hp;
         attack = data.attack;
         speed = data.speed;
         level = data.level;
 
         // 이미지 적용
         sr.sprite = characterSprite;
+
+        // UI 초기화
+        HP_Bar.value = HP / maxHP;
+        XP_Bar.value = XP / maxXP;
+    }
+
+    // 피격
+    public void TakeDamage(float damage)
+    {
+        HP -= damage;
+
+        HP_Bar.value = HP / maxHP;
+        if (HP_Bar.gameObject.activeSelf == false)
+        {
+            HP_Bar.gameObject.SetActive(true);
+        }
+
+        if (HP <= 0)
+        {
+            UI_Manager.Instance.GameIsOver();
+            gameObject.SetActive(false);
+        }
+    }
+
+    // Projectile 발사
+    public void Fire()
+    {
+        GameObject projectileObject = Instantiate(projectile, firePoint.position, directionIndicator.rotation);
+        Projectile projectileScript = projectileObject.GetComponent<Projectile>();
+        projectileScript.SetDamage(this.attack);
+    }
+
+    // 경험치 획득
+    public void GetXP(float xp)
+    {
+        XP += xp;
+        XP_Bar.value = XP / maxXP;
+        if (XP >= maxXP)
+        {
+            level++;
+            XP -= maxXP; // 남은 경험치 반영
+            maxXP *= 1.1f; // 필요 경험치 증가
+
+            UI_Manager.Instance.LevelUP();
+        }
+    }
+
+    // 레벨업 선택지
+    public void PlayerLevelUP()
+    {
+        maxHP += level * 10f;
+        attack += level * 1.1f;
+
+        HP_Bar.value = HP / maxHP;
+    }
+
+    public void RecoverHP()
+    {
+        HP = maxHP;
+        HP_Bar.value = HP / maxHP;
     }
 }

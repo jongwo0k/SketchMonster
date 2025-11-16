@@ -17,6 +17,7 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject levelUp;
     [SerializeField] private GameObject nextStage;
+    [SerializeField] private TextMeshProUGUI gameOverText;
 
     private void Awake()
     {
@@ -40,20 +41,22 @@ public class UI_Manager : MonoBehaviour
     public void GameIsOver()
     {
         gameOver.SetActive(true);
-        Time.timeScale = 0f;
+        int finalStage = MapController.Instance.stageLevel;
+        gameOverText.text = "Stage: " + finalStage;
+        Time.timeScale = 0.0001f;
     }
 
     // NextStage
     public void StageIsClear()
     {
         nextStage.SetActive(true);
-        Time.timeScale = 0f;
+        Time.timeScale = 0.0001f;
     }
 
     public void Next_Button()
     {
-        nextStage.SetActive(false);
         Time.timeScale = 1f;
+        nextStage.SetActive(false);
         MapController.Instance.StartNextStage();
     }
 
@@ -61,13 +64,29 @@ public class UI_Manager : MonoBehaviour
     public void LevelUP()
     {
         levelUp.SetActive(true);
-        Time.timeScale = 0f;
+        Time.timeScale = 0.0001f;
     }
 
-    public void LevelUP_Button()
+    public void Player_LevelUP_Button()
     {
-        levelUp.SetActive(false);
+        PlayerController.Instance.PlayerLevelUP();
         Time.timeScale = 1f;
+        levelUp.SetActive(false);
+    }
+
+    public void Tower_LevelUP_Button()
+    {
+        MainTower.Instance.TowerLevelUP();
+        Time.timeScale = 1f;
+        levelUp.SetActive(false);
+    }
+
+    public void Recover_HP_Button()
+    {
+        PlayerController.Instance.RecoverHP();
+        MainTower.Instance.RecoverHP();
+        Time.timeScale = 1f;
+        levelUp.SetActive(false);
     }
 
     // Update UI Panels
@@ -84,7 +103,8 @@ public class UI_Manager : MonoBehaviour
     // ¿ÁΩ√¿€
     public void Retry_Button()
     {
-        SceneManager.LoadScene("Menu");
         Time.timeScale = 1f;
+        gameOver.SetActive(false);
+        SceneManager.LoadScene("Menu");
     }
 }

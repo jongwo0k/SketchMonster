@@ -38,17 +38,6 @@ public class MapController : MonoBehaviour
         // 생성된 Player에 카메라 연결
         mainCamera.target = playerObject.transform;
 
-        float cameraHeight = Camera.main.orthographicSize;
-        float cameraWidth = cameraHeight * Camera.main.aspect;
-
-        RectInt mapBounds = mapGenerator.MapBounds;
-        float minX = mapBounds.xMin + cameraWidth;
-        float maxX = mapBounds.xMax - cameraWidth;
-        float minY = mapBounds.yMin + cameraHeight;
-        float maxY = mapBounds.yMax - cameraHeight;
-
-        mainCamera.MapRange(minX, maxX, minY, maxY);
-
         StartNewStage();
     }
 
@@ -73,11 +62,28 @@ public class MapController : MonoBehaviour
         }
     }
 
+    // 카메라 경계 설정
+    private void SetCameraBoundary()
+    {
+        float cameraHeight = Camera.main.orthographicSize;
+        float cameraWidth = cameraHeight * Camera.main.aspect;
+
+        RectInt mapBounds = mapGenerator.MapBounds;
+        float minX = mapBounds.xMin + cameraWidth;
+        float maxX = mapBounds.xMax - cameraWidth;
+        float minY = mapBounds.yMin + cameraHeight;
+        float maxY = mapBounds.yMax - cameraHeight;
+
+        mainCamera.MapRange(minX, maxX, minY, maxY);
+    }
+
     private void StartNewStage()
     {
         mapGenerator.ClearMap();
         ClearRemainObjects();
         mapGenerator.GenerateMap();
+
+        SetCameraBoundary();
 
         remainTime = stageDuration;
 
@@ -105,6 +111,12 @@ public class MapController : MonoBehaviour
         foreach (GameObject proj in projectiles)
         {
             Destroy(proj);
+        }
+
+        GameObject[] orbs = GameObject.FindGameObjectsWithTag("ExperienceOrb");
+        foreach (GameObject orb in orbs)
+        {
+            Destroy(orb);
         }
     }
 }

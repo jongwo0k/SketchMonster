@@ -59,11 +59,12 @@ public class EnemySpawner : MonoBehaviour
 
         // Stage에 따라 능력치 상승
         int currentStage = MapController.Instance.stageLevel;
-        float hp = 50f + (currentStage * 15f);
+        float HP = 50f + (currentStage * 15f);
+        float attack = 5f + (currentStage * 1.1f);
         float speed = 5f + (currentStage * 0.1f);
 
         // 외형, 능력치 부여
-        enemyScript.Initialize(enemySprite, hp, speed);
+        enemyScript.Initialize(enemySprite, HP, attack, speed);
 
     }
 

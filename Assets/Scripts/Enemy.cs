@@ -4,11 +4,13 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     bool isDead = false;
+    bool isDefeat = false;
 
     // 능력치
     [Header("Ability")]
     private float HP = 100f; // 테스트용 (Stage마다 변경)
     private float maxHP;
+    private float attack = 10f;
     private float speed = 5f;
 
     // Prefabs
@@ -50,16 +52,38 @@ public class Enemy : MonoBehaviour
 
         // 목표를 향해 이동
         Transform currentTarget = FindClosestTarget();
+        if (currentTarget == null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         Vector2 direction = (currentTarget.position - transform.position).normalized;
         rb.linearVelocity = direction * speed;
     }
 
+    // 충돌 처리
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("MainTower")) 
+        {
+            collision.GetComponent<MainTower>().TakeDamage(attack);
+            Die();
+        }
+        else if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.GetComponent<PlayerController>().TakeDamage(attack);
+            Die();
+        }
+    }
+
     // 초기화, EnemySpawner가 실행
-    public void Initialize(Sprite enemySprite, float hp, float enemySpeed)
+    public void Initialize(Sprite enemySprite, float hp, float enemyAttack, float enemySpeed)
     {
         sr.sprite = enemySprite;
         maxHP = hp;
         HP = hp;
+        attack = enemyAttack;
         speed = enemySpeed;
 
         HP_Bar.value = 1;
@@ -68,9 +92,13 @@ public class Enemy : MonoBehaviour
     // MainTower / Player 중 가까운 대상 찾기
     private Transform FindClosestTarget()
     {
+        // 파괴 될경우?
+
+        // 거리 계산
         float distToTower = Vector2.Distance(transform.position, targetTower.position);
         float distToPlayer = Vector2.Distance(transform.position, targetPlayer.position);
 
+        // 가까운 쪽 타겟팅
         if (distToPlayer < distToTower)
         {
             return targetPlayer;
@@ -82,7 +110,7 @@ public class Enemy : MonoBehaviour
     }
 
     // 데미지 처리
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         HP -= damage;
 
@@ -94,6 +122,7 @@ public class Enemy : MonoBehaviour
 
         if (HP <= 0)
         {
+            isDefeat = true;
             Die();
         }
     }
@@ -108,8 +137,11 @@ public class Enemy : MonoBehaviour
 
         HP_Bar.gameObject.SetActive(false);
 
-        // 경험치 오브 떨어트림
-        Instantiate(experienceOrb, transform.position, Quaternion.identity);
+        // 처치된 경우에만 경험치 오브 떨어트림
+        if (isDefeat)
+        {
+            Instantiate(experienceOrb, transform.position, Quaternion.identity);
+        }
 
         Destroy(gameObject, 0.5f);
     }
