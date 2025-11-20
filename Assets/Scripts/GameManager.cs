@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
         Texture generatedTexture = modelManager.RunGenerator(classIndex);
 
         // 배경 제거
-        Texture2D finalCharacterTexture = RemoveBackground(generatedTexture);
+        Texture2D finalCharacterTexture = ImageProcess.RemoveBackground(generatedTexture);
 
         // 능력치 부여
         CharacterData newCharacterData = CharacterStatCalculator.Calculate(className, strokeCount, remainSeconds);
@@ -114,6 +114,16 @@ public class GameManager : MonoBehaviour
                                          $"Speed: {newCharacterData.speed:F1}";
 
         Debug.Log($"Generated Character #{index + 1} - Grade: {newCharacterData.grade}");
+
+        // 메모리 해제
+        if (generatedTexture != null)
+        {
+            if (generatedTexture is RenderTexture rt)
+            {
+                rt.Release();
+            }
+            Destroy(generatedTexture);
+        }
         yield return null;
     }
 
@@ -164,43 +174,5 @@ public class GameManager : MonoBehaviour
 
         // 게임 Scene 진입
         SceneManager.LoadScene("GameScene");
-    }
-
-    // 배경 제거 (특정 색 범위 투명화 alpha=0) (파일 따로?)
-    private Texture2D RemoveBackground(Texture inputTexture)
-    {
-        Texture2D sourceTexture = ToTexture2D(inputTexture);
-        Color32[] pixels = sourceTexture.GetPixels32();
-
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            Color32 p = pixels[i];
-            // R, B값은 높고 G값은 낮은 색상 (Magenta 배경 제거 용도로 사전 학습)
-            if (p.r >= 120 && p.b >= 120 && p.g <= 120)
-            {
-                pixels[i].a = 0;
-            }
-        }
-
-        Texture2D resultTexture = new Texture2D(sourceTexture.width, sourceTexture.height, TextureFormat.RGBA32, false, false);
-        resultTexture.SetPixels32(pixels);
-        resultTexture.Apply();
-        return resultTexture;
-    }
-
-    // Texture 변환
-    private Texture2D ToTexture2D(Texture tex)
-    {
-        if (tex is Texture2D) return tex as Texture2D;
-
-        RenderTexture currentActiveRT = RenderTexture.active; // GPU -> CPU
-        RenderTexture.active = tex as RenderTexture;
-
-        Texture2D tex2d = new Texture2D(tex.width, tex.height, TextureFormat.RGBA32, false, false); // gamma=true(default), linear=false
-        tex2d.ReadPixels(new Rect(0, 0, tex.width, tex.height), 0, 0);
-        tex2d.Apply();
-
-        RenderTexture.active = currentActiveRT;
-        return tex2d;
     }
 }

@@ -157,15 +157,15 @@ public class PlayerController : MonoBehaviour
     public void GetXP(float xp)
     {
         XP += xp;
-        XP_Bar.value = XP / maxXP;
         if (XP >= maxXP)
         {
             level++;
-            XP -= maxXP; // 남은 경험치 반영
+            XP -= maxXP;
             maxXP *= 1.1f; // 필요 경험치 증가
 
             UI_Manager.Instance.LevelUP();
         }
+        XP_Bar.value = XP / maxXP;
     }
 
     // 레벨업 선택지

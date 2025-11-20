@@ -49,7 +49,12 @@ public class ModelManager : MonoBehaviour
     // CNN이 입력받은 스케치 구별
     public int RunClassifier(Texture2D inputTexture) // 스케치는 Texture2D
     {
-        using var inputTensor = TextureConverter.ToTensor(inputTexture, inputSize, inputSize, 1); // Sentis(-> inference engine)는 Tensor
+        // 학습한 데이터와 동일한 전처리 적용
+        Texture2D preprocessed = ImageProcess.PreprocessSketch(inputTexture);
+
+        // 텐서로 변환, 정규화, NCHW 변환
+        using var inputTensor = TextureConverter.ToTensor(preprocessed, inputSize, inputSize, 1);
+
         cnnWorker.Schedule(inputTensor);
 
         using var outputTensor = cnnWorker.PeekOutput() as Tensor<float>;
@@ -60,7 +65,15 @@ public class ModelManager : MonoBehaviour
         }
 
         float[] outputData = outputTensor.DownloadToArray(); // GPU -> CPU
+
+        // 클래스 각각의 출력값 확인
+        Debug.Log($"Raw outputs - Bird[0]: {outputData[0]:F4}, Dog[1]: {outputData[1]:F4}, Fish[2]: {outputData[2]:F4}");
+
         int bestClassIndex = System.Array.IndexOf(outputData, Mathf.Max(outputData)); // 확률(가능성) 기준
+
+        // Texture 메모리 해제
+        Destroy(preprocessed);
+
         return bestClassIndex;
     }
 
@@ -72,20 +85,18 @@ public class ModelManager : MonoBehaviour
         for (int i = 0; i < latentDim; i++)
             latentTensor[i] = UnityEngine.Random.Range(-1f, 1f);
 
+
         // CNN에게 받은 클래스
         using var labelTensor = new Tensor<int>(new TensorShape(1), new int[] { classIndex });
-
         ganWorker.SetInput(ganLatentInputName, latentTensor);
         ganWorker.SetInput(ganLabelInputName, labelTensor);
         ganWorker.Schedule();
-
         using var outputTensor = ganWorker.PeekOutput(ganOutputName) as Tensor<float>;
         if (outputTensor == null) // 생성 실패
         {
             Debug.LogError("GAN tensor null");
             return null;
         }
-
         float[] tensorData = outputTensor.DownloadToArray();
 
         // [-1, 1] -> [0, 1] 범위 변환 (색 밝기)

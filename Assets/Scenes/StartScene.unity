@@ -3036,7 +3036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc79fbcfdc956134bb4260e8c2ad86d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cnnModelAsset: {fileID: 5022602860645237092, guid: 10e452bea2a0f1349a02546c697fb604, type: 3}
+  cnnModelAsset: {fileID: 5022602860645237092, guid: afc8b734df489824a885bdb15a535570, type: 3}
   ganModelAsset: {fileID: 5022602860645237092, guid: 22438ae1bc01f134c8b0c32f3706dec7, type: 3}
 --- !u!114 &1893376539 stripped
 MonoBehaviour:
