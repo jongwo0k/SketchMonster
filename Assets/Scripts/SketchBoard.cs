@@ -297,11 +297,11 @@ public class SketchBoard : MonoBehaviour
         StartCoroutine(CountdownTimer());
     }
 
-    private void ResetBoard()
+    public void ResetBoard()
     {
+        isSubmitted = false;
         ClearCanvas();
         RestartTimer();
-        isSubmitted = false;
         resultText.gameObject.SetActive(false);
     }
 

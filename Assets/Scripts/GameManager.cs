@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Button> characterSelectButtons;
     [SerializeField] public List<TextMeshProUGUI> characterStatTexts;
 
+
     // 생성된 이미지(캐릭터) 임시 저장
     private List<CharacterData> generatedCharacters;
 
@@ -125,6 +126,29 @@ public class GameManager : MonoBehaviour
             Destroy(generatedTexture);
         }
         yield return null;
+    }
+    
+    // 다시 그리기 버튼
+    public void OnRestartButtonClicked()
+    {
+        resultPanel.SetActive(false);
+        drawingPanel.SetActive(true);
+
+        // 이전 데이터 정리
+        foreach (var img in characterResultImages)
+        {
+            if (img.texture != null)
+            {
+                Destroy(img.texture);
+            }
+            img.texture = null;
+        }
+
+        // 버튼 재활성화
+        foreach (var btn in characterSelectButtons)
+        {
+            btn.interactable = true;
+        }
     }
 
     // 캐릭터 선택 버튼

@@ -29,7 +29,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    [ContextMenu("EDITOR: Generate Map")]
     public void GenerateMap()
     {
         RectInt bounds = MapBounds;
@@ -52,7 +51,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    [ContextMenu("EDITOR: Destroy Map")]
     public void ClearMap()
     {
         if (tilemap != null)
