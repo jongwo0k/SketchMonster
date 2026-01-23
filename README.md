@@ -182,6 +182,8 @@ LeNet 기반 스케치 분류 모델
 
 <details>
 <summary>Code</summary>
+
+```
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
@@ -198,6 +200,7 @@ class CNN(nn.Module):
         x = x.reshape(-1, 64 * 32 * 32)
         x = self.dropout(F.relu(self.fc1(x)))
         return self.fc2(x)
+```
 </details>
 
 ## GAN
@@ -207,6 +210,8 @@ DCGAN 기반 + 3 Class, Conditional DCGAN
 
 <details>
 <summary>Code</summary>
+
+```
 z_dim = 100
 num_classes = 3
 img_channels = 3
@@ -241,6 +246,7 @@ class Generator(nn.Module):
         x = torch.cat([z.view(z.size(0), -1), label_onehot], dim=1)
         x = self.project(x).view(z.size(0), 256, 4, 4)
         return self.model(x)
+```
 </details>
 
 # Decisions
@@ -277,6 +283,7 @@ Class가 많아지면 필요한 데이터가 많아짐 (QuickDraw에는 다양�
 | 모델 그대로 사용 가능 | 온라인 환경 필수 |
 | 성능 제약 적음 | 네트워크 전송 지연 |
 | OpenCV 활용 가능 | 서버 운영 비용 |
+
 추가 고려 사항: 서버를 캐릭터 생성 과정 중에만 On 게임 플레이 중엔 Off 고려 (자동 or 수동)
 
 **Unity 자체 탑재**
