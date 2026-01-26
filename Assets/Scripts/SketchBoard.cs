@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
@@ -28,7 +28,8 @@ public class SketchBoard : MonoBehaviour
 
     // 선 굵기는 CNN이 학습한 데이터와 유사해야 함 (크기 고정)
     [Header("Drawing Settings")]
-    [SerializeField] private int brushSize = 5;          // 펜, 지우개
+    [SerializeField] private int canvasSize = 512;       // 그림판 크기 고정
+    [SerializeField] private int brushSize = 8;          // 펜, 지우개
     [SerializeField] private float timerDuration = 20f;
 
     // 그림판 변수
@@ -145,11 +146,9 @@ public class SketchBoard : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         yield return new WaitForEndOfFrame();
 
-        // drawingArea 실제 크기
-        int w = Mathf.Max(1, (int)drawingArea.rectTransform.rect.width);
-        int h = Mathf.Max(1, (int)drawingArea.rectTransform.rect.height);
+        // drawingArea 크기 고정
 
-        texture = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        texture = new Texture2D(canvasSize, canvasSize, TextureFormat.RGBA32, false);
         texture.wrapMode = TextureWrapMode.Clamp;
         drawingArea.texture = texture;
 
@@ -243,19 +242,29 @@ public class SketchBoard : MonoBehaviour
     {
         if (texture == null) return;
 
-        // 좌표 변환 (LocalPoint=중앙, Texture=좌하단이 0,0)
-        int x0 = (int)(start.x + texture.width * 0.5f);
-        int y0 = (int)(start.y + texture.height * 0.5f);
-        int x1 = (int)(end.x + texture.width * 0.5f);
-        int y1 = (int)(end.y + texture.height * 0.5f);
+        Rect rect = drawingArea.rectTransform.rect;
+        float displayWidth = rect.width;
+        float displayHeight = rect.height;
+
+        int x0 = (int)((start.x + displayWidth * 0.5f) * canvasSize / displayWidth);
+        int y0 = (int)((start.y + displayHeight * 0.5f) * canvasSize / displayHeight);
+        int x1 = (int)((end.x + displayWidth * 0.5f) * canvasSize / displayWidth);
+        int y1 = (int)((end.y + displayHeight * 0.5f) * canvasSize / displayHeight);
+
+        // 범위 체크
+        x0 = Mathf.Clamp(x0, 0, canvasSize - 1);
+        y0 = Mathf.Clamp(y0, 0, canvasSize - 1);
+        x1 = Mathf.Clamp(x1, 0, canvasSize - 1);
+        y1 = Mathf.Clamp(y1, 0, canvasSize - 1);
 
         float distance = Vector2.Distance(start, end);
 
         if (distance > 1f)
         {
-            for (float i = 0f; i <= distance; i += 1f)
+            int steps = Mathf.CeilToInt(distance);
+            for (int i = 0; i <= steps; i++)
             {
-                float t = i / distance;
+                float t = i / (float)steps;
                 int lerpX = (int)Mathf.Lerp(x0, x1, t);
                 int lerpY = (int)Mathf.Lerp(y0, y1, t);
                 DrawDot(lerpX, lerpY);

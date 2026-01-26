@@ -7,37 +7,37 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    // Áß¾Ó °ü¸® ÁöÁ¡, ¸ğµç ½ºÅ©¸³Æ®¿¡¼­ Á¢±Ù °¡´É
+    // ì¤‘ì•™ ê´€ë¦¬ ì§€ì , ëª¨ë“  ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ì ‘ê·¼ ê°€ëŠ¥
     public static GameManager Instance { get; private set; }
 
-    // AI ¸ğµ¨ °ü¸®
+    // AI ëª¨ë¸ ê´€ë¦¬
     [Header("Managers")]
     [SerializeField] private ModelManager modelManager;
 
-    // UI Panel °ü¸® (±×¸²ÆÇ)
+    // UI Panel ê´€ë¦¬ (ê·¸ë¦¼íŒ)
     [Header("UI Panels")]
     [SerializeField] private GameObject drawingPanel;
     [SerializeField] private GameObject loadingPanel;
     [SerializeField] private GameObject resultPanel;
 
-    // Ä³¸¯ÅÍ ¼±ÅÃÃ¢
+    // ìºë¦­í„° ì„ íƒì°½
     [Header("Character Select UI")]
     [SerializeField] private List<RawImage> characterResultImages;
     [SerializeField] private List<Button> characterSelectButtons;
     [SerializeField] public List<TextMeshProUGUI> characterStatTexts;
 
 
-    // »ı¼ºµÈ ÀÌ¹ÌÁö(Ä³¸¯ÅÍ) ÀÓ½Ã ÀúÀå
+    // ìƒì„±ëœ ì´ë¯¸ì§€(ìºë¦­í„°) ì„ì‹œ ì €ì¥
     private List<CharacterData> generatedCharacters;
 
-    // ½Ì±ÛÅæ ÀÎ½ºÅÏ½º ¼³Á¤
+    // ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤ ì„¤ì •
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
-    // -----------------  ÃÊ±âÈ­  ----------------
+    // -----------------  ì´ˆê¸°í™”  ----------------
     void Start()
     {
         InitModelManager();
@@ -57,58 +57,58 @@ public class GameManager : MonoBehaviour
     }
     // -------------------------------------------
 
-    // Ä³¸¯ÅÍ »ı¼º (½ÃÀÛ)
+    // ìºë¦­í„° ìƒì„± (ì‹œì‘)
     public void StartCharacterCreation(Texture2D sketchTexture, int strokeCount, int remainSeconds)
     {
-        GameSession.OriginalSketch = sketchTexture; // ¿øº» ½ºÄÉÄ¡ ÀúÀå
+        GameSession.OriginalSketch = sketchTexture; // ì›ë³¸ ìŠ¤ì¼€ì¹˜ ì €ì¥
 
         Debug.Log($"Sketch submission complete - Stroke Count: {strokeCount}, Remain Time: {remainSeconds} sec");
-        StartCoroutine(CharacterCreationRoutine(sketchTexture, strokeCount, remainSeconds)); // °ÔÀÓÀÌ ¸ØÃß´Â °Í ¹æÁö
+        StartCoroutine(CharacterCreationRoutine(sketchTexture, strokeCount, remainSeconds)); // ê²Œì„ì´ ë©ˆì¶”ëŠ” ê²ƒ ë°©ì§€
     }
 
-    // Ä³¸¯ÅÍ »ı¼º (ÀüÃ¼ °úÁ¤)
+    // ìºë¦­í„° ìƒì„± (ì „ì²´ ê³¼ì •)
     private IEnumerator CharacterCreationRoutine(Texture2D sketch, int strokeCount, int remainSeconds)
     {
-        // UI ÀüÈ¯ (·Îµù Ã¢ È°¿ë)
+        // UI ì „í™˜ (ë¡œë”© ì°½ í™œìš©)
         drawingPanel.SetActive(false);
         loadingPanel.SetActive(true);
 
-        // ÃÊ±âÈ­
+        // ì´ˆê¸°í™”
         generatedCharacters = new List<CharacterData>();
 
-        // ÀÌ¹ÌÁö 3Àå »ı¼º
+        // ì´ë¯¸ì§€ 3ì¥ ìƒì„±
         for (int i = 0; i < 3; i++)
         {
-            yield return GenerateCharacter(i, sketch, strokeCount, remainSeconds); // ¼øÂ÷Àû
+            yield return GenerateCharacter(i, sketch, strokeCount, remainSeconds); // ìˆœì°¨ì 
         }
 
-        // UI ÀüÈ¯ (·Îµù Ã¢ È°¿ë)
+        // UI ì „í™˜ (ë¡œë”© ì°½ í™œìš©)
         loadingPanel.SetActive(false);
         resultPanel.SetActive(true);
 
         Debug.Log("Image creation complete - Select Character");
     }
 
-    // Ä³¸¯ÅÍ »ı¼º (½ÇÁ¦ µ¿ÀÛ)
+    // ìºë¦­í„° ìƒì„± (ì‹¤ì œ ë™ì‘)
     private IEnumerator GenerateCharacter(int index, Texture2D sketch, int strokeCount, int remainSeconds)
     {
-        // AI ¸ğµ¨ÀÌ »ı¼º
+        // AI ëª¨ë¸ì´ ìƒì„±
         int classIndex = modelManager.RunClassifier(sketch);
         string className = modelManager.classNames[classIndex];
         Texture generatedTexture = modelManager.RunGenerator(classIndex);
 
-        // ¹è°æ Á¦°Å
-        Texture2D finalCharacterTexture = ImageProcess.RemoveBackground(generatedTexture);
+        // ë°°ê²½ ì œê±°
+        Texture2D finalCharacterTexture = ImagePreprocess.RemoveBackground(generatedTexture);
 
-        // ´É·ÂÄ¡ ºÎ¿©
+        // ëŠ¥ë ¥ì¹˜ ë¶€ì—¬
         CharacterData newCharacterData = CharacterStatCalculator.Calculate(className, strokeCount, remainSeconds);
 
-        // µ¥ÀÌÅÍ, UI ¾÷µ¥ÀÌÆ®
+        // ë°ì´í„°, UI ì—…ë°ì´íŠ¸
         generatedCharacters.Add(newCharacterData);
         characterResultImages[index].texture = finalCharacterTexture;
         RegisterCharacterSelectButton(index);
 
-        // ¼±ÅÃÃ¢¿¡ Ä³¸¯ÅÍ Á¤º¸ Ç¥½Ã (ÀÌ¹ÌÁö ÇÏ´Ü)
+        // ì„ íƒì°½ì— ìºë¦­í„° ì •ë³´ í‘œì‹œ (ì´ë¯¸ì§€ í•˜ë‹¨)
         characterStatTexts[index].text = $"Rank: {newCharacterData.grade}\n" +
                                          $"HP: {newCharacterData.hp:F0}\n" +
                                          $"Attack: {newCharacterData.attack:F0}\n" +
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"Generated Character #{index + 1} - Grade: {newCharacterData.grade}");
 
-        // ¸Ş¸ğ¸® ÇØÁ¦
+        // ë©”ëª¨ë¦¬ í•´ì œ
         if (generatedTexture != null)
         {
             if (generatedTexture is RenderTexture rt)
@@ -128,13 +128,13 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
     
-    // ´Ù½Ã ±×¸®±â ¹öÆ°
+    // ë‹¤ì‹œ ê·¸ë¦¬ê¸° ë²„íŠ¼
     public void OnRestartButtonClicked()
     {
         resultPanel.SetActive(false);
         drawingPanel.SetActive(true);
 
-        // ÀÌÀü µ¥ÀÌÅÍ Á¤¸®
+        // ì´ì „ ë°ì´í„° ì •ë¦¬
         foreach (var img in characterResultImages)
         {
             if (img.texture != null)
@@ -144,20 +144,20 @@ public class GameManager : MonoBehaviour
             img.texture = null;
         }
 
-        // ¹öÆ° ÀçÈ°¼ºÈ­
+        // ë²„íŠ¼ ì¬í™œì„±í™”
         foreach (var btn in characterSelectButtons)
         {
             btn.interactable = true;
         }
     }
 
-    // Ä³¸¯ÅÍ ¼±ÅÃ ¹öÆ°
+    // ìºë¦­í„° ì„ íƒ ë²„íŠ¼
     private void RegisterCharacterSelectButton(int index)
     {
         characterSelectButtons[index].onClick.AddListener(() => OnCharacterSelected(index));
     }
 
-    // ¼±ÅÃµÈ Ä³¸¯ÅÍ ÀÌ¹ÌÁö¿Í µ¥ÀÌÅÍ(´É·ÂÄ¡) ÀúÀå
+    // ì„ íƒëœ ìºë¦­í„° ì´ë¯¸ì§€ì™€ ë°ì´í„°(ëŠ¥ë ¥ì¹˜) ì €ì¥
     public void OnCharacterSelected(int index)
     {
         CharacterData selectedCharacter = generatedCharacters[index];
@@ -177,10 +177,10 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Failed save data");
         }
 
-        // ¼±ÅÃµÈ Ä³¸¯ÅÍÀÇ ID¸¦ ¼¼¼Ç¿¡ ÀúÀå
+        // ì„ íƒëœ ìºë¦­í„°ì˜ IDë¥¼ ì„¸ì…˜ì— ì €ì¥
         GameSession.SelectedCharacterId = selectedCharacter.characterId;
 
-        // ¼±ÅÃµÇÁö ¾ÊÀº Ä³¸¯ÅÍ´Â ÀûÀ¸·Î µîÀå
+        // ì„ íƒë˜ì§€ ì•Šì€ ìºë¦­í„°ëŠ” ì ìœ¼ë¡œ ë“±ì¥
         GameSession.EnemyTextures = new List<Texture2D>();
         for (int i = 0; i < characterResultImages.Count; i++)
         {
@@ -190,13 +190,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // ºñÈ°¼ºÈ­ (¼Â Áß ÇÏ³ª¸¸ ¼±ÅÃ °¡´É)
+        // ë¹„í™œì„±í™” (ì…‹ ì¤‘ í•˜ë‚˜ë§Œ ì„ íƒ ê°€ëŠ¥)
         foreach (var button in characterSelectButtons)
         {
             button.interactable = false;
         }
 
-        // °ÔÀÓ Scene ÁøÀÔ
+        // ê²Œì„ Scene ì§„ì…
         SceneManager.LoadScene("GameScene");
     }
 }

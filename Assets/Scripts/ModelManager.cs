@@ -50,7 +50,7 @@ public class ModelManager : MonoBehaviour
     public int RunClassifier(Texture2D inputTexture) // 스케치는 Texture2D
     {
         // 학습한 데이터와 동일한 전처리 적용
-        Texture2D preprocessed = ImageProcess.PreprocessSketch(inputTexture);
+        Texture2D preprocessed = ImagePreprocess.PreprocessSketch(inputTexture);
 
         // 텐서로 변환, 정규화, NCHW 변환
         using var inputTensor = TextureConverter.ToTensor(preprocessed, inputSize, inputSize, 1);
