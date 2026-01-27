@@ -1,47 +1,47 @@
 using UnityEngine;
 
-public static class CharacterStatCalculator // (¿Ï¼º ÈÄ ¹ë·±½º¸¦ °í·ÁÇØ °è¼ö ¼öÁ¤ ÇÊ¿ä)
+public static class CharacterStatCalculator // (ì™„ì„± í›„ ë°¸ëŸ°ìŠ¤ë¥¼ ê³ ë ¤í•´ ê³„ìˆ˜ ìˆ˜ì • í•„ìš”)
 {
-    // Ãß°¡ °è¼ö (½ºÄÉÄ¡ Á¤º¸) Max Á¦ÇÑ?
+    // ì¶”ê°€ ê³„ìˆ˜ (ìŠ¤ì¼€ì¹˜ ì •ë³´) Max ì œí•œ?
     private const float StrokeHpFactor = 5f;
     private const float TimeSpeedFactor = 0.2f;
 
-    // ´É·ÂÄ¡ ¼³Á¤
+    // ëŠ¥ë ¥ì¹˜ ì„¤ì •
     public static CharacterData Calculate(string className, int strokeCount, int remainTime)
     {
-        var tickId = System.DateTime.Now.Ticks.ToString(); // PNG, JSONÀÇ id ÅëÀÏ
+        var uniqueId = System.Guid.NewGuid().ToString(); // PNG, JSONì˜ id í†µì¼
 
         CharacterData data = new()
         {
-            characterId = tickId,
-            imagePath = $"{tickId}.png",
+            characterId = uniqueId,
+            imagePath = $"{uniqueId}.png",
             className = className,
             grade = GetRandomGrade(),
             level = 1
         };
 
-        // Å¬·¡½ºº° ±âº» ´É·ÂÄ¡
+        // í´ë˜ìŠ¤ë³„ ê¸°ë³¸ ëŠ¥ë ¥ì¹˜
         float baseHp = 100f, baseAttack = 10f, baseSpeed = 5f;
         switch (className)
         {
-            case "Bird":            // ³·Àº ½ºÆå, ºü¸§
+            case "Bird":            // ë‚®ì€ ìŠ¤í™, ë¹ ë¦„
                 baseHp = 80f;
                 baseAttack = 8f;
                 baseSpeed = 7f;
                 break;
-            case "Dog":             // ¹ë·±½º
+            case "Dog":             // ë°¸ëŸ°ìŠ¤
                 baseHp = 100f;
                 baseAttack = 10f;
                 baseSpeed = 5f;
                 break;
-            case "Fish":            // ³ôÀº ½ºÆå, ´À¸²
+            case "Fish":            // ë†’ì€ ìŠ¤í™, ëŠë¦¼
                 baseHp = 120f;
                 baseAttack = 12f;
                 baseSpeed = 3f;
                 break;
         }
 
-        // µî±Ş °è¼ö
+        // ë“±ê¸‰ ê³„ìˆ˜
         float gradeMultiplier = 1.0f;
         switch (data.grade)
         {
@@ -51,7 +51,7 @@ public static class CharacterStatCalculator // (¿Ï¼º ÈÄ ¹ë·±½º¸¦ °í·ÁÇØ °è¼ö ¼öÁ
             case "C": gradeMultiplier = 0.8f; break;
         }
 
-        // ÃÖÁ¾ ´É·ÂÄ¡ °è»ê
+        // ìµœì¢… ëŠ¥ë ¥ì¹˜ ê³„ì‚°
         float hpBonus = strokeCount * StrokeHpFactor;
         float speedBonus = remainTime * TimeSpeedFactor;
 
@@ -62,7 +62,7 @@ public static class CharacterStatCalculator // (¿Ï¼º ÈÄ ¹ë·±½º¸¦ °í·ÁÇØ °è¼ö ¼öÁ
         return data;
     }
 
-    // µî±Ş ºÎ¿© (·£´ı)
+    // ë“±ê¸‰ ë¶€ì—¬ (ëœë¤)
     private static string GetRandomGrade()
     {
         float randomValue = Random.Range(0f, 100f);
