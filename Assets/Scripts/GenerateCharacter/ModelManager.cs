@@ -58,7 +58,7 @@ public class ModelManager : MonoBehaviour
         cnnWorker.Schedule(inputTensor);
 
         using var outputTensor = cnnWorker.PeekOutput() as Tensor<float>;
-        if (outputTensor == null) // 안그리고 제출해도 생성?
+        if (outputTensor == null) // default bird
         {
             Debug.LogError("CNN tensor null");
             return -1;
@@ -83,32 +83,35 @@ public class ModelManager : MonoBehaviour
         // 랜덤 노이즈 (z)
         using var latentTensor = new Tensor<float>(new TensorShape(1, latentDim));
         for (int i = 0; i < latentDim; i++)
+        {
             latentTensor[i] = UnityEngine.Random.Range(-1f, 1f);
-
+        }
 
         // CNN에게 받은 클래스
         using var labelTensor = new Tensor<int>(new TensorShape(1), new int[] { classIndex });
+
         ganWorker.SetInput(ganLatentInputName, latentTensor);
         ganWorker.SetInput(ganLabelInputName, labelTensor);
         ganWorker.Schedule();
+
         using var outputTensor = ganWorker.PeekOutput(ganOutputName) as Tensor<float>;
         if (outputTensor == null) // 생성 실패
         {
             Debug.LogError("GAN tensor null");
             return null;
         }
+
+        // [-1, 1] → [0, 1] 색 밝기
         float[] tensorData = outputTensor.DownloadToArray();
-
-        // [-1, 1] -> [0, 1] 범위 변환 (색 밝기)
-        for (int i = 0; i < tensorData.Length; i++)
+        int totalPixels = tensorData.Length;
+        for (int i = 0; i < totalPixels; i++)
         {
-            tensorData[i] = (tensorData[i] + 1.0f) / 2.0f;
+            tensorData[i] = Mathf.Clamp01((tensorData[i] + 1.0f) * 0.5f);
         }
-        using var finalTensor = new Tensor<float>(outputTensor.shape, tensorData);
 
-        // 이미지는 Texture
-        var outputTexture = new RenderTexture(OutputImageSize, OutputImageSize, 0);
-        TextureConverter.RenderToTexture(finalTensor, outputTexture);
+        using var normalizedTensor = new Tensor<float>(outputTensor.shape, tensorData);
+        var outputTexture = new RenderTexture(OutputImageSize, OutputImageSize, 0, RenderTextureFormat.ARGB32);
+        TextureConverter.RenderToTexture(normalizedTensor, outputTexture);
         return outputTexture;
     }
 

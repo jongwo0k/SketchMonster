@@ -59,6 +59,10 @@ public class SketchBoard : MonoBehaviour
     private Canvas parentCanvas;
     private GameManager gameManager;
 
+    // Buffer
+    private Color32[] pixelBuffer;
+    private bool isDirty = false;
+
     void Start()
     {
         if (!TryInitializeGameManager()) return;
@@ -76,7 +80,20 @@ public class SketchBoard : MonoBehaviour
         if (isSubmitted || timer <= 0) return; // Timer 종료 or 제출
         HandleDrawingInput();
     }
-   
+
+    // Apply 일괄 적용
+    void LateUpdate()
+    {
+        if(texture == null) return;
+
+        if (isDirty)
+        {
+            texture.SetPixels32(pixelBuffer);
+            texture.Apply();
+            isDirty = false;
+        }
+    }
+
     // ------------------------------ 초기화 ---------------------------------
     private bool TryInitializeGameManager()
     {
@@ -146,11 +163,11 @@ public class SketchBoard : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         yield return new WaitForEndOfFrame();
 
-        // drawingArea 크기 고정
-
         texture = new Texture2D(canvasSize, canvasSize, TextureFormat.RGBA32, false);
         texture.wrapMode = TextureWrapMode.Clamp;
         drawingArea.texture = texture;
+
+        pixelBuffer = new Color32[canvasSize * canvasSize];
 
         ClearCanvas();
         SetPenMode(); // 기본 모드 - Pen
@@ -218,8 +235,6 @@ public class SketchBoard : MonoBehaviour
     // 펜 굵기 만큼 점으로 그리기
     private void DrawDot(int x, int y)
     {
-        if (texture == null) return;
-
         for (int i = -brushSize; i < brushSize; i++)
         {
             for (int j = -brushSize; j < brushSize; j++)
@@ -228,9 +243,9 @@ public class SketchBoard : MonoBehaviour
                 {
                     int px = x + i;
                     int py = y + j;
-                    if (px >= 0 && px < texture.width && py >= 0 && py < texture.height)
+                    if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize)
                     {
-                        texture.SetPixel(px, py, currentColor);
+                        pixelBuffer[py * canvasSize + px] = currentColor;
                     }
                 }
             }
@@ -239,9 +254,7 @@ public class SketchBoard : MonoBehaviour
 
     // 마우스 이동 시 점 끊김 보간
     private void DrawLine(Vector2 start, Vector2 end)
-    {
-        if (texture == null) return;
-
+    { 
         Rect rect = drawingArea.rectTransform.rect;
         float displayWidth = rect.width;
         float displayHeight = rect.height;
@@ -275,7 +288,7 @@ public class SketchBoard : MonoBehaviour
             DrawDot(x1, y1);
         }
 
-        texture.Apply();
+        isDirty = true;
     }
 
     // ----------------------------------------------------------------------------
@@ -329,13 +342,12 @@ public class SketchBoard : MonoBehaviour
 
     public void ClearCanvas()
     {
-        if (texture == null) return;
-        Color[] pixels = new Color[texture.width * texture.height];
-        for (int i = 0; i < pixels.Length; i++) pixels[i] = Color.white;
+        Color32 white = new Color32(255, 255, 255, 255);
+        for (int i = 0; i < pixelBuffer.Length; i++)
+            pixelBuffer[i] = white;
 
-        texture.SetPixels(pixels);
-        texture.Apply();
         strokeCount = 0;
+        isDirty = true;
     }
 
     public void SubmitDrawing()
@@ -346,6 +358,10 @@ public class SketchBoard : MonoBehaviour
         StopAllCoroutines();
         int remainSeconds = Mathf.CeilToInt(Mathf.Max(0, timer));
         timerText.text = "Submitted";
+
+        // 최종 Apply
+        texture.SetPixels32(pixelBuffer);
+        texture.Apply();
 
         Debug.Log($"Stroke Count: {strokeCount}, Remain Time: {remainSeconds} sec");
         gameManager.StartCharacterCreation(texture, strokeCount, remainSeconds);

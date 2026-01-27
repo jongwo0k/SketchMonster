@@ -1,13 +1,37 @@
-// SceneÀÌ ¹Ù²ğ ¶§ µ¥ÀÌÅÍ À¯Áö
+// Sceneì´ ë°”ë€” ë•Œ ë°ì´í„° ìœ ì§€
 using UnityEngine;
 using System.Collections.Generic;
 
 public static class GameSession
 {
-    // °íÁ¤
+    // ê³ ì •
     public static string SelectedCharacterId;
 
-    // ´Ş¶óÁü
+    // ë‹¬ë¼ì§
     public static Texture2D OriginalSketch;
-    public static List<Texture2D> EnemyTextures;
+    public static List<Texture2D> EnemyTextures = new List<Texture2D>();
+
+    public static void CleanSession()
+    {
+        SelectedCharacterId = null;
+
+        // ì›ë³¸ ìŠ¤ì¼€ì¹˜
+        if (OriginalSketch != null)
+        {
+            Object.Destroy(OriginalSketch);
+            OriginalSketch = null;
+        }
+
+        // Enemy
+        if (EnemyTextures != null)
+        {
+            foreach (var tex in EnemyTextures)
+            {
+                if (tex != null) Object.Destroy(tex);
+            }
+            EnemyTextures.Clear();
+        }
+        
+        Debug.Log("Clear Complete");
+    }
 }

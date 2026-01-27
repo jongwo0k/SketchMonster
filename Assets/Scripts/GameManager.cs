@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     {
         InitModelManager();
         InitPanels();
+        GameSession.CleanSession();
     }
 
     private void InitModelManager()
@@ -60,7 +61,15 @@ public class GameManager : MonoBehaviour
     // 캐릭터 생성 (시작)
     public void StartCharacterCreation(Texture2D sketchTexture, int strokeCount, int remainSeconds)
     {
-        GameSession.OriginalSketch = sketchTexture; // 원본 스케치 저장
+        // 남은 데이터 정리
+        if (GameSession.OriginalSketch != null && GameSession.OriginalSketch != sketchTexture)
+        {
+            Destroy(GameSession.OriginalSketch);
+        }
+
+        Texture2D copyTexture = new Texture2D(sketchTexture.width, sketchTexture.height, sketchTexture.format, false);
+        Graphics.CopyTexture(sketchTexture, copyTexture);
+        GameSession.OriginalSketch = copyTexture; // 복사본 저장
 
         Debug.Log($"Sketch submission complete - Stroke Count: {strokeCount}, Remain Time: {remainSeconds} sec");
         StartCoroutine(CharacterCreationRoutine(sketchTexture, strokeCount, remainSeconds)); // 게임이 멈추는 것 방지
@@ -74,6 +83,10 @@ public class GameManager : MonoBehaviour
         loadingPanel.SetActive(true);
 
         // 초기화
+        if (generatedCharacters != null && generatedCharacters.Count > 0)
+        {
+            generatedCharacters.Clear();
+        }
         generatedCharacters = new List<CharacterData>();
 
         // 이미지 3장 생성
@@ -96,6 +109,11 @@ public class GameManager : MonoBehaviour
         int classIndex = modelManager.RunClassifier(sketch);
         string className = modelManager.classNames[classIndex];
         Texture generatedTexture = modelManager.RunGenerator(classIndex);
+
+        if (characterResultImages[index].texture != null)
+        {
+            Destroy(characterResultImages[index].texture);
+        }
 
         // 배경 제거
         Texture2D finalCharacterTexture = ImagePreprocess.RemoveBackground(generatedTexture);
@@ -143,6 +161,7 @@ public class GameManager : MonoBehaviour
             }
             img.texture = null;
         }
+        GameSession.CleanSession();
 
         // 버튼 재활성화
         foreach (var btn in characterSelectButtons)
@@ -154,6 +173,7 @@ public class GameManager : MonoBehaviour
     // 캐릭터 선택 버튼
     private void RegisterCharacterSelectButton(int index)
     {
+        characterSelectButtons[index].onClick.RemoveAllListeners(); // 리스너 누적 방지
         characterSelectButtons[index].onClick.AddListener(() => OnCharacterSelected(index));
     }
 
