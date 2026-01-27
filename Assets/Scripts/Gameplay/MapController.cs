@@ -119,4 +119,9 @@ public class MapController : MonoBehaviour
             Destroy(orb);
         }
     }
+
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
 }

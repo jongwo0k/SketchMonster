@@ -182,4 +182,15 @@ public class PlayerController : MonoBehaviour
         HP = maxHP;
         HP_Bar.value = HP / maxHP;
     }
+
+    // 종료 시 이번 회차 데이터 제거
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+
+        if (sr != null && sr.sprite != null && sr.sprite.texture != null)
+        {
+            Destroy(sr.sprite.texture);
+        }
+    }
 }
