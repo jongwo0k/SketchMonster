@@ -12,9 +12,9 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = -transform.up * speed; // Unity ±âº»Àº YÃà ¹æÇâ -> Ä³¸¯ÅÍ ±âº»Àº ¾Æ·¡¸¦ º½
+        rb.linearVelocity = -transform.up * speed; // Unity ê¸°ë³¸ì€ Yì¶• ë°©í–¥ -> ìºë¦­í„° ê¸°ë³¸ì€ ì•„ë˜ë¥¼ ë´„
 
-        // °è¼Ó ³¯¾Æ°¡°Å³ª ½×ÀÌ´Â °Í ¹æÁö
+        // ê³„ì† ë‚ ì•„ê°€ê±°ë‚˜ ìŒ“ì´ëŠ” ê²ƒ ë°©ì§€
         Destroy(gameObject, destroyTime);
     }
 
@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    // PlayerÀÇ °ø°İ·ÂÀ» ¹Ş¾Æ¿È
+    // Playerì˜ ê³µê²©ë ¥ì„ ë°›ì•„ì˜´
     public void SetDamage(float damage)
     {
         this.attack = damage;

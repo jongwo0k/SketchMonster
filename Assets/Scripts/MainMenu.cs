@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public void OnNewGameButtonClicked()
     {
-        // New Game ¹öÆ° Å¬¸¯ -> ±×¸²ÆÇÀ¸·Î ÀÌµ¿, Ä³¸¯ÅÍ »ý¼º ÆÄÀÌÇÁ¶óÀÎ ("StartScene" ¾À)À» ·Îµå
+        // New Game ë²„íŠ¼ í´ë¦­ -> ê·¸ë¦¼íŒìœ¼ë¡œ ì´ë™, ìºë¦­í„° ìƒì„± íŒŒì´í”„ë¼ì¸ ("StartScene" ì”¬)ì„ ë¡œë“œ
         SceneManager.LoadScene("StartScene");
     }
 
@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnExitButtonClicked()
     {
-        // Exit ¹öÆ° Å¬¸¯ -> ¿¡µðÅÍ¿¡¼­´Â µ¿ÀÛX, ºôµåµÈ °ÔÀÓ¿¡¼­´Â Á¾·á
+        // Exit ë²„íŠ¼ í´ë¦­ -> ì—ë””í„°ì—ì„œëŠ” ë™ìž‘X, ë¹Œë“œëœ ê²Œìž„ì—ì„œëŠ” ì¢…ë£Œ
         Application.Quit();
     }
 }

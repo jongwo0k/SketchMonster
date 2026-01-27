@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    // Ä«¸Ş¶ó º¯¼ö
+    // ì¹´ë©”ë¼ ë³€ìˆ˜
     public Transform target;
     public float smoothSpeed = 0.125f;
     public Vector3 offset;
 
-    // ¸Ê ¹üÀ§
+    // ë§µ ë²”ìœ„
     public float maxX, minX, maxY, minY;
 
     public void MapRange(float minX, float maxX, float minY, float maxY)
@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
         this.maxY = maxY;
     }
 
-    // ¸¶Áö¸·¿¡ µ¿ÀÛ
+    // ë§ˆì§€ë§‰ì— ë™ì‘
     void LateUpdate()
     {
         if (target == null) return;
@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
         Vector3 desiredPosition = target.position + offset;
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
-        // È­¸é ÀÌÅ» ¹æÁö
+        // í™”ë©´ ì´íƒˆ ë°©ì§€
         smoothedPosition.x = Mathf.Clamp(smoothedPosition.x, minX, maxX);
         smoothedPosition.y = Mathf.Clamp(smoothedPosition.y, minY, maxY);
 

@@ -6,7 +6,7 @@ public class EnemySpawner : MonoBehaviour
     [Header("Enemy Template")]
     [SerializeField] private GameObject enemyTemplate;
 
-    // »ı¼º ºóµµ
+    // ìƒì„± ë¹ˆë„
     [Header("Spawn Interval")]
     [SerializeField] private float initialSpawnInterval = 3f;
     [SerializeField] private float spawnIntervalDecrease = 0.1f;
@@ -16,22 +16,22 @@ public class EnemySpawner : MonoBehaviour
 
     public void StartSpawnEnemy(int stageLevel)
     {
-        // ¸Ê Á¤º¸ ºÒ·¯¿À±â
+        // ë§µ ì •ë³´ ë¶ˆëŸ¬ì˜¤ê¸°
         mapGenerator = GetComponent<MapGenerator>();
 
-        // ½ºÅ×ÀÌÁö¿¡ µû¶ó »ı¼º ºóµµ Á¶Á¤
+        // ìŠ¤í…Œì´ì§€ì— ë”°ë¼ ìƒì„± ë¹ˆë„ ì¡°ì •
         currentSpawnInterval = Mathf.Max(0.5f, initialSpawnInterval - ((stageLevel - 1) * spawnIntervalDecrease));
 
-        // ÀÌÀü ½ºÅ×ÀÌÁö Á¾·á, »õ·Î ½ÃÀÛ
+        // ì´ì „ ìŠ¤í…Œì´ì§€ ì¢…ë£Œ, ìƒˆë¡œ ì‹œì‘
         StopAllCoroutines();
         StartCoroutine(SpawnLoop());
     }
-
+    
     private IEnumerator SpawnLoop()
     {
         while (true)
         {
-            // °£°İ¸¸Å­ ´ë±â ÈÄ »ı¼º
+            // ê°„ê²©ë§Œí¼ ëŒ€ê¸° í›„ ìƒì„±
             yield return new WaitForSeconds(currentSpawnInterval);
 
             if (Time.timeScale == 0f)
@@ -46,37 +46,37 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        // »ı¼º À§Ä¡ ¼³Á¤
+        // ìƒì„± ìœ„ì¹˜ ì„¤ì •
         Vector2 spawnPos = GetRandomSpawnPosition();
 
-        // EnemyTemplate °¡Á®¿È
+        // EnemyTemplate ê°€ì ¸ì˜´
         GameObject enemyInstance = Instantiate(enemyTemplate, spawnPos, Quaternion.identity);
         Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
 
-        // ¼¼¼Ç¿¡¼­ ¿ÜÇü ºÒ·¯¿È
+        // ì„¸ì…˜ì—ì„œ ì™¸í˜• ë¶ˆëŸ¬ì˜´
         Texture2D enemyTexture = GameSession.EnemyTextures[Random.Range(0, GameSession.EnemyTextures.Count)];
         Sprite enemySprite = ConvertTextureToSprite(enemyTexture);
 
-        // Stage¿¡ µû¶ó ´É·ÂÄ¡ »ó½Â
+        // Stageì— ë”°ë¼ ëŠ¥ë ¥ì¹˜ ìƒìŠ¹
         int currentStage = MapController.Instance.stageLevel;
         float HP = 50f + (currentStage * 15f);
         float attack = 5f + (currentStage * 1.1f);
         float speed = 5f + (currentStage * 0.1f);
 
-        // ¿ÜÇü, ´É·ÂÄ¡ ºÎ¿©
+        // ì™¸í˜•, ëŠ¥ë ¥ì¹˜ ë¶€ì—¬
         enemyScript.Initialize(enemySprite, HP, attack, speed);
 
     }
 
-    // ³¡¿¡¼­ ·£´ı »ı¼º
+    // ëì—ì„œ ëœë¤ ìƒì„±
     private Vector2 GetRandomSpawnPosition()
     {
         RectInt bounds = mapGenerator.MapBounds;
-        int side = Random.Range(0, 4); // 1234(»óÇÏÁÂ¿ì ¼ø)
+        int side = Random.Range(0, 4); // 1234(ìƒí•˜ì¢Œìš° ìˆœ)
 
         Vector2 spawnPos = Vector2.zero;
 
-        // Wall Å¸ÀÏ ¹Ù·Î ¾Õ¿¡¼­ »ı¼º
+        // Wall íƒ€ì¼ ë°”ë¡œ ì•ì—ì„œ ìƒì„±
         if (side == 0)
         {
             spawnPos = new Vector2(Random.Range(bounds.xMin, bounds.xMax), bounds.yMax - 2);

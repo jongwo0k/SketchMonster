@@ -8,14 +8,14 @@ public class PlayerSpawner : MonoBehaviour
 
     public GameObject SpawnPlayer()
     {
-        Vector3 spawnPoint = new Vector3(0, -6, 0); // Áß¾Ó ¿ÀºêÁ§Æ® ¾Æ·¡
+        Vector3 spawnPoint = new Vector3(0, -6, 0); // ì¤‘ì•™ ì˜¤ë¸Œì íŠ¸ ì•„ë˜
         string characterIdToLoad = GameSession.SelectedCharacterId;
         var (data, sprite) = DataManager.LoadCharacter(characterIdToLoad);
 
-        // Ä³¸¯ÅÍ »ı¼º
+        // ìºë¦­í„° ìƒì„±
         GameObject playerInstance = Instantiate(playerTemplate, spawnPoint, Quaternion.identity);
 
-        // ´É·ÂÄ¡ Àû¿ë
+        // ëŠ¥ë ¥ì¹˜ ì ìš©
         PlayerController playerController = playerInstance.GetComponent<PlayerController>();
 
         playerController.Initialize(data, sprite);

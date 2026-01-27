@@ -37,12 +37,12 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
-                // �׵θ�
+                // 테두리
                 if (x == bounds.xMin || x == bounds.xMax - 1 || y == bounds.yMin || y == bounds.yMax - 1)
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), selectedTheme.wallTile);
                 }
-                // �ٴ�
+                // 바닥
                 else
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), selectedTheme.floorTile);

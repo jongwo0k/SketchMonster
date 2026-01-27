@@ -1,21 +1,21 @@
 using System;
 
-[Serializable] // JSON º¯È¯
+[Serializable] // JSON ë³€í™˜
 public class CharacterData
 {
-    // ±âº» Á¤º¸
-    public string characterId;   // °íÀ¯ ID: "character_1234"  -> ÀÌ¸§ ÁöÁ¤?
-    public string imagePath;     // ÀÌ¹ÌÁö ÆÄÀÏ °æ·Î: "character_1234.png"
+    // ê¸°ë³¸ ì •ë³´
+    public string characterId;   // ê³ ìœ  ID: "character_1234"  -> ì´ë¦„ ì§€ì •?
+    public string imagePath;     // ì´ë¯¸ì§€ íŒŒì¼ ê²½ë¡œ: "character_1234.png"
     public string className;     // "Bird", "Dog", "Fish"
     public string grade;         // S(10) A(30) B(40) C(20)
-    // public string characterName Á÷Á¢ ÁöÁ¤?
+    // public string characterName ì§ì ‘ ì§€ì •?
 
-    // °è¼ö Àû¿ëµÈ ÃÖÁ¾ ´É·ÂÄ¡ (class + grade + sketch)
+    // ê³„ìˆ˜ ì ìš©ëœ ìµœì¢… ëŠ¥ë ¥ì¹˜ (class + grade + sketch)
     public float hp;
     public float attack;
     public float speed;
 
     // Level, Skill
     public int level;
-    // public List<Skill> skills; // classº° °íÀ¯ ½ºÅ³ Ãß°¡
+    // public List<Skill> skills; // classë³„ ê³ ìœ  ìŠ¤í‚¬ ì¶”ê°€
 }

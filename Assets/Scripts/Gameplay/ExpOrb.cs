@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ExpOrb : MonoBehaviour
 {
-    // 1°³´ç °æÇèÄ¡ Áõ°¡·®
+    // 1ê°œë‹¹ ê²½í—˜ì¹˜ ì¦ê°€ëŸ‰
     [SerializeField] public float expValue = 10f;
 
     private void OnTriggerEnter2D(Collider2D other)

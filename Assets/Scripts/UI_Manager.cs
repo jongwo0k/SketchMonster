@@ -7,12 +7,12 @@ public class UI_Manager : MonoBehaviour
 {
     public static UI_Manager Instance { get; private set; }
 
-    // UI Panel °ü¸®
+    // UI Panel ê´€ë¦¬
     [Header("Stage Panels")]
     [SerializeField] private Slider stageSlider;
     [SerializeField] private TextMeshProUGUI stageText;
 
-    // °á°ú Ã¢
+    // ê²°ê³¼ ì°½
     [Header("Canvas")]
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject levelUp;
@@ -100,7 +100,7 @@ public class UI_Manager : MonoBehaviour
         stageSlider.value = value;
     }
 
-    // Àç½ÃÀÛ
+    // ìž¬ì‹œìž‘
     public void Retry_Button()
     {
         Time.timeScale = 1f;

@@ -11,7 +11,7 @@ public class MapController : MonoBehaviour
 
     [SerializeField] private CameraController mainCamera;
 
-    // Stage °ü¸®
+    // Stage ê´€ë¦¬
     [Header("Stage")]
     public float remainTime;
     public float stageDuration = 60f;
@@ -32,10 +32,10 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
-        // Player »ı¼º
+        // Player ìƒì„±
         GameObject playerObject = playerSpawner.SpawnPlayer();
 
-        // »ı¼ºµÈ Player¿¡ Ä«¸Ş¶ó ¿¬°á
+        // ìƒì„±ëœ Playerì— ì¹´ë©”ë¼ ì—°ê²°
         mainCamera.target = playerObject.transform;
 
         StartNewStage();
@@ -62,7 +62,7 @@ public class MapController : MonoBehaviour
         }
     }
 
-    // Ä«¸Ş¶ó °æ°è ¼³Á¤
+    // ì¹´ë©”ë¼ ê²½ê³„ ì„¤ì •
     private void SetCameraBoundary()
     {
         float cameraHeight = Camera.main.orthographicSize;
@@ -98,10 +98,10 @@ public class MapController : MonoBehaviour
         StartNewStage();
     }
 
-    // ÀÌÀü ½ºÅ×ÀÌÁö¿¡ ³²Àº enemy, projectile Á¦°Å
+    // ì´ì „ ìŠ¤í…Œì´ì§€ì— ë‚¨ì€ enemy, projectile ì œê±°
     private void ClearRemainObjects()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // List·Î º¯°æ or ´Ù¸¥ ÇÔ¼ö object pooling
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // Listë¡œ ë³€ê²½ or ë‹¤ë¥¸ í•¨ìˆ˜ object pooling
         foreach (GameObject enemy in enemies)
         {
             Destroy(enemy);

@@ -6,9 +6,9 @@ public class Enemy : MonoBehaviour
     bool isDead = false;
     bool isDefeat = false;
 
-    // ´É·ÂÄ¡
+    // ëŠ¥ë ¥ì¹˜
     [Header("Ability")]
-    private float HP = 100f; // Å×½ºÆ®¿ë (Stage¸¶´Ù º¯°æ)
+    private float HP = 100f; // í…ŒìŠ¤íŠ¸ìš© (Stageë§ˆë‹¤ ë³€ê²½)
     private float maxHP;
     private float attack = 10f;
     private float speed = 5f;
@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
 
-        GameObject tower = GameObject.Find("MainTower"); // MainTower´Â Ã³À½ºÎÅÍ Á¸Àç
+        GameObject tower = GameObject.Find("MainTower"); // MainTowerëŠ” ì²˜ìŒë¶€í„° ì¡´ì¬
         targetTower = tower.transform;
         
         HP_Bar.gameObject.SetActive(false);
@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        targetPlayer = PlayerController.Instance.transform; // Player´Â »ı¼º µÊ
+        targetPlayer = PlayerController.Instance.transform; // PlayerëŠ” ìƒì„± ë¨
     }
 
     void FixedUpdate()
@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // ¸ñÇ¥¸¦ ÇâÇØ ÀÌµ¿
+        // ëª©í‘œë¥¼ í–¥í•´ ì´ë™
         Transform currentTarget = FindClosestTarget();
         if (currentTarget == null)
         {
@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
         rb.linearVelocity = direction * speed;
     }
 
-    // Ãæµ¹ Ã³¸®
+    // ì¶©ëŒ ì²˜ë¦¬
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("MainTower")) 
@@ -77,7 +77,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // ÃÊ±âÈ­, EnemySpawner°¡ ½ÇÇà
+    // ì´ˆê¸°í™”, EnemySpawnerê°€ ì‹¤í–‰
     public void Initialize(Sprite enemySprite, float hp, float enemyAttack, float enemySpeed)
     {
         sr.sprite = enemySprite;
@@ -89,27 +89,27 @@ public class Enemy : MonoBehaviour
         HP_Bar.value = 1;
     }
 
-    // MainTower / Player Áß °¡±î¿î ´ë»ó Ã£±â
+    // MainTower / Player ì¤‘ ê°€ê¹Œìš´ ëŒ€ìƒ ì°¾ê¸°
     private Transform FindClosestTarget()
     {
-        // ÆÄ±« µÉ°æ¿ì?
+        // íŒŒê´´ ë ê²½ìš°?
 
-        // °Å¸® °è»ê
+        // ê±°ë¦¬ ê³„ì‚°
         float distToTower = Vector2.Distance(transform.position, targetTower.position);
         float distToPlayer = Vector2.Distance(transform.position, targetPlayer.position);
 
-        // °¡±î¿î ÂÊ Å¸°ÙÆÃ
+        // ê°€ê¹Œìš´ ìª½ íƒ€ê²ŸíŒ…
         if (distToPlayer < distToTower)
         {
             return targetPlayer;
         }
         else
         {
-            return targetTower; // µ¿ÀÏÇÏ¸é Tower ¿ì¼±
+            return targetTower; // ë™ì¼í•˜ë©´ Tower ìš°ì„ 
         }
     }
 
-    // µ¥¹ÌÁö Ã³¸®
+    // ë°ë¯¸ì§€ ì²˜ë¦¬
     public void TakeDamage(float damage)
     {
         HP -= damage;
@@ -127,7 +127,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // »ç¸Á
+    // ì‚¬ë§
     private void Die()
     {
         isDead = true;
@@ -137,7 +137,7 @@ public class Enemy : MonoBehaviour
 
         HP_Bar.gameObject.SetActive(false);
 
-        // Ã³Ä¡µÈ °æ¿ì¿¡¸¸ °æÇèÄ¡ ¿Àºê ¶³¾îÆ®¸²
+        // ì²˜ì¹˜ëœ ê²½ìš°ì—ë§Œ ê²½í—˜ì¹˜ ì˜¤ë¸Œ ë–¨ì–´íŠ¸ë¦¼
         if (isDefeat)
         {
             Instantiate(experienceOrb, transform.position, Quaternion.identity);

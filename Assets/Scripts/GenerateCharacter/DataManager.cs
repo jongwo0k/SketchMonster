@@ -5,28 +5,28 @@ public static class DataManager
 {
     private const int CharacterSize = 2;
 
-    // Ä³¸¯ÅÍ ÀúÀå
+    // ìºë¦­í„° ì €ì¥
     public static void SaveCharacter(CharacterData data, Texture2D image)
     {
-        // PNG ¹è¿­, JSON ¹®ÀÚ¿­·Î º¯È¯
+        // PNG ë°°ì—´, JSON ë¬¸ìì—´ë¡œ ë³€í™˜
         byte[] pngData = image.EncodeToPNG();
         string jsonData = JsonUtility.ToJson(data, true); // prettyPrint
 
-        // PNG, JSON ÆÄÀÏ °æ·Î »ı¼º (Application.persistentDataPath -> ¿î¿µÃ¼Á¦°¡ Çã¿ëÇÑ ÀúÀå °æ·Î AppData)
+        // PNG, JSON íŒŒì¼ ê²½ë¡œ ìƒì„± (Application.persistentDataPath -> ìš´ì˜ì²´ì œê°€ í—ˆìš©í•œ ì €ì¥ ê²½ë¡œ AppData)
         string pngPath = Path.Combine(Application.persistentDataPath, data.imagePath);
         string jsonPath = Path.Combine(Application.persistentDataPath, $"{data.characterId}.json");
 
-        // ÆÄÀÏ ÀúÀå, °æ·Î Ç¥½Ã
+        // íŒŒì¼ ì €ì¥, ê²½ë¡œ í‘œì‹œ
         File.WriteAllBytes(pngPath, pngData);
         Debug.Log($"Character image saved to: {pngPath}");
         File.WriteAllText(jsonPath, jsonData);
         Debug.Log($"Character stats saved to: {jsonPath}");
     }
 
-    // ÀúÀåµÈ Ä³¸¯ÅÍ ºÒ·¯¿À±â
+    // ì €ì¥ëœ ìºë¦­í„° ë¶ˆëŸ¬ì˜¤ê¸°
     public static (CharacterData data, Sprite sprite) LoadCharacter(string characterId)
     {
-        // JSON ÆÄÀÏ¿¡¼­ Ä³¸¯ÅÍ Á¤º¸ ºÒ·¯¿È
+        // JSON íŒŒì¼ì—ì„œ ìºë¦­í„° ì •ë³´ ë¶ˆëŸ¬ì˜´
         string jsonPath = Path.Combine(Application.persistentDataPath, $"{characterId}.json");
         if (!File.Exists(jsonPath))
         {
@@ -36,7 +36,7 @@ public static class DataManager
         string jsonData = File.ReadAllText(jsonPath);
         CharacterData data = JsonUtility.FromJson<CharacterData>(jsonData);
 
-        // PNG ÆÄÀÏ¿¡¼­ Ä³¸¯ÅÍ ÀÌ¹ÌÁö ºÒ·¯¿È
+        // PNG íŒŒì¼ì—ì„œ ìºë¦­í„° ì´ë¯¸ì§€ ë¶ˆëŸ¬ì˜´
         string pngPath = Path.Combine(Application.persistentDataPath, data.imagePath);
         if (!File.Exists(pngPath))
         {
@@ -47,11 +47,10 @@ public static class DataManager
         Texture2D texture = new Texture2D(CharacterSize, CharacterSize);
         texture.LoadImage(pngData);
 
-        // Texture¸¦ Sprite·Î º¯È¯, Ä³¸¯ÅÍ ¹İÈ¯
+        // Textureë¥¼ Spriteë¡œ ë³€í™˜, ìºë¦­í„° ë°˜í™˜
         Rect rect = new Rect(0, 0, texture.width, texture.height);
-        Vector2 pivot = new Vector2(0.5f, 0.5f); // ½ºÇÁ¶óÀÌÆ®ÀÇ Áß¾Ó
+        Vector2 pivot = new Vector2(0.5f, 0.5f); // ìŠ¤í”„ë¼ì´íŠ¸ì˜ ì¤‘ì•™
         Sprite sprite = Sprite.Create(texture, rect, pivot);
-
         return (data, sprite);
     }
 }

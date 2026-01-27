@@ -10,7 +10,7 @@ public class MainTower : MonoBehaviour
 
     bool isUpgrade = false;
 
-    // Tower ´É·ÂÄ¡
+    // Tower ëŠ¥ë ¥ì¹˜
     public float maxHP = 100f;
     public float HP;
     public float attack = 10f;
@@ -38,7 +38,7 @@ public class MainTower : MonoBehaviour
     {
         HP = maxHP;
 
-        // ÅØ½ºÃÄ ºÒ·¯¿À±â
+        // í…ìŠ¤ì³ ë¶ˆëŸ¬ì˜¤ê¸°
         Texture2D sketchTexture = GameSession.OriginalSketch;
 
         if (sketchTexture != null)
@@ -46,13 +46,13 @@ public class MainTower : MonoBehaviour
             // texture -> sprite
             Rect rect = new Rect(0, 0, sketchTexture.width, sketchTexture.height);
             Vector2 pivot = new Vector2(0.5f, 0.5f);
-            float pixelsPerUnit = Mathf.Max(sketchTexture.width, sketchTexture.height); // Å©±â °íÁ¤
+            float pixelsPerUnit = Mathf.Max(sketchTexture.width, sketchTexture.height); // í¬ê¸° ê³ ì •
             Sprite sketchSprite = Sprite.Create(sketchTexture, rect, pivot, pixelsPerUnit);
 
-            // ½ºÄÉÄ¡·Î ±³Ã¼
+            // ìŠ¤ì¼€ì¹˜ë¡œ êµì²´
             sketchField.sprite = sketchSprite;
 
-            // Á¤»ç°¢ÇüÀ¸·Î
+            // ì •ì‚¬ê°í˜•ìœ¼ë¡œ
             float Width = sketchTexture.width / pixelsPerUnit;
             float Height = sketchTexture.height / pixelsPerUnit;
             float scaleX = (Width > 0) ? 0.9f / Width : 0.9f;
@@ -77,7 +77,7 @@ public class MainTower : MonoBehaviour
         }
     }
 
-    // ÇÇ°İ
+    // í”¼ê²©
     public void TakeDamage(float damage)
     {
         HP -= damage;
@@ -94,7 +94,7 @@ public class MainTower : MonoBehaviour
         }
     }
 
-    // ·¹º§¾÷ ¼±ÅÃÁö
+    // ë ˆë²¨ì—… ì„ íƒì§€
     public void TowerLevelUP()
     {
         isUpgrade = true;
@@ -108,7 +108,7 @@ public class MainTower : MonoBehaviour
         HP_Bar.value = HP / maxHP;
     }
 
-    // »ç¹æÀ¸·Î Projectile ¹ß»ç
+    // ì‚¬ë°©ìœ¼ë¡œ Projectile ë°œì‚¬
     public void Fire()
     {
         Quaternion rotationUp = Quaternion.Euler(0, 0, 90f + 90f);
@@ -122,7 +122,7 @@ public class MainTower : MonoBehaviour
         SpawnProjectile(rotationLeft);
     }
 
-    // Projectile »ı¼º
+    // Projectile ìƒì„±
     private void SpawnProjectile(Quaternion rotation)
     {
         GameObject projInstance = Instantiate(projectileObject, transform.position, rotation);
