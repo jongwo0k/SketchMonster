@@ -138,4 +138,14 @@ public class MainTower : MonoBehaviour
         HP = maxHP;
         HP_Bar.value = HP / maxHP;
     }
+
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+
+        if(sketchField != null && sketchField.sprite != null)
+        {
+            Destroy(sketchField.sprite); // sprite만
+        }
+    }
 }
