@@ -101,23 +101,7 @@ public class MapController : MonoBehaviour
     // 이전 스테이지에 남은 enemy, projectile 제거
     private void ClearRemainObjects()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // List로 변경 or 다른 함수 object pooling
-        foreach (GameObject enemy in enemies)
-        {
-            Destroy(enemy);
-        }
-
-        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectile");
-        foreach (GameObject proj in projectiles)
-        {
-            Destroy(proj);
-        }
-
-        GameObject[] orbs = GameObject.FindGameObjectsWithTag("ExperienceOrb");
-        foreach (GameObject orb in orbs)
-        {
-            Destroy(orb);
-        }
+        ObjectPoolManager.Instance.ClearObjects();
     }
 
     void OnDestroy()

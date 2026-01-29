@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -37,9 +38,17 @@ public class Enemy : MonoBehaviour
         HP_Bar.gameObject.SetActive(false);
     }
 
-    void Start()
+    private void OnEnable()
     {
-        targetPlayer = PlayerController.Instance.transform; // Player는 생성 됨
+        if (PlayerController.Instance != null)
+        {
+            targetPlayer = PlayerController.Instance.transform;
+        }
+    }
+
+    private void OnDisable()
+    {
+        rb.linearVelocity = Vector2.zero;
     }
 
     void FixedUpdate()
@@ -67,12 +76,12 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("MainTower")) 
         {
-            collision.GetComponent<MainTower>().TakeDamage(attack);
+            MainTower.Instance.TakeDamage(attack);
             Die();
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
-            collision.GetComponent<PlayerController>().TakeDamage(attack);
+            PlayerController.Instance.TakeDamage(attack);
             Die();
         }
     }
@@ -86,6 +95,13 @@ public class Enemy : MonoBehaviour
         attack = enemyAttack;
         speed = enemySpeed;
 
+        // 상태 초기화
+        isDead = false;
+        isDefeat = false;
+        col.enabled = true;
+
+        // HP UI
+        HP_Bar.gameObject.SetActive(true);
         HP_Bar.value = 1;
     }
 
@@ -140,9 +156,14 @@ public class Enemy : MonoBehaviour
         // 처치된 경우에만 경험치 오브 떨어트림
         if (isDefeat)
         {
-            Instantiate(experienceOrb, transform.position, Quaternion.identity);
+            ObjectPoolManager.Instance.Spawn(PoolType.ExpOrb, transform.position, Quaternion.identity);
         }
+        StartCoroutine(DespawnDelay(0.5f));
+    }
 
-        Destroy(gameObject, 0.5f);
+    IEnumerator DespawnDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Enemy);
     }
 }

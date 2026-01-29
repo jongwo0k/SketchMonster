@@ -6,7 +6,6 @@ public class MainTower : MonoBehaviour
     public static MainTower Instance { get; private set; }
 
     [SerializeField] private SpriteRenderer sketchField;
-    [SerializeField] private GameObject projectileObject;
 
     bool isUpgrade = false;
 
@@ -125,7 +124,7 @@ public class MainTower : MonoBehaviour
     // Projectile 생성
     private void SpawnProjectile(Quaternion rotation)
     {
-        GameObject projInstance = Instantiate(projectileObject, transform.position, rotation);
+        GameObject projInstance = ObjectPoolManager.Instance.Spawn(PoolType.Projectile, transform.position, rotation);
         Projectile projectileScript = projInstance.GetComponent<Projectile>();
         if (projectileScript != null)
         {

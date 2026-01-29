@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
@@ -9,21 +10,34 @@ public class Projectile : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    // 재사용 될 때마다
+    private void OnEnable()
+    {
         rb.linearVelocity = -transform.up * speed; // Unity 기본은 Y축 방향 -> 캐릭터 기본은 아래를 봄
 
         // 계속 날아가거나 쌓이는 것 방지
-        Destroy(gameObject, destroyTime);
+        StartCoroutine(AutoDespawn());
+    }
+
+    private void OnDisable()
+    {
+        rb.linearVelocity = Vector2.zero;
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.GetComponent<Enemy>().TakeDamage(attack);
-            Destroy(gameObject);
+            if(collision.TryGetComponent<Enemy>(out Enemy enemy))
+            {
+                enemy.TakeDamage(attack);
+                ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
+            }
         }
     }
 
@@ -31,5 +45,11 @@ public class Projectile : MonoBehaviour
     public void SetDamage(float damage)
     {
         this.attack = damage;
+    }
+
+    IEnumerator AutoDespawn()
+    {
+        yield return new WaitForSeconds(destroyTime);
+        ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
     }
 }

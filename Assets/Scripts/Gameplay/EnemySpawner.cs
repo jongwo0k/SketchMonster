@@ -1,11 +1,9 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("Enemy Template")]
-    [SerializeField] private GameObject enemyTemplate;
-
     // 생성 빈도
     [Header("Spawn Interval")]
     [SerializeField] private float initialSpawnInterval = 3f;
@@ -13,6 +11,22 @@ public class EnemySpawner : MonoBehaviour
 
     private MapGenerator mapGenerator;
     private float currentSpawnInterval;
+
+    // 스프라이트 미리 저장
+    private List<Sprite> enemySprites = new List<Sprite>();
+
+    void Start()
+    {
+        if (GameSession.EnemyTextures != null)
+        {
+            foreach (Texture2D texture in GameSession.EnemyTextures)
+            {
+                // 캐싱
+                Sprite unselectSprite = ConvertTextureToSprite(texture);
+                enemySprites.Add(unselectSprite);
+            }
+        }
+    }
 
     public void StartSpawnEnemy(int stageLevel)
     {
@@ -50,12 +64,8 @@ public class EnemySpawner : MonoBehaviour
         Vector2 spawnPos = GetRandomSpawnPosition();
 
         // EnemyTemplate 가져옴
-        GameObject enemyInstance = Instantiate(enemyTemplate, spawnPos, Quaternion.identity);
-        Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
-
-        // 세션에서 외형 불러옴
-        Texture2D enemyTexture = GameSession.EnemyTextures[Random.Range(0, GameSession.EnemyTextures.Count)];
-        Sprite enemySprite = ConvertTextureToSprite(enemyTexture);
+        GameObject enemyObject = ObjectPoolManager.Instance.Spawn(PoolType.Enemy, spawnPos, Quaternion.identity);
+        Enemy enemyScript = enemyObject.GetComponent<Enemy>();
 
         // Stage에 따라 능력치 상승
         int currentStage = MapController.Instance.stageLevel;
@@ -64,8 +74,8 @@ public class EnemySpawner : MonoBehaviour
         float speed = 5f + (currentStage * 0.1f);
 
         // 외형, 능력치 부여
+        Sprite enemySprite = enemySprites[Random.Range(0, enemySprites.Count)];
         enemyScript.Initialize(enemySprite, HP, attack, speed);
-
     }
 
     // 끝에서 랜덤 생성
@@ -106,5 +116,15 @@ public class EnemySpawner : MonoBehaviour
 
         Sprite sprite = Sprite.Create(texture, rect, pivot, pixelsPerUnit);
         return sprite;
+    }
+
+    void OnDestroy()
+    {
+        foreach (var sprite in enemySprites)
+        {
+            if (sprite != null)
+                Destroy(sprite);
+        }
+        enemySprites.Clear();
     }
 }

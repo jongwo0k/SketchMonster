@@ -96,9 +96,8 @@ public class PlayerController : MonoBehaviour
         {
             float xpValue = collision.GetComponent<ExpOrb>().expValue;
             GetXP(xpValue);
-            Destroy(collision.gameObject);
+            ObjectPoolManager.Instance.Despawn(collision.gameObject, PoolType.ExpOrb);
         }
-        
     }
 
     // 방향 표시
@@ -148,7 +147,7 @@ public class PlayerController : MonoBehaviour
     // Projectile 발사
     public void Fire()
     {
-        GameObject projectileObject = Instantiate(projectile, firePoint.position, directionIndicator.rotation);
+        GameObject projectileObject = ObjectPoolManager.Instance.Spawn(PoolType.Projectile, firePoint.position, directionIndicator.rotation);
         Projectile projectileScript = projectileObject.GetComponent<Projectile>();
         projectileScript.SetDamage(this.attack);
     }
@@ -188,9 +187,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Instance == this) Instance = null;
 
-        if (sr != null && sr.sprite != null && sr.sprite.texture != null)
+        if (sr != null && sr.sprite != null)
         {
-            Destroy(sr.sprite.texture);
+            Texture2D tex = sr.sprite.texture;
+            Destroy(sr.sprite);
+            if (tex != null) Destroy(tex);
         }
     }
 }
