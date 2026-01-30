@@ -19,6 +19,11 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private GameObject nextStage;
     [SerializeField] private TextMeshProUGUI gameOverText;
 
+    // 일시정지
+    [SerializeField] private GameObject pauseMenu;
+    // [SerializeField] volume;
+    private bool isPaused = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -37,20 +42,69 @@ public class UI_Manager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) // ESC
+        {
+            // 다른 창이 열려있는 경우 제외
+            if (!gameOver.activeSelf && !levelUp.activeSelf && !nextStage.activeSelf)
+            {
+                Pause();
+            }
+        }
+    }
+
+    // 일시 정지
+    public void Pause()
+    {
+        isPaused = !isPaused; // Toggle
+
+        if (isPaused)
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    // 볼륨 조절
+    public void VolumeChange(float value)
+    {
+
+    }
+
+    // 종료
+    public void ExitMenu_Button()
+    {
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+        GameSession.CleanSession();
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void ExitGame_Button()
+    {
+        Application.Quit();
+    }
+
     // GameOver
     public void GameIsOver()
     {
         gameOver.SetActive(true);
         int finalStage = MapController.Instance.stageLevel;
         gameOverText.text = "Stage: " + finalStage;
-        Time.timeScale = 0.0001f;
+        Time.timeScale = 0f;
     }
 
     // NextStage
     public void StageIsClear()
     {
         nextStage.SetActive(true);
-        Time.timeScale = 0.0001f;
+        Time.timeScale = 0f;
     }
 
     public void Next_Button()
@@ -64,7 +118,7 @@ public class UI_Manager : MonoBehaviour
     public void LevelUP()
     {
         levelUp.SetActive(true);
-        Time.timeScale = 0.0001f;
+        Time.timeScale = 0f;
     }
 
     public void Player_LevelUP_Button()
@@ -105,6 +159,12 @@ public class UI_Manager : MonoBehaviour
     {
         Time.timeScale = 1f;
         gameOver.SetActive(false);
+        GameSession.CleanSession();
         SceneManager.LoadScene("Menu");
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
     }
 }
