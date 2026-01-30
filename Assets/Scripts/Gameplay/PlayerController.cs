@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;
+
         // 키보드 움직임 입력 (WASD, 방향키 모두)
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
