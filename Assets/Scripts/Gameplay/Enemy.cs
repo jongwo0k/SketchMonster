@@ -135,13 +135,16 @@ public class Enemy : MonoBehaviour
         {
             HP_Bar.gameObject.SetActive(true);
         }
-        ObjectPoolManager.Instance.Spawn(PoolType.EnemyHitParticle, transform.position, Quaternion.identity);
-        SoundManager.Instance.PlayEnemyHit();
 
         if (HP <= 0)
         {
             isDefeat = true;
             Die(true);
+        }
+        else
+        {
+            ObjectPoolManager.Instance.Spawn(PoolType.EnemyHitParticle, transform.position, Quaternion.identity);
+            SoundManager.Instance.PlayEnemyHit();
         }
     }
 

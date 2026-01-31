@@ -366,4 +366,13 @@ public class SketchBoard : MonoBehaviour
         Debug.Log($"Stroke Count: {strokeCount}, Remain Time: {remainSeconds} sec");
         gameManager.StartCharacterCreation(texture, strokeCount, remainSeconds);
     }
+
+    void OnDestroy()
+    {
+        if (texture != null)
+        {
+            Destroy(texture);
+            texture = null;
+        }
+    }
 }
