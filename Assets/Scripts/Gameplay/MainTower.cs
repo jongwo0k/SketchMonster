@@ -91,6 +91,9 @@ public class MainTower : MonoBehaviour
         {
             UI_Manager.Instance.GameIsOver();
         }
+
+        ObjectPoolManager.Instance.Spawn(PoolType.HitParticle, transform.position, Quaternion.identity);
+        SoundManager.Instance.PlayPlayerHit();
     }
 
     // 레벨업 선택지

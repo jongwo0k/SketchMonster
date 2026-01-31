@@ -21,7 +21,7 @@ public class UI_Manager : MonoBehaviour
 
     // 일시정지
     [SerializeField] private GameObject pauseMenu;
-    // [SerializeField] volume;
+    [SerializeField] private Slider volumeSlider;
     private bool isPaused = false;
 
     private void Awake()
@@ -40,6 +40,8 @@ public class UI_Manager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1f;
+        SoundManager.Instance.SetVolume(0.5f);
+        volumeSlider.value = 0.5f;
     }
 
     private void Update()
@@ -66,15 +68,15 @@ public class UI_Manager : MonoBehaviour
         }
         else
         {
-            pauseMenu.SetActive(false);
             Time.timeScale = 1f;
+            pauseMenu.SetActive(false);
         }
     }
 
     // 볼륨 조절
     public void VolumeChange(float value)
     {
-
+        SoundManager.Instance.SetVolume(value);
     }
 
     // 종료
@@ -97,6 +99,7 @@ public class UI_Manager : MonoBehaviour
         gameOver.SetActive(true);
         int finalStage = MapController.Instance.stageLevel;
         gameOverText.text = "Stage: " + finalStage;
+        SoundManager.Instance.PlayGameOver();
         Time.timeScale = 0f;
     }
 
@@ -104,6 +107,7 @@ public class UI_Manager : MonoBehaviour
     public void StageIsClear()
     {
         nextStage.SetActive(true);
+        SoundManager.Instance.PlayStageClear();
         Time.timeScale = 0f;
     }
 

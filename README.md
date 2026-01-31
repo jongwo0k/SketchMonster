@@ -361,7 +361,7 @@ Find계열 함수를 사용한 방식은 전체를 탐색해 성능에 부담을
 Objectpooling
 - 미리 오브젝트들을 생성해서 List(활성, 일괄), Queue(재사용)에 저장해 상태를 관리하고 사용시에만 활성화한다.
 - 미리 생성한 오브젝트만으로 부족할 경우에만 추가로 생성한다.
-- Projectile, Enemy, ExpOrb처럼 생성 빈도가 높은 오브젝트들을 통합해서 관리할 수 있고 추후 Particle, Sound 시스템도 동일한 방식으로 관리할 수 있다.
+- Projectile, Enemy, ExpOrb처럼 생성 빈도가 높은 오브젝트들을 통합해서 관리할 수 있고 추후 Particle도 동일한 방식으로 관리할 수 있다.
 
 # 개선할 점 및 발전 방향
 
@@ -387,8 +387,16 @@ unity가 있을 경우 git clone후 해당 버전에서 직접 빌드해서 실�
 
 # Reference
 
-QuickDraw
-DALL-E (OpenAI)
-Unity Inference Engine
-OpenCV
-Roguelike pack by Kenney Vleugels for Kenney (www.kenney.nl) with help by Lynn Evers (Twitter: @EversLynn)
+- QuickDraw
+- DALL-E (OpenAI)
+- Unity Inference Engine
+- OpenCV
+- Roguelike pack by Kenney Vleugels for Kenney (www.kenney.nl) with help by Lynn Evers (Twitter: @EversLynn)
+- BGM by suno ai
+- Sound Effect by Driken Stan from Pixabay (shoot)
+- Sound Effect by Universfield from Pixabay (xp, clear)
+- Sound Effect by freesound_community from Pixabay (levelup)
+- Sound Effect by freesound_community from Pixabay (over)
+- Sound Effect by floraphonic from Pixabay (monster die)
+- Sound Effect by Pramod Rai from Pixabay (hit monster)
+- Sound Effect by floraphonic from Pixabay (hit projectile)

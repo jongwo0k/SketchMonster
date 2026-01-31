@@ -142,8 +142,14 @@ public class PlayerController : MonoBehaviour
         if (HP <= 0)
         {
             UI_Manager.Instance.GameIsOver();
+            ObjectPoolManager.Instance.Spawn(PoolType.DieParticle, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
         }
+        else
+        {
+            ObjectPoolManager.Instance.Spawn(PoolType.HitParticle, transform.position, Quaternion.identity);
+        }
+        SoundManager.Instance.PlayPlayerHit();
     }
 
     // Projectile 발사
@@ -152,6 +158,7 @@ public class PlayerController : MonoBehaviour
         GameObject projectileObject = ObjectPoolManager.Instance.Spawn(PoolType.Projectile, firePoint.position, directionIndicator.rotation);
         Projectile projectileScript = projectileObject.GetComponent<Projectile>();
         projectileScript.SetDamage(this.attack);
+        SoundManager.Instance.PlayShoot();
     }
 
     // 경험치 획득
@@ -164,9 +171,15 @@ public class PlayerController : MonoBehaviour
             XP -= maxXP;
             maxXP *= 1.1f; // 필요 경험치 증가
 
+            SoundManager.Instance.PlayLevelUp();
             UI_Manager.Instance.LevelUP();
         }
+        else
+        {
+            SoundManager.Instance.PlayGetExp();
+        }
         XP_Bar.value = XP / maxXP;
+        
     }
 
     // 레벨업 선택지

@@ -6,9 +6,10 @@ public enum PoolType
 {
     Projectile,
     Enemy,
-    ExpOrb
-    // Effect, Particle
-    // Sound
+    ExpOrb,
+    HitParticle,
+    EnemyHitParticle,
+    DieParticle,
 }
 
 public class ObjectPoolManager : MonoBehaviour

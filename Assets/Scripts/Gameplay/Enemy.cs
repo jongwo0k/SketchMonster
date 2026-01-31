@@ -77,12 +77,12 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("MainTower")) 
         {
             MainTower.Instance.TakeDamage(attack);
-            Die();
+            Die(false);
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController.Instance.TakeDamage(attack);
-            Die();
+            Die(false);
         }
     }
 
@@ -135,16 +135,18 @@ public class Enemy : MonoBehaviour
         {
             HP_Bar.gameObject.SetActive(true);
         }
+        ObjectPoolManager.Instance.Spawn(PoolType.EnemyHitParticle, transform.position, Quaternion.identity);
+        SoundManager.Instance.PlayEnemyHit();
 
         if (HP <= 0)
         {
             isDefeat = true;
-            Die();
+            Die(true);
         }
     }
 
     // 사망
-    private void Die()
+    private void Die(bool playSound = true)
     {
         isDead = true;
 
@@ -157,8 +159,13 @@ public class Enemy : MonoBehaviour
         if (isDefeat)
         {
             ObjectPoolManager.Instance.Spawn(PoolType.ExpOrb, transform.position, Quaternion.identity);
+            ObjectPoolManager.Instance.Spawn(PoolType.DieParticle, transform.position, Quaternion.identity);
         }
         StartCoroutine(DespawnDelay(0.5f));
+        if (playSound)
+        {
+            SoundManager.Instance.PlayEnemyDie();
+        }
     }
 
     IEnumerator DespawnDelay(float delay)
