@@ -40,8 +40,7 @@ public class UI_Manager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1f;
-        SoundManager.Instance.SetVolume(0.5f);
-        volumeSlider.value = 0.5f;
+        volumeSlider.value = SoundManager.Instance.GetVolume();
     }
 
     private void Update()

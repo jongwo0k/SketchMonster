@@ -23,12 +23,15 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip gameOverSound;   // 게임오버
     [SerializeField] private AudioClip stageClearSound; // 스테이지 클리어
 
+    private const string VOLUME = "SavedVolume";
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // 유지
+            SetVolume(PlayerPrefs.GetFloat(VOLUME, 0.5f)); // 이전 볼륨 설정 값 유지, 없으면 기본값(0.5)
         }
         else
         {
@@ -90,6 +93,7 @@ public class SoundManager : MonoBehaviour
         // 0.0 ~ 1.0, default 0.5
         bgmSource.volume = volume;
         sfxSource.volume = volume;
+        PlayerPrefs.SetFloat(VOLUME, volume);
     }
 
     // 호출 시 변수 없이 함수만
