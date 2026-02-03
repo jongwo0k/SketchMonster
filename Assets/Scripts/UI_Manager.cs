@@ -98,6 +98,14 @@ public class UI_Manager : MonoBehaviour
         gameOver.SetActive(true);
         int finalStage = MapController.Instance.stageLevel;
         gameOverText.text = "Stage: " + finalStage;
+
+        var (data, _) = DataManager.LoadCharacter(GameSession.SelectedCharacterId);
+        if(data != null)
+        {
+            int finalLevel = PlayerController.Instance.level;
+            DataManager.SaveGameResult(data, finalStage, finalLevel);
+        }
+        
         SoundManager.Instance.PlayGameOver();
         Time.timeScale = 0f;
     }

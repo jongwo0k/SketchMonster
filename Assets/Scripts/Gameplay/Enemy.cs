@@ -31,9 +31,6 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
-
-        GameObject tower = GameObject.Find("MainTower"); // MainTower는 처음부터 존재
-        targetTower = tower.transform;
         
         HP_Bar.gameObject.SetActive(false);
     }
@@ -43,6 +40,10 @@ public class Enemy : MonoBehaviour
         if (PlayerController.Instance != null)
         {
             targetPlayer = PlayerController.Instance.transform;
+        }
+        if (MainTower.Instance != null)
+        {
+            targetTower = MainTower.Instance.transform;
         }
     }
 

@@ -6,7 +6,7 @@ public class MainMenu : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField] private GameObject howtoplayPanel;
-    [SerializeField] private GameObject rankPanel;
+    [SerializeField] private GameObject recordPanel;
 
     [Header("Volume")]
     [SerializeField] private Slider volumeSlider;
@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         if (howtoplayPanel != null) howtoplayPanel.SetActive(false);
-        if (rankPanel != null) rankPanel.SetActive(false);
+        if (recordPanel != null) recordPanel.SetActive(false);
         volumeSlider.value = SoundManager.Instance.GetVolume();
     }
 
@@ -24,12 +24,13 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("StartScene");
     }
 
-    /*
-    public void OnRankHallButtonClicked()
+    
+    public void OnRecordButtonClicked()
     {
-        rankPanel.SetActive(true);
+        recordPanel.SetActive(true);
     }
 
+    /*
     public void OnHowToPlayPanelButtonClicked()
     {
         howtoplayPanel.SetActive(true);
@@ -42,13 +43,13 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    /*
+    
     public void CloseButtonClicked()
     {
-        howtoplayPanel.SetActive(false);
-        rankPanel.SetActive(false);
+        // howtoplayPanel.SetActive(false);
+        recordPanel.SetActive(false);
     }
-    */
+    
 
     public void VolumeChange(float value)
     {
