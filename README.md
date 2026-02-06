@@ -1,5 +1,5 @@
 # SketchMonster
-A 2D top-down roguelike game where player drawings are analyzed by AI(CNN, GAN) to generate unique monster characters for gameplay. Built with Unity and Sentis engine.
+A 2D top-down roguelike game where player drawings are analyzed by AI(CNN, GAN) to generate unique monster characters for gameplay. Built with Unity and Inference(Sentis) engine.
 
 # 프로젝트 소개
 SketchMonster는 생성형 AI를 게임에 통합한 2D 로그라이크 게임입니다.
@@ -44,7 +44,7 @@ Generator가 생성한 이미지를 외형으로 하며 최종 계산된 능력�
 레벨업 시 3가지 선택지 중 1개 선택
 - Player 능력치 강화
 - Tower 능력치 강화
-- HP 회복
+- 전체 HP 회복
 
 ## 게임 오버
 
@@ -144,8 +144,9 @@ Magenta 배경 적용
 
 **Start Menu**
 - 새 게임 시작
+- 게임 기록 랭킹 시스템
+- (미구현: How To Play)
 - 게임 종료
-- (미구현: 진행 중이던 게임 불러오기, 이전에 생성한 캐릭터 관리)
 
 **Draw Sketch**
 - 그림판에 원하는 스케치를 그림
@@ -308,6 +309,12 @@ Class가 많아지면 필요한 데이터가 많아짐 (QuickDraw에는 다양�
 - 작은 캐릭터 크기의 pixel art 스타일
 - 절차적 생성으로 콘텐츠 확보
 
+## 메인 메뉴 목록
+
+불러오기, 캐릭터 관리 대신 게임 기록 랭킹, 플레이 방법 및 게임 설명 채택
+- 장르 특성상 진행 중 종료는 적을 것이며 불러오기 보다는 게임 플레이 기록을 남기는 기능이 더 수요가 클 것으로 판단했다.
+- 조작법과 특정 Class만 생성할 수 있다는 정보를 제공할 수 있다.
+
 # Troubleshooting
 
 ## 생성된 이미지의 노이즈와 불안정한 형태
@@ -374,7 +381,6 @@ Generator가 생성하는 이미지의 방향이 고정되지 않아 플레이 �
 - 한쪽 방향만 바라보도록 재구성한 데이터로 학습된 모델로 변경, 생성된 이미지를 Unity의 flipX로 Unity에서 일괄 처리
 
 **게임적 요소 보강**
-- Class별 캐릭터의 고유 스킬이나 게임적 요소의 추가가 필요하다.
 - 현재 Class가 3개만 지원되며 해당하지 않는 이상한 그림을 그려도 3개 중 하나로 생성된다. 더 많은 Class 추가 또는 어느 것에도 해당하지 않는 스케치(추론 결과가 임계 정확도 미만)를 제출했을 때 생성 될 Chaos Class가 추가될 경우 완성도가 높아질 것으로 예상된다.
 - 레벨 디자인 최적화가 필요하다. 적의 패턴 추가, 생성 주기와 난이도 곡선의 적절한 밸런싱이 필요하다.
 - 게임 장르 특성상 속도감과 타격감이 중요하다. 이에 대한 추가적인 개선이 필요하다.

@@ -25,11 +25,20 @@ public class PlayerController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Slider HP_Bar;
     [SerializeField] private Slider XP_Bar;
+    [SerializeField] private Image skill_Icon;
+
+    private Skill playerSkill;
+    private bool isDash = false;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Vector2 movement;
     private Vector2 lastAimDirection; // 조준 방향을 저장
+
+    // 공개
+    public Rigidbody2D Rb => rb;
+    public Vector2 CurrentMovement => movement;
+    public Vector2 LastAimDirection => lastAimDirection;
 
     void Awake()
     {
@@ -83,12 +92,32 @@ public class PlayerController : MonoBehaviour
         {
             Fire();
         }
+
+        // Skill 사용 (Shift L, R)
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) // project setting -> input manager Fire3?
+        {
+            playerSkill.UseSkill();
+        }
+        skill_Icon.fillAmount = playerSkill.GetCooldownRatio(); // UI
     }
 
     // 물리처리
     void FixedUpdate()
     {
-        rb.linearVelocity = movement.normalized * speed; // 대각선 보정
+        if (!isDash) // Dash중엔 X, 다른 class?
+        {
+            rb.linearVelocity = movement.normalized * speed; // 대각선 보정
+        }
+    }
+
+    public void SetDashState(bool active)
+    {
+        isDash = active;
+
+        if (!active)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
     }
 
     // 충돌
@@ -99,6 +128,13 @@ public class PlayerController : MonoBehaviour
             float xpValue = collision.GetComponent<ExpOrb>().expValue;
             GetXP(xpValue);
             ObjectPoolManager.Instance.Despawn(collision.gameObject, PoolType.ExpOrb);
+        }
+        else if (isDash && collision.gameObject.CompareTag("Enemy"))
+        {
+            if (collision.TryGetComponent<Enemy>(out Enemy enemy))
+            {
+                enemy.TakeDamage(float.MaxValue); // 바로 처치
+            }
         }
     }
 
@@ -126,11 +162,36 @@ public class PlayerController : MonoBehaviour
         // UI 초기화
         HP_Bar.value = HP / maxHP;
         XP_Bar.value = XP / maxXP;
+
+        // 이전 스킬 제거
+        if (playerSkill != null) Destroy(playerSkill);
+
+        // 스킬 할당
+        switch (data.className)
+        {
+            case "Bird":
+                playerSkill = gameObject.AddComponent<BirdSkill>(); 
+                break;
+            // case "Dog":
+            // case "Fish":
+        }
+
+        // 스킬 초기화
+        if (playerSkill != null)
+        {
+            playerSkill.Initialize(this);
+        }
     }
 
     // 피격
     public void TakeDamage(float damage)
     {
+        // Dash중엔 무적
+        if (isDash)
+        {
+            return;
+        }
+
         HP -= damage;
 
         HP_Bar.value = HP / maxHP;
