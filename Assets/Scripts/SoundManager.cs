@@ -23,6 +23,11 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip gameOverSound;   // 게임오버
     [SerializeField] private AudioClip stageClearSound; // 스테이지 클리어
 
+    [Header("Skill")]
+    [SerializeField] private AudioClip birdSkillSound;
+    [SerializeField] private AudioClip dogSkillSound;
+    [SerializeField] private AudioClip fishSkillSound;
+
     private const string VOLUME = "SavedVolume";
 
     private void Awake()
@@ -105,6 +110,9 @@ public class SoundManager : MonoBehaviour
     public void PlayLevelUp() => PlaySFX(levelUpSound);
     public void PlayGameOver() => PlaySFX(gameOverSound);
     public void PlayStageClear() => PlaySFX(stageClearSound);
+    public void PlayBirdSkill() => PlaySFX(birdSkillSound);
+    public void PlayDogSkill() => PlaySFX(dogSkillSound);
+    public void PlayFishSkill() => PlaySFX(fishSkillSound);
 
     public float GetVolume()
     {

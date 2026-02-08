@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform directionIndicator; // 조준 방향
-    [SerializeField] private Transform firePoint;          // 발사 지점
+    [SerializeField] public Transform firePoint;          // 발사 지점
 
     // 움직임
     [Header("Movement")]
@@ -172,7 +172,9 @@ public class PlayerController : MonoBehaviour
             case "Bird":
                 playerSkill = gameObject.AddComponent<BirdSkill>(); 
                 break;
-            // case "Dog":
+            case "Dog":
+                playerSkill = gameObject.AddComponent<DogSkill>();
+                break;
             // case "Fish":
         }
 

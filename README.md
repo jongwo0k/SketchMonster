@@ -406,3 +406,4 @@ unity가 있을 경우 git clone후 해당 버전에서 직접 빌드해서 실�
 - Sound Effect by floraphonic from Pixabay (monster die)
 - Sound Effect by Pramod Rai from Pixabay (hit monster)
 - Sound Effect by floraphonic from Pixabay (hit projectile)
+- Sound Effect by DRAGON-STUDIO from Pixabay (bird, dog, fish skill)

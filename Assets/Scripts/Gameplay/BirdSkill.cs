@@ -27,6 +27,8 @@ public class BirdSkill : Skill
             dashDir = player.LastAimDirection;
         }
 
+        SoundManager.Instance.PlayBirdSkill();
+
         // 대쉬 중
         player.SetDashState(true);
 

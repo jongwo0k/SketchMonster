@@ -1288,6 +1288,9 @@ MonoBehaviour:
   levelUpSound: {fileID: 8300000, guid: 7e08fc9d8257cc74dbfba957912a8dfb, type: 3}
   gameOverSound: {fileID: 8300000, guid: eb63280c21aff224d83aab175c372f42, type: 3}
   stageClearSound: {fileID: 8300000, guid: cfab0532b58a9804d89c8cc6a8661ff7, type: 3}
+  birdSkillSound: {fileID: 8300000, guid: d1ee8f57499c73444860cf3b83c36a3b, type: 3}
+  dogSkillSound: {fileID: 8300000, guid: 6279bc89fd0e93b4185684b9644b6bf7, type: 3}
+  fishSkillSound: {fileID: 8300000, guid: d215105f983bacf439311c36e5539b50, type: 3}
 --- !u!4 &1526086230
 Transform:
   m_ObjectHideFlags: 0
