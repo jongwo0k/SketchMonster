@@ -25485,6 +25485,10 @@ MonoBehaviour:
     prefab: {fileID: 2209709073152201532, guid: d4e7a421ff096cf4d920f64655ae1410, type: 3}
     initialCount: 2
     container: {fileID: 2016081483}
+  - type: 7
+    prefab: {fileID: 5348607674775655467, guid: 6fad8f5ec1d604f4896c2920b49ddc92, type: 3}
+    initialCount: 2
+    container: {fileID: 880057198}
 --- !u!4 &396305864
 Transform:
   m_ObjectHideFlags: 0
@@ -25505,6 +25509,7 @@ Transform:
   - {fileID: 621106216}
   - {fileID: 527622142}
   - {fileID: 2016081483}
+  - {fileID: 880057198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &453667551
@@ -26518,6 +26523,37 @@ MonoBehaviour:
   minX: -2.5
   maxY: 13
   minY: 0.5
+--- !u!1 &880057197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 880057198}
+  m_Layer: 0
+  m_Name: Bubble
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &880057198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880057197}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 396305864}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &887235874
 GameObject:
   m_ObjectHideFlags: 0

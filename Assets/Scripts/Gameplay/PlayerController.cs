@@ -175,7 +175,9 @@ public class PlayerController : MonoBehaviour
             case "Dog":
                 playerSkill = gameObject.AddComponent<DogSkill>();
                 break;
-            // case "Fish":
+            case "Fish":
+                playerSkill = gameObject.AddComponent<FishSkill>();
+                break;
         }
 
         // 스킬 초기화

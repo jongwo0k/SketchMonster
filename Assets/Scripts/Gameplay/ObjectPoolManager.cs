@@ -11,6 +11,7 @@ public enum PoolType
     EnemyHitParticle,
     DieParticle,
     BarkParticle,
+    BubbleSkill,
 }
 
 public class ObjectPoolManager : MonoBehaviour
