@@ -8,7 +8,8 @@ public class DogSkill : Skill
     public override void Initialize(PlayerController _player)
     {
         base.Initialize(_player);
-        this.cooldown = 1f;
+        this.cooldown = 3f;
+        this.damage *= 5f;
     }
 
     protected override void Execute()
@@ -65,7 +66,7 @@ public class DogSkill : Skill
                 {
                     if (hit.TryGetComponent<Enemy>(out Enemy enemy))
                     {
-                        enemy.TakeDamage(float.MaxValue);
+                        enemy.TakeDamage(damage);
                     }
                 }
             }

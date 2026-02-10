@@ -2,9 +2,10 @@ using UnityEngine;
 
 public static class CharacterStatCalculator // (완성 후 밸런스를 고려해 계수 수정 필요)
 {
-    // 추가 계수 (스케치 정보) Max 제한?
+    // 추가 계수 (스케치 정보) Max 제한? hp O, speed도?
     private const float StrokeHpFactor = 5f;
     private const float TimeSpeedFactor = 0.2f;
+    private const float MaxHpBonus = 200f;
 
     // 능력치 설정
     public static CharacterData Calculate(string className, int strokeCount, int remainTime)
@@ -52,7 +53,7 @@ public static class CharacterStatCalculator // (완성 후 밸런스를 고려�
         }
 
         // 최종 능력치 계산
-        float hpBonus = strokeCount * StrokeHpFactor;
+        float hpBonus = Mathf.Min(strokeCount * StrokeHpFactor, MaxHpBonus);
         float speedBonus = remainTime * TimeSpeedFactor;
 
         data.hp = (baseHp * gradeMultiplier) + hpBonus;

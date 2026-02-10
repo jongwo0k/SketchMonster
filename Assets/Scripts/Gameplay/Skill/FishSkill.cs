@@ -8,7 +8,7 @@ public class FishSkill : Skill
     public override void Initialize(PlayerController _player)
     {
         base.Initialize(_player);
-        this.cooldown = 10f;
+        this.cooldown = 8f;
     }
 
     protected override void Execute()

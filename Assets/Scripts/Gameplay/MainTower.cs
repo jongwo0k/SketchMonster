@@ -12,7 +12,7 @@ public class MainTower : MonoBehaviour
     // Tower 능력치
     public float maxHP = 100f;
     public float HP;
-    public float attack = 10f;
+    public float attack = 15f;
     public float attackCoolTime = 3f;
     public float fireTimer;
     public int towerLevel = 1;

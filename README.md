@@ -91,7 +91,7 @@ Stroke Count: HP 추가
 ## 조작법
 - `방향키` 캐릭터 이동
 - `Space` 기본 공격 (바라보는 방향으로 투사체 발사)
-(Class 별 고유 스킬 추가 예정)
+- `Shift` Class별 고유 스킬 (Dash, Bark, Bubble)
 
 **게임 요소**
 - 적은 외곽에서 생성되어 Main Tower와 Player 중 가까운 대상을 추적
@@ -99,6 +99,7 @@ Stroke Count: HP 추가
 - 스테이지가 진행될수록 적의 생성 주기와 능력치 상승
 - 적 처치 시 경험치 구슬 드롭
 - 레벨업 시 선택지 제시
+- 상위 플레이 기록 저장
 
 ![Levelup Sample](./docs/images/levelup_sample.png)
 *Levelup Sample*
@@ -315,6 +316,12 @@ Class가 많아지면 필요한 데이터가 많아짐 (QuickDraw에는 다양�
 - 장르 특성상 진행 중 종료는 적을 것이며 불러오기 보다는 게임 플레이 기록을 남기는 기능이 더 수요가 클 것으로 판단했다.
 - 조작법과 특정 Class만 생성할 수 있다는 정보를 제공할 수 있다.
 
+## Class별 스킬 부여
+
+- Bird - Dash Skill: Speed가 높고 HP가 적은 특징을 살릴 수 있다.
+- Dog - Bark Skill: 범용적으로 사용하기 좋다.
+- Fish - Bubble Skill: 데미지를 입히는 영역을 생성해 Speed가 느린 특징을 보완할 수 있다.
+
 # Troubleshooting
 
 ## 생성된 이미지의 노이즈와 불안정한 형태
@@ -368,7 +375,14 @@ Find계열 함수를 사용한 방식은 전체를 탐색해 성능에 부담을
 Objectpooling
 - 미리 오브젝트들을 생성해서 List(활성, 일괄), Queue(재사용)에 저장해 상태를 관리하고 사용시에만 활성화한다.
 - 미리 생성한 오브젝트만으로 부족할 경우에만 추가로 생성한다.
-- Projectile, Enemy, ExpOrb처럼 생성 빈도가 높은 오브젝트들을 통합해서 관리할 수 있고 추후 Particle도 동일한 방식으로 관리할 수 있다.
+- Projectile, Enemy, ExpOrb처럼 생성 빈도가 높은 오브젝트들을 통합해서 관리할 수 있다.
+
+## Bark Skill 이펙트 개선
+Bark Skill의 이펙트와 Hitbox가 일치하지 않는다.
+
+**해결책**
+Particle 대신 MeshFilter + MeshRenderer로 Hitbox 영역과 일치하는 부채꼴을 그려서 표시하도록 했다.
+Hitbox판정과 동일한 radius, angle을 사용하기에 영역이 항상 일치한다.
 
 # 개선할 점 및 발전 방향
 
