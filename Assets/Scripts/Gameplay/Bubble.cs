@@ -61,15 +61,6 @@ public class Bubble : MonoBehaviour
         }
     }
 
-    // gizmo 범위 확인
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
-        Gizmos.DrawSphere(transform.position, radius);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, radius);
-    }
-
     private void OnDisable()
     {
         StopAllCoroutines();

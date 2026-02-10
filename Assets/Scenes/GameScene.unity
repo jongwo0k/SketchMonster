@@ -25482,7 +25482,7 @@ MonoBehaviour:
     initialCount: 20
     container: {fileID: 527622142}
   - type: 6
-    prefab: {fileID: 2209709073152201532, guid: d4e7a421ff096cf4d920f64655ae1410, type: 3}
+    prefab: {fileID: 5181159644706173607, guid: d5c60e92d29794c438ba8689b1186658, type: 3}
     initialCount: 2
     container: {fileID: 2016081483}
   - type: 7

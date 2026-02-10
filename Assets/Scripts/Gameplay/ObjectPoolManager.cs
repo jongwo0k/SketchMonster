@@ -10,7 +10,7 @@ public enum PoolType
     HitParticle,
     EnemyHitParticle,
     DieParticle,
-    BarkParticle,
+    BarkEffect,
     BubbleSkill,
 }
 

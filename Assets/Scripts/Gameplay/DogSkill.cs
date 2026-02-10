@@ -31,8 +31,18 @@ public class DogSkill : Skill
         float rotZ = Mathf.Atan2(barkDir.y, barkDir.x) * Mathf.Rad2Deg - 90; // 위
         Quaternion effectRot = Quaternion.Euler(0f, 0f, rotZ);
 
-        ObjectPoolManager.Instance.Spawn(PoolType.BarkParticle, player.firePoint.position, effectRot);
-        
+        // 범위 표시
+        GameObject effectObj = ObjectPoolManager.Instance.Spawn(PoolType.BarkEffect, player.firePoint.position, effectRot);
+        if (effectObj != null)
+        {
+            BarkEffect effect = effectObj.GetComponent<BarkEffect>();
+            if (effect != null)
+            {
+                Vector3 firePoint = player.firePoint.localPosition;
+                effect.PlayEffect(radius, angle, player.transform, effectRot, firePoint);
+            }
+        }
+
         BarkDamage(barkDir);
     }
 
@@ -60,25 +70,5 @@ public class DogSkill : Skill
                 }
             }
         }
-    }
-
-    // gizmo 범위 확인
-    private void OnDrawGizmosSelected()
-    {
-        if (player == null) return;
-
-        Vector3 origin = player.firePoint.position;
-        Vector3 direction = Application.isPlaying ? (Vector3)player.LastAimDirection : Vector3.down; // 아래
-
-        Gizmos.color = Color.red;
-
-        // 원
-        Gizmos.DrawWireSphere(origin, radius);
-        // 부채꼴 (데미지 범위)
-        Vector3 leftDir = Quaternion.Euler(0, 0, angle / 2f) * direction;
-        Vector3 rightDir = Quaternion.Euler(0, 0, -angle / 2f) * direction;
-
-        Gizmos.DrawLine(origin, origin + leftDir * radius);
-        Gizmos.DrawLine(origin, origin + rightDir * radius);
     }
 }
