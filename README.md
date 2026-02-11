@@ -1,6 +1,8 @@
 # SketchMonster
 A 2D top-down roguelike game where player drawings are analyzed by AI(CNN, GAN) to generate unique monster characters for gameplay. Built with Unity and Inference(Sentis) engine.
 
+![Generate Character Fish](./docs/gif/generate_character_fish.gif)
+
 # 프로젝트 소개
 SketchMonster는 생성형 AI를 게임에 통합한 2D 로그라이크 게임입니다.
 
@@ -93,6 +95,15 @@ Stroke Count: HP 추가
 - `Space` 기본 공격 (바라보는 방향으로 투사체 발사)
 - `Shift` Class별 고유 스킬 (Dash, Bark, Bubble)
 
+![bird Skill](./docs/gif/bird_skill.gif)
+*Gameplay Sample Bird*
+
+![dog Skill](./docs/gif/dog_skill.gif)
+*Gameplay Sample Dog*
+
+![Fish Skill](./docs/gif/fish_skill.gif)
+*Gameplay Sample Fish*
+
 **게임 요소**
 - 적은 외곽에서 생성되어 Main Tower와 Player 중 가까운 대상을 추적
 - Main Tower 또는 Player의 HP가 0이 되면 Game Over
@@ -101,11 +112,11 @@ Stroke Count: HP 추가
 - 레벨업 시 선택지 제시
 - 상위 플레이 기록 저장
 
+![Record Sample](./docs/images/record_sample.png)
+*Record Sample*
+
 ![Levelup Sample](./docs/images/levelup_sample.png)
 *Levelup Sample*
-
-![Gameplay Sample](./docs/images/gameplay_sample.png)
-*Gameplay Sample*
 
 # System Architecture
 
