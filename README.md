@@ -96,12 +96,15 @@ Stroke Count: HP 추가
 - `Shift` Class별 고유 스킬 (Dash, Bark, Bubble)
 
 ![bird Skill](./docs/gif/bird_skill.gif)
+
 *Gameplay Sample Bird*
 
 ![dog Skill](./docs/gif/dog_skill.gif)
+
 *Gameplay Sample Dog*
 
 ![Fish Skill](./docs/gif/fish_skill.gif)
+
 *Gameplay Sample Fish*
 
 **게임 요소**
