@@ -115,6 +115,35 @@ public static class DataManager
         }
     }
 
+    // Top10 외에 남아있는 파일 정리
+    public static void InitStorage()
+    {
+        RecordData rd = LoadRecordData();
+        HashSet<string> validIds = new HashSet<string>();
+        if (rd != null)
+        {
+            foreach (var record in rd.records)
+            {
+                validIds.Add(record.characterId);
+            }
+        }
+
+        string[] jsonFiles = Directory.GetFiles(Application.persistentDataPath, "*.json");
+        foreach (string jsonFile in jsonFiles)
+        {
+            string fullFileName = Path.GetFileName(jsonFile);
+
+            if (fullFileName == GAME_RESULT) continue;
+
+            string fileId = Path.GetFileNameWithoutExtension(jsonFile);
+
+            if (!validIds.Contains(fileId))
+            {
+                DeleteCharacterData(fileId);
+            }
+        }
+    }
+
     private static void DeleteCharacterData(string characterId)
     {
         string pngPath = Path.Combine(Application.persistentDataPath, $"{characterId}.png");

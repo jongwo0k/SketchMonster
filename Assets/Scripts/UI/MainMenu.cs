@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
         if (howtoplayPanel != null) howtoplayPanel.SetActive(false);
         if (recordPanel != null) recordPanel.SetActive(false);
         volumeSlider.value = SoundManager.Instance.GetVolume();
+        DataManager.InitStorage();
     }
 
     public void OnNewGameButtonClicked()

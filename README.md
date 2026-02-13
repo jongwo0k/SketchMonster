@@ -399,6 +399,14 @@ Bark Skill의 이펙트와 Hitbox가 일치하지 않는다.
 Particle 대신 MeshFilter + MeshRenderer로 Hitbox 영역과 일치하는 부채꼴을 그려서 표시하도록 했다.
 Hitbox판정과 동일한 radius, angle을 사용하기에 영역이 항상 일치한다.
 
+## 플레이 중 맵에 경계선 발생
+타일간 틈새로 줄무늬가 발생, 화면이 깨지는 듯한 효과 발생
+
+**해결책**
+PPU, Material, Anti-aliasing, Tilemap Renderer 등 설정값 재확인
+Pixel Perfect Camera 컴포넌트 추가 (개선 실패)
+Sprtie Atlas 사용
+
 # 개선할 점 및 발전 방향
 
 **생성 캐릭터 방향 불일치**
@@ -418,7 +426,9 @@ Generator가 생성하는 이미지의 방향이 고정되지 않아 플레이 �
 
 Microsoft Windows Intel 64-bit를 기준으로 빌드
 Unity 6.0 (6000.0.59f2)
-unity가 있을 경우 git clone후 해당 버전에서 직접 빌드해서 실행 혹은 링크에서 다운로드 ### 링크 추가 ###
+git clone
+or
+https://drive.google.com/drive/folders/1m_50n2NPiqtNDIUgXded-PbpdohRRDgR?usp=sharing
 
 # Reference
 
