@@ -70,14 +70,14 @@ public class PlayerController : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
 
         // 바라보는 방향으로 스프라이트 반전
-        // GAN이 어느 방향을 바라보는 이미지를 생성할지 알 수 없음, 현재 오른쪽을 보는 이미지가 정상 동작
+        // GAN이 어느 방향을 바라보는 이미지를 생성할지 알 수 없음, 현재 오른쪽을 보는 이미지가 정상 동작 -> 전부 왼쪽
         if (movement.x > 0.1f)
         {
-            sr.flipX = false;
+            sr.flipX = true;
         }
         else if (movement.x < -0.1f)
         {
-            sr.flipX = true;
+            sr.flipX = false;
         }
 
         // 멈춰도 직전 방향 유지

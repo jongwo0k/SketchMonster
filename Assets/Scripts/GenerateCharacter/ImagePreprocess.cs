@@ -15,8 +15,11 @@ public static class ImagePreprocess
         for (int i = 0; i < pixels.Length; i++)
         {
             Color32 p = pixels[i];
-            // R, B값은 높고 G값은 낮은 색상 (Magenta 배경 제거 용도로 사전 학습)
-            if (p.r >= 120 && p.b >= 120 && p.g <= 120)
+            // R, B값은 높고 G값은 낮은, R-G 차이와 B-G 차이가 큰 색상 (Magenta 배경 제거 용도로 사전 학습)
+            int rg_diff = p.r - p.g;
+            int bg_diff = p.b - p.g;
+
+            if (rg_diff >= 50 && bg_diff >= 50)
             {
                 pixels[i].a = 0;
             }

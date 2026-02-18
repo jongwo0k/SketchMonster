@@ -3353,7 +3353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cnnModelAsset: {fileID: 5022602860645237092, guid: afc8b734df489824a885bdb15a535570, type: 3}
-  ganModelAsset: {fileID: 5022602860645237092, guid: 22438ae1bc01f134c8b0c32f3706dec7, type: 3}
+  ganModelAsset: {fileID: 5022602860645237092, guid: 6a475d17fb564b1478512c514c7f3b15, type: 3}
 --- !u!114 &1893376539 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6506537145813591153, guid: d132123f6ba97db4ca3231080f7f7aa7, type: 3}

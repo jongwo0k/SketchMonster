@@ -70,6 +70,15 @@ public class Enemy : MonoBehaviour
 
         Vector2 direction = (currentTarget.position - transform.position).normalized;
         rb.linearVelocity = direction * speed;
+
+        if (direction.x > 0.1f)
+        {
+            sr.flipX = true;
+        }
+        else if (direction.x < -0.1f)
+        {
+            sr.flipX = false;
+        }
     }
 
     // 충돌 처리

@@ -27,9 +27,9 @@ public class ModelManager : MonoBehaviour
     private const int OutputImageSize = 64;
 
     // ONNX Layer 이름 (netron)
-    private const string ganLatentInputName = "onnx::Reshape_0";
-    private const string ganLabelInputName = "labels";
-    private const string ganOutputName = "71";
+    private const string ganLatentInputName = "latent_vector"; // "onnx::Reshape_0";
+    private const string ganLabelInputName = "class_label";    // "labels";
+    private const string ganOutputName = "generated_image";    // "71";
 
     // 초기화, 모델 실행
     public void Initialize()
