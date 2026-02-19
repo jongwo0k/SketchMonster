@@ -53,7 +53,9 @@ public class ModelManager : MonoBehaviour
         Texture2D preprocessed = ImagePreprocess.PreprocessSketch(inputTexture);
 
         // 텐서로 변환, 정규화, NCHW 변환
-        using var inputTensor = TextureConverter.ToTensor(preprocessed, inputSize, inputSize, 1);
+        // using var inputTensor = TextureConverter.ToTensor(preprocessed, inputSize, inputSize, 1);
+        using var inputTensor = new Tensor<float>(new TensorShape(1, 1, inputSize, inputSize));
+        TextureConverter.ToTensor(preprocessed, inputTensor, new TextureTransform());
 
         cnnWorker.Schedule(inputTensor);
 
