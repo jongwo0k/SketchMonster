@@ -427,12 +427,12 @@ Player 캐릭터와 Enemy에게도 적용
 - 레벨 디자인 최적화가 필요하다. 적의 패턴 추가, 생성 주기와 난이도 곡선의 적절한 밸런싱이 필요하다.
 - 게임 장르 특성상 속도감과 타격감이 중요하다. 이에 대한 추가적인 개선이 필요하다. (Sound, Particle 추가)
 
-# 개발 환경 및 실행 방법
-
+# 개발 환경
 Microsoft Windows Intel 64-bit를 기준으로 빌드
 Unity 6.0 (6000.0.59f2)
 
-https://drive.google.com/drive/folders/1m_50n2NPiqtNDIUgXded-PbpdohRRDgR?usp=sharing
+# Play Demo
+https://youtu.be/2zUCH92KYWU
 
 # Reference
 
