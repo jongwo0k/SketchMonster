@@ -7,6 +7,11 @@ public static class GameSession
     // 고정
     public static string SelectedCharacterId;
 
+#if UNITY_WEBGL // Web 에선 파일로 저장 X
+    public static CharacterData SelectedCharacterData;
+    public static Sprite SelectedCharacterSprite;
+#endif
+
     // 달라짐
     public static Texture2D OriginalSketch;
     public static List<Texture2D> EnemyTextures = new List<Texture2D>();
@@ -14,6 +19,19 @@ public static class GameSession
     public static void CleanSession()
     {
         SelectedCharacterId = null;
+
+#if UNITY_WEBGL
+        SelectedCharacterData = null;
+        if (SelectedCharacterSprite != null)
+        {
+            if (SelectedCharacterSprite.texture != null)
+            {
+                Object.Destroy(SelectedCharacterSprite.texture);
+            }
+            Object.Destroy(SelectedCharacterSprite);
+            SelectedCharacterSprite = null;
+        }
+#endif
 
         // 원본 스케치
         if (OriginalSketch != null)

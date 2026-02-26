@@ -187,6 +187,16 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Class: {selectedCharacter.className}, Grade: {selectedCharacter.grade}");
         Debug.Log($"HP: {selectedCharacter.hp}, Attack: {selectedCharacter.attack}, Speed: {selectedCharacter.speed}");
 
+#if UNITY_WEBGL // Web 에선 파일로 저장 X
+        GameSession.SelectedCharacterData = selectedCharacter;
+        if (selectedImage != null)
+        {
+            Rect rect = new Rect(0, 0, selectedImage.width, selectedImage.height);
+            Vector2 pivot = new Vector2(0.5f, 0.5f);
+            GameSession.SelectedCharacterSprite = Sprite.Create(selectedImage, rect, pivot);
+        }
+#else
+
         if (selectedImage != null)
         {
             DataManager.SaveCharacter(selectedCharacter, selectedImage);
@@ -196,6 +206,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Failed save data");
         }
+#endif
 
         // 선택된 캐릭터의 ID를 세션에 저장
         GameSession.SelectedCharacterId = selectedCharacter.characterId;

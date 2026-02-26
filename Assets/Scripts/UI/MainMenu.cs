@@ -16,7 +16,9 @@ public class MainMenu : MonoBehaviour
         if (howtoplayPanel != null) howtoplayPanel.SetActive(false);
         if (recordPanel != null) recordPanel.SetActive(false);
         volumeSlider.value = SoundManager.Instance.GetVolume();
+#if !UNITY_WEBGL // Web 빌드에선 저장 X
         DataManager.InitStorage();
+#endif
     }
 
     public void OnNewGameButtonClicked()
@@ -28,7 +30,9 @@ public class MainMenu : MonoBehaviour
     
     public void OnRecordButtonClicked()
     {
+#if !UNITY_WEBGL
         recordPanel.SetActive(true);
+#endif
     }
 
     /*
@@ -40,8 +44,10 @@ public class MainMenu : MonoBehaviour
 
     public void OnExitButtonClicked()
     {
-        // Exit 버튼 클릭 -> 에디터에서는 동작X, 빌드된 게임에서는 종료
+        // Exit 버튼 클릭 -> 에디터, Web에서는 동작X, 빌드된 게임에서는 종료
+#if !UNITY_WEBGL
         Application.Quit();
+#endif
     }
 
     
