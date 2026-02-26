@@ -1,4 +1,8 @@
 # SketchMonster
+
+[![YouTube Demo](https://img.shields.io/badge/Play_Video-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/2zUCH92KYWU)
+[![Play itch](https://img.shields.io/badge/Play_Demo-FA5C5C?style=for-the-badge&logo=itch.io&logoColor=white)](https://jongwo0k.itch.io/sketchmonster)
+
 A 2D top-down roguelike game where player drawings are analyzed by AI(CNN, GAN) to generate unique monster characters for gameplay. Built with Unity and Inference(Sentis) engine.
 
 ![Generate Character Fish](./docs/gif/generate_character_fish.gif)
@@ -423,16 +427,20 @@ Player 캐릭터와 Enemy에게도 적용
 # 개선할 점 및 발전 방향
 
 **게임적 요소 보강**
-- 현재 Class가 3개만 지원되며 해당하지 않는 이상한 그림을 그려도 3개 중 하나로 생성된다. 더 많은 Class 추가 또는 어느 것에도 해당하지 않는 스케치(추론 결과가 임계 정확도 미만)를 제출했을 때 생성 될 Chaos Class가 추가될 경우 완성도가 높아질 것으로 예상된다.
+- 현재 Class가 3개만 지원되며 해당하지 않는 이상한 그림을 그려도 3개 중 하나(보통 Bird)로 생성된다. 더 많은 Class 추가 또는 어느 것에도 해당하지 않는 스케치(추론 결과가 임계 정확도 미만)를 제출했을 때 생성 될 Chaos Class가 추가될 경우 완성도가 높아질 것으로 예상된다.
+- Class 별로 고유 스킬 종류 추가
+- Boss 스테이지 추가
 - 레벨 디자인 최적화가 필요하다. 적의 패턴 추가, 생성 주기와 난이도 곡선의 적절한 밸런싱이 필요하다.
-- 게임 장르 특성상 속도감과 타격감이 중요하다. 이에 대한 추가적인 개선이 필요하다. (Sound, Particle 추가)
+- 게임 장르 특성상 속도감과 타격감이 중요하다. 이에 대한 추가적인 개선이 필요하다. (Sound, Particle 추가됨)
+
+**구조 보강**
+- 프로젝트가 진행되면서 싱글톤이 과도하게 사용되는 구조가 되었다. Event기반으로 강한 결합을 해소할 수 있다.
+- 충돌, 데미지 처리 방식에 인터페이스를 적용해 확장성 개선
+- 스탯, 데미지 등 여러 값들이 흩어져 있다. 별도 파일에서 통합 관리 또는 ScriptableObject를 활용해 수치 조정 편의성 개선
 
 # 개발 환경
-Microsoft Windows Intel 64-bit를 기준으로 빌드
+Microsoft Windows Intel 64-bit를 기준으로 빌드 (Web 빌드 추가)
 Unity 6.0 (6000.0.59f2)
-
-# Play Demo
-https://youtu.be/2zUCH92KYWU
 
 # Reference
 

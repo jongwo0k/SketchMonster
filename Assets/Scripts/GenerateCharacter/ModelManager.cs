@@ -36,8 +36,13 @@ public class ModelManager : MonoBehaviour
     {
         try
         {
+#if UNITY_WEBGL // Web 빌드 CPU
+            cnnWorker = new Worker(ModelLoader.Load(cnnModelAsset), BackendType.CPU);
+            ganWorker = new Worker(ModelLoader.Load(ganModelAsset), BackendType.CPU);
+#else
             cnnWorker = new Worker(ModelLoader.Load(cnnModelAsset), BackendType.GPUCompute);
             ganWorker = new Worker(ModelLoader.Load(ganModelAsset), BackendType.GPUCompute);
+#endif
             Debug.Log("ModelManager start");
         }
         catch (System.Exception ex)

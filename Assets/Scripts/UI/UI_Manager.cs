@@ -89,7 +89,9 @@ public class UI_Manager : MonoBehaviour
 
     public void ExitGame_Button()
     {
+#if !UNITY_WEBGL
         Application.Quit();
+#endif
     }
 
     // GameOver
@@ -99,13 +101,15 @@ public class UI_Manager : MonoBehaviour
         int finalStage = MapController.Instance.stageLevel;
         gameOverText.text = "Stage: " + finalStage;
 
+#if !UNITY_WEBGL // Web 에선 record X
         var (data, _) = DataManager.LoadCharacter(GameSession.SelectedCharacterId);
         if(data != null)
         {
             int finalLevel = PlayerController.Instance.level;
             DataManager.SaveGameResult(data, finalStage, finalLevel);
         }
-        
+#endif
+
         SoundManager.Instance.PlayGameOver();
         Time.timeScale = 0f;
     }
