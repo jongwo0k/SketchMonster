@@ -31,6 +31,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     private Dictionary<PoolType, Queue<GameObject>> poolDictionary; // 재사용 대기
     private Dictionary<PoolType, List<GameObject>> activeObjects;   // 활성화, 전체
+    private Dictionary<PoolType, PoolInfo> poolInfoCache;           // 캐싱
 
     private void Awake()
     {
@@ -44,11 +45,13 @@ public class ObjectPoolManager : MonoBehaviour
     {
         poolDictionary = new Dictionary<PoolType, Queue<GameObject>>();
         activeObjects = new Dictionary<PoolType, List<GameObject>>();
+        poolInfoCache = new Dictionary<PoolType, PoolInfo>();
 
         foreach (var info in poolInfoList)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
             List<GameObject> activeList = new List<GameObject>();
+            poolInfoCache.Add(info.type, info);
 
             // 미리 생성
             for (int i = 0; i < info.initialCount; i++)
@@ -84,7 +87,7 @@ public class ObjectPoolManager : MonoBehaviour
         // 없으면 생성
         else
         {
-            var info = poolInfoList.Find(x => x.type == type);
+            var info = poolInfoCache[type];
             obj = CreateNewObject(info);
         }
 
