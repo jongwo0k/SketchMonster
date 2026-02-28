@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     bool isDead = false;
     bool isDefeat = false;
@@ -84,14 +84,9 @@ public class Enemy : MonoBehaviour
     // 충돌 처리
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("MainTower")) 
+        if (collision.TryGetComponent<IDamageable>(out var target))
         {
-            MainTower.Instance.TakeDamage(attack);
-            Die(false);
-        }
-        else if (collision.gameObject.CompareTag("Player"))
-        {
-            PlayerController.Instance.TakeDamage(attack);
+            target.TakeDamage(attack);
             Die(false);
         }
     }

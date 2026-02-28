@@ -31,13 +31,10 @@ public class Projectile : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.TryGetComponent<IDamageable>(out var target))
         {
-            if(collision.TryGetComponent<Enemy>(out Enemy enemy))
-            {
-                enemy.TakeDamage(attack);
-                ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
-            }
+            target.TakeDamage(attack);
+            ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
         }
     }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
     public static PlayerController Instance { get; private set; }
 
@@ -123,18 +123,14 @@ public class PlayerController : MonoBehaviour
     // 충돌
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("ExperienceOrb")) // 경험치 구슬
+        if (collision.TryGetComponent<ExpOrb>(out var orb)) // 경험치 구슬
         {
-            float xpValue = collision.GetComponent<ExpOrb>().expValue;
-            GetXP(xpValue);
+            GetXP(orb.expValue);
             ObjectPoolManager.Instance.Despawn(collision.gameObject, PoolType.ExpOrb);
         }
-        else if (isDash && collision.gameObject.CompareTag("Enemy"))
+        else if (isDash && collision.TryGetComponent<IDamageable>(out var target))
         {
-            if (collision.TryGetComponent<Enemy>(out Enemy enemy))
-            {
-                enemy.TakeDamage(float.MaxValue); // 바로 처치
-            }
+            target.TakeDamage(float.MaxValue); // 바로 처치
         }
     }
 

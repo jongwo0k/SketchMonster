@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3785154583329616225}
   - component: {fileID: 7129651103812431961}
   - component: {fileID: 1128694232261169985}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 8951051253359920994}
   - component: {fileID: 5329155128487283153}
   - component: {fileID: 775339492422989636}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 8053080765588226069}
   - component: {fileID: 8418912437727815068}
   - component: {fileID: 4652210100465824284}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4076207082334037407}
   - component: {fileID: 5636311844111398587}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: HP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 8372560250420742005}
   - component: {fileID: 915113404798925923}
   - component: {fileID: 677749258050843349}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemyTemplete
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -528,7 +528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3194759252689001540}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3785154583329616225}
   - component: {fileID: 7129651103812431961}
   - component: {fileID: 1128694232261169985}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 2119198650249909963}
   - component: {fileID: 2772236654137130917}
   - component: {fileID: 5846822809315333887}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 2306275755436022756}
   - component: {fileID: 6445951912489545491}
   - component: {fileID: 1427953654155323117}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1815172094428802781}
   - component: {fileID: 4046360806820434294}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: XP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 308186684438186485}
   - component: {fileID: 9115388186566924837}
   - component: {fileID: 1250276559230718487}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Skill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 8951051253359920994}
   - component: {fileID: 5329155128487283153}
   - component: {fileID: 775339492422989636}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -476,7 +476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2278338956794883524}
   - component: {fileID: 900844044078715542}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: directionIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 4701832990242730945}
   - component: {fileID: 2551728227139267165}
   - component: {fileID: 5646271618752174958}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 8053080765588226069}
   - component: {fileID: 8418912437727815068}
   - component: {fileID: 4652210100465824284}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -804,7 +804,7 @@ GameObject:
   - component: {fileID: 1640720660825026984}
   - component: {fileID: 422575515302301940}
   - component: {fileID: 446205711317421861}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -878,7 +878,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4076207082334037407}
   - component: {fileID: 5636311844111398587}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: HP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -966,7 +966,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6284956973335859367}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1002,7 +1002,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3599866151382724027}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: firePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1037,7 +1037,7 @@ GameObject:
   - component: {fileID: 8372560250420742005}
   - component: {fileID: 915113404798925923}
   - component: {fileID: 8109428613522346704}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerTemplete
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1222,7 +1222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3194759252689001540}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}

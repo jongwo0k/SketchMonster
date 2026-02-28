@@ -8,6 +8,13 @@ public class Bubble : MonoBehaviour
     private float radius;
     private float tickInterval = 0.25f; // 데미지 간격
 
+    private int enemyLayer; // 팀킬 방지
+    
+    private void Awake()
+    {
+        enemyLayer = LayerMask.GetMask("Enemy");
+    }
+
     public void Initialize(float playerAttack, float skillDuration, float skillRadius)
     {
         this.damage = playerAttack * 2f;
@@ -46,17 +53,14 @@ public class Bubble : MonoBehaviour
     private void BubbleDamage()
     {
         // 주변 collider 탐색
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius, enemyLayer);
 
         foreach (var hit in hits)
         {
             // 적이 범위 내에 있으면 데미지
-            if (hit.CompareTag("Enemy"))
+            if (hit.TryGetComponent<IDamageable>(out IDamageable target))
             {
-                if (hit.TryGetComponent<Enemy>(out Enemy enemy))
-                {
-                    enemy.TakeDamage(damage);
-                }
+                target.TakeDamage(damage);
             }
         }
     }

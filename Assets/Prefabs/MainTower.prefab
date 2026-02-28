@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1445128774768893350}
   - component: {fileID: 7837161077089321394}
   - component: {fileID: 1910026766960906082}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 279251696030459217}
   - component: {fileID: 6378777432024573922}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SketchField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7505129572866509505}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 4628429014018657151}
   - component: {fileID: 2674776343416866674}
   - component: {fileID: 3568785688013848720}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 4603872085965435585}
   - component: {fileID: 2137750209106937801}
   - component: {fileID: 3946870246186331632}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MainTower
   m_TagString: MainTower
   m_Icon: {fileID: 0}
@@ -450,7 +450,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sketchField: {fileID: 6378777432024573922}
-  projectileObject: {fileID: 7890512036339493354, guid: 46af9f08c62d7b04e9852a745cd9c2b1, type: 3}
   maxHP: 100
   HP: 0
   attack: 10
@@ -469,7 +468,7 @@ GameObject:
   - component: {fileID: 1433232078413538948}
   - component: {fileID: 3441173290021640264}
   - component: {fileID: 559671203580572420}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -543,7 +542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8673355151199824056}
   - component: {fileID: 2375682687620792976}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: HP
   m_TagString: Untagged
   m_Icon: {fileID: 0}

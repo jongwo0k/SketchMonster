@@ -52,22 +52,20 @@ public class DogSkill : Skill
         Vector3 origin = player.firePoint.position;
 
         // 주변 collider 탐색
-        Collider2D[] hits = Physics2D.OverlapCircleAll(origin, radius);
+        int enemyLayer = LayerMask.GetMask("Enemy"); // 팀킬 방지
+        Collider2D[] hits = Physics2D.OverlapCircleAll(origin, radius, enemyLayer);
 
         foreach (var hit in hits)
         {
             // 적이 범위 내에 있으면 처치
-            if (hit.CompareTag("Enemy"))
-            {
-                Vector2 toEnemy = (hit.transform.position - origin).normalized;
-                float angleToEnemy = Vector2.Angle(direction, toEnemy);
+            Vector2 toEnemy = (hit.transform.position - origin).normalized;
+            float angleToEnemy = Vector2.Angle(direction, toEnemy);
 
-                if (angleToEnemy <= angle / 2f)
+            if (angleToEnemy <= angle / 2f)
+            {
+                if (hit.TryGetComponent<IDamageable>(out IDamageable target))
                 {
-                    if (hit.TryGetComponent<Enemy>(out Enemy enemy))
-                    {
-                        enemy.TakeDamage(damage);
-                    }
+                    target.TakeDamage(damage);
                 }
             }
         }

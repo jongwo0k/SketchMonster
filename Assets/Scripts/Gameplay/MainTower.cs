@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainTower : MonoBehaviour
+public class MainTower : MonoBehaviour, IDamageable
 {
     public static MainTower Instance { get; private set; }
 
