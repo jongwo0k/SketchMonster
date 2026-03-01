@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    // 방향
+    private enum MapSide
+    {
+        Top,
+        Bottom,
+        Left,
+        Right,
+    }
+
     // 생성 빈도
     [Header("Spawn Interval")]
     [SerializeField] private float initialSpawnInterval = 3f;
@@ -82,26 +91,25 @@ public class EnemySpawner : MonoBehaviour
     private Vector2 GetRandomSpawnPosition()
     {
         RectInt bounds = mapGenerator.MapBounds;
-        int side = Random.Range(0, 4); // 1234(상하좌우 순)
+        MapSide side = (MapSide)Random.Range(0, 4); // 형 변환
 
         Vector2 spawnPos = Vector2.zero;
 
         // Wall 타일 바로 앞에서 생성
-        if (side == 0)
+        switch (side)
         {
-            spawnPos = new Vector2(Random.Range(bounds.xMin, bounds.xMax), bounds.yMax - 2);
-        }
-        else if (side == 1)
-        {
-            spawnPos = new Vector2(Random.Range(bounds.xMin, bounds.xMax), bounds.yMin + 2);
-        }
-        else if (side == 2)
-        {
-            spawnPos = new Vector2(bounds.xMin + 2, Random.Range(bounds.yMin, bounds.yMax));
-        }
-        else
-        {
-            spawnPos = new Vector2(bounds.xMax - 2, Random.Range(bounds.yMin, bounds.yMax));
+            case MapSide.Top:
+                spawnPos = new Vector2(Random.Range(bounds.xMin, bounds.xMax), bounds.yMax - 2);
+                break;
+            case MapSide.Bottom:
+                spawnPos = new Vector2(Random.Range(bounds.xMin, bounds.xMax), bounds.yMin + 2);
+                break;
+            case MapSide.Left:
+                spawnPos = new Vector2(bounds.xMin + 2, Random.Range(bounds.yMin, bounds.yMax));
+                break;
+            case MapSide.Right:
+                spawnPos = new Vector2(bounds.xMax - 2, Random.Range(bounds.yMin, bounds.yMax));
+                break;
         }
 
         return spawnPos;

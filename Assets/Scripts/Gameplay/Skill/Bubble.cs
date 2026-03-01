@@ -12,7 +12,7 @@ public class Bubble : MonoBehaviour
     
     private void Awake()
     {
-        enemyLayer = LayerMask.GetMask("Enemy");
+        enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY);
     }
 
     public void Initialize(float playerAttack, float skillDuration, float skillRadius)

@@ -52,7 +52,7 @@ public class DogSkill : Skill
         Vector3 origin = player.firePoint.position;
 
         // 주변 collider 탐색
-        int enemyLayer = LayerMask.GetMask("Enemy"); // 팀킬 방지
+        int enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY); // 팀킬 방지
         Collider2D[] hits = Physics2D.OverlapCircleAll(origin, radius, enemyLayer);
 
         foreach (var hit in hits)

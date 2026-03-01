@@ -84,7 +84,7 @@ public class UI_Manager : MonoBehaviour
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         GameSession.CleanSession();
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene(ConstString.SCENE_MENU);
     }
 
     public void ExitGame_Button()
@@ -175,7 +175,7 @@ public class UI_Manager : MonoBehaviour
         Time.timeScale = 1f;
         gameOver.SetActive(false);
         GameSession.CleanSession();
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene(ConstString.SCENE_MENU);
     }
 
     private void OnDestroy()

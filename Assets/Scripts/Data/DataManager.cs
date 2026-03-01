@@ -4,7 +4,6 @@ using UnityEngine;
 
 public static class DataManager
 {
-    private const string GAME_RESULT = "GameResult.json";
     private const int MAX_SAVE_COUNT = 10;
 
     // 캐릭터 저장
@@ -58,7 +57,7 @@ public static class DataManager
 
     public static RecordData LoadRecordData()
     {
-        string path = Path.Combine(Application.persistentDataPath, GAME_RESULT);
+        string path = Path.Combine(Application.persistentDataPath, ConstString.GAME_RESULT_FILE);
         if (!File.Exists(path))
         {
             return new RecordData();
@@ -88,7 +87,7 @@ public static class DataManager
 
         // 파일로 저장
         string json = JsonUtility.ToJson(rd, true);
-        File.WriteAllText(Path.Combine(Application.persistentDataPath, GAME_RESULT), json);
+        File.WriteAllText(Path.Combine(Application.persistentDataPath, ConstString.GAME_RESULT_FILE), json);
         Debug.Log($"Game Record Saved");
     }
 
@@ -133,7 +132,7 @@ public static class DataManager
         {
             string fullFileName = Path.GetFileName(jsonFile);
 
-            if (fullFileName == GAME_RESULT) continue;
+            if (fullFileName == ConstString.GAME_RESULT_FILE) continue;
 
             string fileId = Path.GetFileNameWithoutExtension(jsonFile);
 

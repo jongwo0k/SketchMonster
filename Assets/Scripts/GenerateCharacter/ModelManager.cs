@@ -26,11 +26,6 @@ public class ModelManager : MonoBehaviour
     private const int latentDim = 100;
     private const int OutputImageSize = 64;
 
-    // ONNX Layer 이름 (netron)
-    private const string ganLatentInputName = "latent_vector"; // "onnx::Reshape_0";
-    private const string ganLabelInputName = "class_label";    // "labels";
-    private const string ganOutputName = "generated_image";    // "71";
-
     // 초기화, 모델 실행
     public void Initialize()
     {
@@ -97,11 +92,11 @@ public class ModelManager : MonoBehaviour
         // CNN에게 받은 클래스
         using var labelTensor = new Tensor<int>(new TensorShape(1), new int[] { classIndex });
 
-        ganWorker.SetInput(ganLatentInputName, latentTensor);
-        ganWorker.SetInput(ganLabelInputName, labelTensor);
+        ganWorker.SetInput(ConstString.GAN_LATENT_INPUT_NAME, latentTensor);
+        ganWorker.SetInput(ConstString.GAN_LABEL_INPUT_NAME, labelTensor);
         ganWorker.Schedule();
 
-        using var outputTensor = ganWorker.PeekOutput(ganOutputName) as Tensor<float>;
+        using var outputTensor = ganWorker.PeekOutput(ConstString.GAN_OUTPUT_NAME) as Tensor<float>;
         if (outputTensor == null) // 생성 실패
         {
             Debug.LogError("GAN tensor null");

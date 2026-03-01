@@ -28,15 +28,13 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip dogSkillSound;
     [SerializeField] private AudioClip fishSkillSound;
 
-    private const string VOLUME = "SavedVolume";
-
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // 유지
-            SetVolume(PlayerPrefs.GetFloat(VOLUME, 0.5f)); // 이전 볼륨 설정 값 유지, 없으면 기본값(0.5)
+            SetVolume(PlayerPrefs.GetFloat(ConstString.PREF_VOLUME, 0.5f)); // 이전 볼륨 설정 값 유지, 없으면 기본값(0.5)
         }
         else
         {
@@ -57,11 +55,11 @@ public class SoundManager : MonoBehaviour
     // 씬 로딩이 끝나면 자동으로 호출
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Menu") // 캐릭터 생성 (Menu ~ Select)
+        if (scene.name == ConstString.SCENE_MENU) // 캐릭터 생성 (Menu ~ Select)
         {
             PlayBGM(menuBGM);
         }
-        else if (scene.name == "GameScene")
+        else if (scene.name == ConstString.SCENE_GAME)
         {
             int randomBGM = Random.Range(0, gameBGMs.Length);
             PlayBGM(gameBGMs[randomBGM]);
@@ -98,7 +96,7 @@ public class SoundManager : MonoBehaviour
         // 0.0 ~ 1.0, default 0.5
         bgmSource.volume = volume;
         sfxSource.volume = volume;
-        PlayerPrefs.SetFloat(VOLUME, volume);
+        PlayerPrefs.SetFloat(ConstString.PREF_VOLUME, volume);
     }
 
     // 호출 시 변수 없이 함수만

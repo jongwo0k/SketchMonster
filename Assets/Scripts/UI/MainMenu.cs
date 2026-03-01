@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour
     public void OnNewGameButtonClicked()
     {
         // New Game 버튼 클릭 -> 그림판으로 이동, 캐릭터 생성 파이프라인 ("StartScene" 씬)을 로드
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene(ConstString.SCENE_START);
     }
 
     

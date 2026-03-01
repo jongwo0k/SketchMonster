@@ -228,6 +228,6 @@ public class GameManager : MonoBehaviour
         }
 
         // 게임 Scene 진입
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene(ConstString.SCENE_GAME);
     }
 }
