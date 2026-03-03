@@ -445,7 +445,7 @@ tolerance 값(1 ~ 1.1) 조절에도 기존 방식과 큰 차이 없음, UI에 �
 **구조 보강**
 - 프로젝트가 진행되면서 싱글톤이 과도하게 사용되는 구조가 되었다. Event기반으로 강한 결합을 해소할 수 있다.
 - 충돌, 데미지 처리 방식에 인터페이스를 적용해 확장성 개선 (IDamageable, Layer 반영 완료, 이후 스킬 추가 시 활용 가능)
-- 스탯, 데미지 등 여러 값들이 흩어져 있다. 별도 파일에서 통합 관리 또는 ScriptableObject를 활용해 수치 조정 편의성 개선 (문자열 ConstString & Scriptable 모델 추가 학습이 필요한 class, 변경될 계획이 없는 grade는 보류, class 이름 enum 변경 시 json 기존 데이터 문제 위험)
+- 스탯, 데미지 등 여러 값들이 흩어져 있다. 별도 파일에서 통합 관리 또는 ScriptableObject를 활용해 수치 조정 편의성 개선 (문자열 ConstString & Scriptable 모델 추가 학습이 필요한 class, 변경될 계획이 없는 grade는 보류, class 이름 enum 변경 시 json 기존 데이터 문제 위험), (GameManager가 전체 게임을 관리하지 않고 캐릭터 생성까지만 관리, GameManager를 전체 게임을 관리하도록 수정(작업량 과다) vs DontDestroyOnLoad만 추가(기능 분리) vs 별도 파일 생성(싱글톤 또 추가) vs GameSession활용 (기능 분리) vs static class 새로 작성 <- 채택)
 
 # 개발 환경
 Microsoft Windows Intel 64-bit를 기준으로 빌드 (Web 빌드 추가)

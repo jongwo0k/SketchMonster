@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10354aff1b62c384ba49f676b139d89e, type: 3}
+  m_Name: BalanceData
+  m_EditorClassIdentifier: 
+  birdStats:
+    hp: 80
+    attack: 8
+    speed: 7
+  dogStats:
+    hp: 100
+    attack: 10
+    speed: 5
+  fishStats:
+    hp: 120
+    attack: 12
+    speed: 3
+  gradeS: 10
+  gradeA: 30
+  gradeB: 40
+  gradeMultiplierS: 1.5
+  gradeMultiplierA: 1.2
+  gradeMultiplierB: 1
+  gradeMultiplierC: 0.8
+  strokeHpFactor: 5
+  timeSpeedFactor: 0.2
+  maxHpBonus: 200
+  projectileSpeed: 10
+  projectileDestroyTime: 2
+  dashStats:
+    cooldown: 5
+    dashPower: 30
+    duration: 0.3
+  barkStats:
+    cooldown: 3
+    damageMultiplier: 5
+    radius: 8
+    angle: 90
+    effectDuration: 0.3
+  bubbleStats:
+    cooldown: 8
+    damageMultiplier: 2
+    duration: 4
+    radius: 4
+    tickInterval: 0.25
+  expValue: 10
+  maxXP: 100
+  playerHpPerLevel: 10
+  playerAttackPerLevel: 1.1
+  xpMultiplier: 1.1
+  enemyBaseHp: 50
+  enemyHpPerStage: 15
+  enemyBaseAttack: 5
+  enemyAttackPerStage: 1.1
+  enemyBaseSpeed: 5
+  enemySpeedPerStage: 0.1
+  initialSpawnInterval: 3
+  spawnIntervalDecrease: 0.1
+  minSpawnInterval: 0.5
+  towerBaseHp: 100
+  towerBaseAttack: 15
+  towerBaseCooldown: 3
+  towerHpPerLevel: 15
+  towerAttackPerLevel: 1.1
+  towerCooldownReduction: 0.9
+  towerMinCooldown: 0.5
+  sketchDuration: 20
+  stageDuration: 60

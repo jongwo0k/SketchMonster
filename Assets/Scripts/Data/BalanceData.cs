@@ -1,0 +1,165 @@
+using UnityEngine;
+
+// 기본 능력치
+[System.Serializable]
+public struct ClassStats
+{
+    public float hp;
+    public float attack;
+    public float speed;
+}
+
+// 스킬 능력치
+[System.Serializable]
+public struct DashSkillStats // Bird
+{
+    public float cooldown;
+    public float dashPower;
+    public float duration;
+}
+
+[System.Serializable]
+public struct BarkSkillStats // Dog
+{
+    public float cooldown;
+    public float damageMultiplier; // 기본 공격 * 계수
+    public float radius;
+    public float angle;
+    public float effectDuration;
+}
+
+[System.Serializable]
+public struct BubbleSkillStats // Fish
+{
+    public float cooldown;
+    public float damageMultiplier;
+    public float duration;
+    public float radius;
+    public float tickInterval;
+}
+
+[CreateAssetMenu(fileName = "BalanceData", menuName = "ScriptableObject/BalanceData")]
+public class BalanceData : ScriptableObject
+{
+    // 기본 능력치
+    [Header("Base Stats")]
+    public ClassStats birdStats;
+    public ClassStats dogStats;
+    public ClassStats fishStats;
+
+    // 등급 확률
+    [Header("Grade Rate")]
+    public float gradeS = 10f;
+    public float gradeA = 30f;
+    public float gradeB = 40f;
+    // 나머지 C (20%)
+
+    // 등급 계수
+    [Header("Grade Multiplier")]
+    public float gradeMultiplierS = 1.5f;
+    public float gradeMultiplierA = 1.2f;
+    public float gradeMultiplierB = 1.0f;
+    public float gradeMultiplierC = 0.8f;
+
+    // 스케치 보너스
+    [Header("Sketch Bonus")]
+    public float strokeHpFactor = 5f;
+    public float timeSpeedFactor = 0.2f;
+    public float maxHpBonus = 200f;
+
+    // Projectile
+    [Header("Projectile Life Time")]
+    public float projectileSpeed = 10f;
+    public float projectileDestroyTime = 2f;
+
+    // Skill
+    [Header("Skill Stats")]
+    public DashSkillStats dashStats;
+    public BarkSkillStats barkStats;
+    public BubbleSkillStats bubbleStats;
+    
+    // 경험치
+    [Header("Experience")]
+    public float expValue = 10f;
+    public float maxXP = 100f;
+
+    // 플레이어 레벨업 증가량
+    [Header("Player LevelUp")]
+    public float playerHpPerLevel = 10f;
+    public float playerAttackPerLevel = 1.1f;
+    public float xpMultiplier = 1.1f;
+
+    // 적 기본 능력치
+    [Header("Enemy Base Stats")]
+    public float enemyBaseHp = 50f;
+    public float enemyHpPerStage = 15f;
+    public float enemyBaseAttack = 5f;
+    public float enemyAttackPerStage = 1.1f;
+    public float enemyBaseSpeed = 5f;
+    public float enemySpeedPerStage = 0.1f;
+
+    // 적 스폰률
+    [Header("Enemy Spawn")]
+    public float initialSpawnInterval = 3f;
+    public float spawnIntervalDecrease = 0.1f;
+    public float minSpawnInterval = 0.5f;
+
+    // 타워 기본 능력치
+    [Header("Tower Base Stats")]
+    public float towerBaseHp = 100f;
+    public float towerBaseAttack = 15f;
+    public float towerAttackCooldown = 3f;
+
+    // 타워 레벨업 증가량
+    [Header("Tower LevelUp")]
+    public float towerHpPerLevel = 15f;
+    public float towerAttackPerLevel = 1.1f;
+    public float towerCooldownReduction = 0.9f; // 공격속도
+    public float towerMinCooldown = 0.5f;
+
+    // 타이머
+    [Header("Duration")]
+    public float sketchDuration = 20f;
+    public float stageDuration = 60f;
+
+    // 맵 크기
+    [Header("Map Size")]
+    public int width = 70;
+    public int height = 34;
+
+    // 클래스별 스탯 가져오기
+    public ClassStats GetClassStats(string className)
+    {
+        return className switch
+        {
+            "Bird" => birdStats,
+            "Dog" => dogStats,
+            "Fish" => fishStats,
+            _ => dogStats
+        };
+    }
+
+    // 등급 계수 가져오기
+    public float GetGradeMultiplier(string grade)
+    {
+        return grade switch
+        {
+            "S" => gradeMultiplierS,
+            "A" => gradeMultiplierA,
+            "B" => gradeMultiplierB,
+            "C" => gradeMultiplierC,
+            _ => 1.0f
+        };
+    }
+
+    // 등급 부여 (랜덤)
+    public string GetRandomGrade()
+    {
+        float randomValue = Random.Range(0f, 100f);
+
+        if (randomValue < gradeS) return "S";                    // 10% (0 ~ 9.99)
+        if (randomValue < gradeS + gradeA) return "A";           // 30% (10 ~ 39.99)
+        if (randomValue < gradeS + gradeA + gradeB) return "B";  // 40% (40 ~ 79.99)
+        return "C";                                              // 20% (80 ~ 99.99)
+    }
+}
