@@ -4,8 +4,6 @@ using System.Collections;
 public class Projectile : MonoBehaviour
 {
     [Header("Projectile")]
-    [SerializeField] public float speed = 10f;
-    [SerializeField] public float destroyTime = 2f;
     [SerializeField] public float attack = 1f;
 
     private Rigidbody2D rb;
@@ -18,7 +16,7 @@ public class Projectile : MonoBehaviour
     // 재사용 될 때마다
     private void OnEnable()
     {
-        rb.linearVelocity = -transform.up * speed; // Unity 기본은 Y축 방향 -> 캐릭터 기본은 아래를 봄
+        rb.linearVelocity = -transform.up * GameConfig.Data.projectileSpeed; // Unity 기본은 Y축 방향 -> 캐릭터 기본은 아래를 봄
 
         // 계속 날아가거나 쌓이는 것 방지
         StartCoroutine(AutoDespawn());
@@ -46,7 +44,7 @@ public class Projectile : MonoBehaviour
 
     IEnumerator AutoDespawn()
     {
-        yield return new WaitForSeconds(destroyTime);
+        yield return new WaitForSeconds(GameConfig.Data.projectileDestroyTime);
         ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
     }
 }

@@ -124,8 +124,8 @@ public class BalanceData : ScriptableObject
 
     // 맵 크기
     [Header("Map Size")]
-    public int width = 70;
-    public int height = 34;
+    public int width = 140;
+    public int height = 68;
 
     // 클래스별 스탯 가져오기
     public ClassStats GetClassStats(string className)

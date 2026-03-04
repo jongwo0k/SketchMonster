@@ -68,10 +68,12 @@ MonoBehaviour:
   minSpawnInterval: 0.5
   towerBaseHp: 100
   towerBaseAttack: 15
-  towerBaseCooldown: 3
+  towerAttackCooldown: 3
   towerHpPerLevel: 15
   towerAttackPerLevel: 1.1
   towerCooldownReduction: 0.9
   towerMinCooldown: 0.5
   sketchDuration: 20
   stageDuration: 60
+  width: 140
+  height: 68

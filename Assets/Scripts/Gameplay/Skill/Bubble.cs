@@ -6,7 +6,7 @@ public class Bubble : MonoBehaviour
     private float damage;
     private float duration;
     private float radius;
-    private float tickInterval = 0.25f; // 데미지 간격
+    private float tickInterval; // 데미지 간격
 
     private int enemyLayer; // 팀킬 방지
     
@@ -15,11 +15,12 @@ public class Bubble : MonoBehaviour
         enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY);
     }
 
-    public void Initialize(float playerAttack, float skillDuration, float skillRadius)
+    public void Initialize(float playerAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval)
     {
-        this.damage = playerAttack * 2f;
+        this.damage = playerAttack * damageMultiplier;
         this.duration = skillDuration;
         this.radius = skillRadius;
+        this.tickInterval = interval;
 
         // 크기 조절
         transform.localScale = Vector3.one * (radius * 2f);

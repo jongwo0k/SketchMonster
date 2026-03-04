@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] public float speed = 5f;
     [SerializeField] public int level = 1;
     private float maxHP;
-    private float maxXP = 100f;
+    private float maxXP;
 
     // UI
     [Header("UI")]
@@ -54,10 +54,12 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+
+        maxXP = GameConfig.Data.maxXP;   // 기본 최댓값
     }
 
     void Start()
-    {
+    {   
         lastAimDirection = Vector2.down; // default: 아래쪽 방향
     }
 
@@ -230,7 +232,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             level++;
             XP -= maxXP;
-            maxXP *= 1.1f; // 필요 경험치 증가
+            maxXP *= GameConfig.Data.xpMultiplier; // 필요 경험치 증가
 
             SoundManager.Instance.PlayLevelUp();
             UI_Manager.Instance.LevelUP();
@@ -246,8 +248,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     // 레벨업 선택지
     public void PlayerLevelUP()
     {
-        maxHP += level * 10f;
-        attack += level * 1.1f;
+        maxHP += level * GameConfig.Data.playerHpPerLevel;
+        attack += level * GameConfig.Data.playerAttackPerLevel;
 
         HP_Bar.value = HP / maxHP;
     }

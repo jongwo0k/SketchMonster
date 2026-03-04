@@ -13,8 +13,8 @@ public class MapController : MonoBehaviour
 
     // Stage 관리
     [Header("Stage")]
+    private float stageDuration;
     public float remainTime;
-    public float stageDuration = 60f;
     public int stageLevel = 1;
 
     private void Awake()
@@ -37,6 +37,9 @@ public class MapController : MonoBehaviour
 
         // 생성된 Player에 카메라 연결
         mainCamera.target = playerObject.transform;
+
+        // 진행도 캐싱
+        stageDuration = GameConfig.Data.stageDuration;
 
         StartNewStage();
     }

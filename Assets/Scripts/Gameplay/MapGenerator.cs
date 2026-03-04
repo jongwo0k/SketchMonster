@@ -12,8 +12,6 @@ public class MapGenerator : MonoBehaviour
 {
     [Header("Map")]
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private int width = 70;
-    [SerializeField] private int height = 34;
 
 
     [Header("Tile")]
@@ -23,9 +21,9 @@ public class MapGenerator : MonoBehaviour
     {
         get
         {
-            int minX = -width / 2;
-            int minY = -height / 2;
-            return new RectInt(minX, minY, width, height);
+            int minX = -GameConfig.Data.width / 2;
+            int minY = -GameConfig.Data.height / 2;
+            return new RectInt(minX, minY, GameConfig.Data.width, GameConfig.Data.height);
         }
     }
 

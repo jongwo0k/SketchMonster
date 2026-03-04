@@ -10,10 +10,10 @@ public class MainTower : MonoBehaviour, IDamageable
     bool isUpgrade = false;
 
     // Tower 능력치
-    public float maxHP = 100f;
+    public float maxHP;
     public float HP;
-    public float attack = 15f;
-    public float attackCoolTime = 3f;
+    public float attack;
+    public float attackCoolTime;
     public float fireTimer;
     public int towerLevel = 1;
 
@@ -35,6 +35,10 @@ public class MainTower : MonoBehaviour, IDamageable
 
     void Start()
     {
+        // Tower 능력치 값 불러오기
+        maxHP = GameConfig.Data.towerBaseHp;
+        attack = GameConfig.Data.towerBaseAttack;
+        attackCoolTime = GameConfig.Data.towerAttackCooldown;
         HP = maxHP;
 
         // 텍스쳐 불러오기
@@ -102,9 +106,9 @@ public class MainTower : MonoBehaviour, IDamageable
         isUpgrade = true;
 
         fireTimer = 0f;
-        attackCoolTime = Mathf.Max(0.5f, attackCoolTime * 0.9f);
-        maxHP += towerLevel * 15f;
-        attack += towerLevel * 1.1f;
+        attackCoolTime = Mathf.Max(GameConfig.Data.towerMinCooldown, attackCoolTime * GameConfig.Data.towerCooldownReduction);
+        maxHP += towerLevel * GameConfig.Data.towerHpPerLevel;
+        attack += towerLevel * GameConfig.Data.towerAttackPerLevel;
         towerLevel++;
 
         HP_Bar.value = HP / maxHP;

@@ -13,11 +13,6 @@ public class EnemySpawner : MonoBehaviour
         Right,
     }
 
-    // 생성 빈도
-    [Header("Spawn Interval")]
-    [SerializeField] private float initialSpawnInterval = 3f;
-    [SerializeField] private float spawnIntervalDecrease = 0.1f;
-
     private MapGenerator mapGenerator;
     private float currentSpawnInterval;
 
@@ -43,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
         mapGenerator = GetComponent<MapGenerator>();
 
         // 스테이지에 따라 생성 빈도 조정
-        currentSpawnInterval = Mathf.Max(0.5f, initialSpawnInterval - ((stageLevel - 1) * spawnIntervalDecrease));
+        currentSpawnInterval = Mathf.Max(GameConfig.Data.minSpawnInterval, GameConfig.Data.initialSpawnInterval - ((stageLevel - 1) * GameConfig.Data.spawnIntervalDecrease));
 
         // 이전 스테이지 종료, 새로 시작
         StopAllCoroutines();
@@ -78,9 +73,9 @@ public class EnemySpawner : MonoBehaviour
 
         // Stage에 따라 능력치 상승
         int currentStage = MapController.Instance.stageLevel;
-        float HP = 50f + (currentStage * 15f);
-        float attack = 5f + (currentStage * 1.1f);
-        float speed = 5f + (currentStage * 0.1f);
+        float HP = GameConfig.Data.enemyBaseHp + (currentStage * GameConfig.Data.enemyHpPerStage);
+        float attack = GameConfig.Data.enemyBaseAttack + (currentStage * GameConfig.Data.enemyAttackPerStage);
+        float speed = GameConfig.Data.enemyBaseSpeed + (currentStage * GameConfig.Data.enemySpeedPerStage);
 
         // 외형, 능력치 부여
         Sprite enemySprite = enemySprites[Random.Range(0, enemySprites.Count)];

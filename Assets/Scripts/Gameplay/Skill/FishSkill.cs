@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class FishSkill : Skill
 {
-    public float duration = 4f;
-    public float radius = 4f;
+    private BubbleSkillStats stats;
 
     public override void Initialize(PlayerController _player)
     {
         base.Initialize(_player);
-        this.cooldown = 8f;
+        stats = GameConfig.Data.bubbleStats;
+        this.cooldown = stats.cooldown;
     }
 
     protected override void Execute()
@@ -21,7 +21,7 @@ public class FishSkill : Skill
             Bubble bubble = bubbleObj.GetComponent<Bubble>();
             if (bubble != null)
             {
-                bubble.Initialize(player.attack, duration, radius);
+                bubble.Initialize(player.attack, stats.damageMultiplier, stats.duration, stats.radius, stats.tickInterval);
             }
         }
 

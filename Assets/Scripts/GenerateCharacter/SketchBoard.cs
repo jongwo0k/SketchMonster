@@ -30,7 +30,6 @@ public class SketchBoard : MonoBehaviour
     [Header("Drawing Settings")]
     [SerializeField] private int canvasSize = 512;       // 그림판 크기 고정
     [SerializeField] private int brushSize = 8;          // 펜, 지우개
-    [SerializeField] private float timerDuration = 20f;
 
     // 그림판 변수
     private Texture2D texture;
@@ -143,7 +142,7 @@ public class SketchBoard : MonoBehaviour
     {
         bottomPanel.SetActive(false);
         resultText.gameObject.SetActive(false);
-        timer = timerDuration;
+        timer = GameConfig.Data.sketchDuration;
     }
 
     private void InitializeListeners()
@@ -314,7 +313,7 @@ public class SketchBoard : MonoBehaviour
     private void RestartTimer()
     {
         StopAllCoroutines();
-        timer = timerDuration;
+        timer = GameConfig.Data.sketchDuration;
         bottomPanel.SetActive(false);
         StartCoroutine(CountdownTimer());
     }

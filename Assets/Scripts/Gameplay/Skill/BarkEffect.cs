@@ -3,7 +3,6 @@ using System.Collections;
 
 public class BarkEffect : MonoBehaviour
 {
-    public float duration = 0.3f;
     private float currentRadius;
     private float currentAngle;
 
@@ -15,7 +14,7 @@ public class BarkEffect : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    public void PlayEffect(float radius, float angle, Transform playerTransform, Quaternion rotation, Vector3 firePoint)
+    public void PlayEffect(float radius, float angle, Transform playerTransform, Quaternion rotation, Vector3 firePoint, float duration)
     {
         StopAllCoroutines();
 
@@ -26,11 +25,11 @@ public class BarkEffect : MonoBehaviour
         transform.localPosition = firePoint;
         transform.localRotation = rotation;  // 방향
 
-        StartCoroutine(BarkRoutine());
+        StartCoroutine(BarkRoutine(duration));
     }
 
     // 부채꼴 범위 표시
-    private IEnumerator BarkRoutine()
+    private IEnumerator BarkRoutine(float duration)
     {
         int segments = 20;              // 호 점 갯수
         int vertexCount = segments + 2; // 꼭짓점 + 마지막

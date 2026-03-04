@@ -3,13 +3,13 @@ using System.Collections;
 
 public class BirdSkill : Skill
 {
-    public float dashPower = 30f;
-    public float duration = 0.3f;
+    private DashSkillStats stats;
 
     public override void Initialize(PlayerController _player)
     {
         base.Initialize(_player);
-        this.cooldown = 5f;
+        stats = GameConfig.Data.dashStats;
+        this.cooldown = stats.cooldown;
     }
 
     protected override void Execute()
@@ -33,9 +33,9 @@ public class BirdSkill : Skill
         player.SetDashState(true);
 
         player.Rb.linearVelocity = Vector2.zero;
-        player.Rb.AddForce(dashDir * dashPower, ForceMode2D.Impulse);
+        player.Rb.AddForce(dashDir * stats.dashPower, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(stats.duration);
 
         if (player != null)
         {

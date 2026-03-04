@@ -345,6 +345,21 @@ Class가 많아지면 필요한 데이터가 많아짐 (QuickDraw에는 다양�
 - Dog - Bark Skill: 범용적으로 사용하기 좋다.
 - Fish - Bubble Skill: 데미지를 입히는 영역을 생성해 Speed가 느린 특징을 보완할 수 있다.
 
+## 문자열 및 밸런스 관련 데이터 관리
+
+고정 문자열, 밸런스 관련 데이터가 하드코딩되어 흩어져 있어 레벨 디자인, 테스트에 어려움이 있다.
+Skill이 Class별로 1개씩만 존재해 향후 추가를 고려해야 한다.
+
+문자열만 저장되어 있는 ConstString파일 작성.
+
+ScriptableObject 사용 및 접근 방법 고려
+- GameManager에 연결 후 사용: 현재 GameManager는 캐릭터 생성까지만 담당, GameScene에선 파괴 된다.
+- GameManager에 DontDestroyOnLoad 적용 후 전체 게임 상태를 관리하도록 리펙토링 또는 CharacterGenerateManager로 이름을 수정하고 전체 게임 상태를 관리하는 진짜 GameManager 새로 작성: 구조가 너무 많이 바뀜, 작업량 과다
+- 새로운 전용 싱글톤 추가: 이미 싱글톤 과다, 데이터만 들고 있는 빈 오브젝트를 새로 배치해야 한다.
+- GameSession 활용: 데이터의 역할이 섞인다.
+
+결정: GameConfig static class 새로 작성 후 Resources.Load로 전역 접근해 사용한다.
+
 # Troubleshooting
 
 ## 생성된 이미지의 노이즈와 불안정한 형태
@@ -433,6 +448,16 @@ URP Shader Graph로 렌더링 방식을 변경했다.
 tolerance 값(1 ~ 1.1) 조절에도 기존 방식과 큰 차이 없음, UI에 사용할 이미지와 호환 문제 발생
 기존 방식 유지 채택
 
+## 밸런스 관련 값 통합 관리
+여러 값들이 하드코딩되어 흩어져 있어 확장 및 수치 조절에 어려움이 있다.
+
+**해결책**
+고정 문자열들은 ConstString에 미리 작성해 통합 관리한다.
+BalanceData ScriptableObject를 생성해 값들을 통합 관리한다.
+Inspector 창에서 한 번에 쉽게 수정할 수 있다.
+GameConfig static class를 작성한 뒤 Resources.Load로 전역 접근해 사용한다.
+이후 새로운 적 형태나 스킬 추가 시에도 활용될 수 있다.
+
 # 개선할 점 및 발전 방향
 
 **게임적 요소 보강**
@@ -445,7 +470,6 @@ tolerance 값(1 ~ 1.1) 조절에도 기존 방식과 큰 차이 없음, UI에 �
 **구조 보강**
 - 프로젝트가 진행되면서 싱글톤이 과도하게 사용되는 구조가 되었다. Event기반으로 강한 결합을 해소할 수 있다.
 - 충돌, 데미지 처리 방식에 인터페이스를 적용해 확장성 개선 (IDamageable, Layer 반영 완료, 이후 스킬 추가 시 활용 가능)
-- 스탯, 데미지 등 여러 값들이 흩어져 있다. 별도 파일에서 통합 관리 또는 ScriptableObject를 활용해 수치 조정 편의성 개선 (문자열 ConstString & Scriptable 모델 추가 학습이 필요한 class, 변경될 계획이 없는 grade는 보류, class 이름 enum 변경 시 json 기존 데이터 문제 위험), (GameManager가 전체 게임을 관리하지 않고 캐릭터 생성까지만 관리, GameManager를 전체 게임을 관리하도록 수정(작업량 과다) vs DontDestroyOnLoad만 추가(기능 분리) vs 별도 파일 생성(싱글톤 또 추가) vs GameSession활용 (기능 분리) vs static class 새로 작성 <- 채택)
 
 # 개발 환경
 Microsoft Windows Intel 64-bit를 기준으로 빌드 (Web 빌드 추가)

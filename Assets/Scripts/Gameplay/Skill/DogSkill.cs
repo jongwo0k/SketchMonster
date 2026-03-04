@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class DogSkill : Skill
 {
-    public float radius = 8f;
-    public float angle = 90f;
+    private BarkSkillStats stats;
 
     public override void Initialize(PlayerController _player)
     {
         base.Initialize(_player);
-        this.cooldown = 3f;
-        this.damage *= 5f;
+        stats = GameConfig.Data.barkStats;
+        this.cooldown = stats.cooldown;
+        this.damage *= stats.damageMultiplier;
     }
 
     protected override void Execute()
@@ -40,7 +40,7 @@ public class DogSkill : Skill
             if (effect != null)
             {
                 Vector3 firePoint = player.firePoint.localPosition;
-                effect.PlayEffect(radius, angle, player.transform, effectRot, firePoint);
+                effect.PlayEffect(stats.radius, stats.angle, player.transform, effectRot, firePoint, stats.effectDuration);
             }
         }
 
@@ -53,7 +53,7 @@ public class DogSkill : Skill
 
         // 주변 collider 탐색
         int enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY); // 팀킬 방지
-        Collider2D[] hits = Physics2D.OverlapCircleAll(origin, radius, enemyLayer);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stats.radius, enemyLayer);
 
         foreach (var hit in hits)
         {
@@ -61,7 +61,7 @@ public class DogSkill : Skill
             Vector2 toEnemy = (hit.transform.position - origin).normalized;
             float angleToEnemy = Vector2.Angle(direction, toEnemy);
 
-            if (angleToEnemy <= angle / 2f)
+            if (angleToEnemy <= stats.angle / 2f)
             {
                 if (hit.TryGetComponent<IDamageable>(out IDamageable target))
                 {
