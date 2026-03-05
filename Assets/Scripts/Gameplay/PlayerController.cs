@@ -220,7 +220,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         GameObject projectileObject = ObjectPoolManager.Instance.Spawn(PoolType.Projectile, firePoint.position, directionIndicator.rotation);
         Projectile projectileScript = projectileObject.GetComponent<Projectile>();
-        projectileScript.SetDamage(this.attack);
+        projectileScript.SetDamage(this.attack, this.speed);
         SoundManager.Instance.PlayShoot();
     }
 
