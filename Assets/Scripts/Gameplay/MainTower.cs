@@ -108,6 +108,7 @@ public class MainTower : MonoBehaviour, IDamageable
         fireTimer = 0f;
         attackCoolTime = Mathf.Max(GameConfig.Data.towerMinCooldown, attackCoolTime * GameConfig.Data.towerCooldownReduction);
         maxHP += towerLevel * GameConfig.Data.towerHpPerLevel;
+        HP += towerLevel * GameConfig.Data.towerHpPerLevel;
         attack += towerLevel * GameConfig.Data.towerAttackPerLevel;
         towerLevel++;
 

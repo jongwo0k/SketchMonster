@@ -249,6 +249,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void PlayerLevelUP()
     {
         maxHP += level * GameConfig.Data.playerHpPerLevel;
+        HP += level * GameConfig.Data.playerHpPerLevel;
         attack += level * GameConfig.Data.playerAttackPerLevel;
 
         HP_Bar.value = HP / maxHP;
