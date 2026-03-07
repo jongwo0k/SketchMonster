@@ -63,7 +63,7 @@ public class ModelManager : MonoBehaviour
         if (outputTensor == null) // default bird
         {
             Debug.LogError("CNN tensor null");
-            return -1;
+            return 0;
         }
 
         float[] outputData = outputTensor.DownloadToArray(); // GPU -> CPU

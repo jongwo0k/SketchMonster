@@ -49,7 +49,10 @@ public static class GameSession
             }
             EnemyTextures.Clear();
         }
-        
+
+        // Event
+        EventManager.ClearAllEvents();
+
         Debug.Log("Clear Complete");
     }
 }

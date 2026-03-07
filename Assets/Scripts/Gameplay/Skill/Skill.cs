@@ -5,7 +5,7 @@ public abstract class Skill : MonoBehaviour
     protected PlayerController player;
     protected float damage;
 
-    public float cooldown = 5f; // 임시
+    protected float cooldown = 5f; // 임시
     protected float lastUseTime = float.NegativeInfinity;
 
     private bool isReady => Time.time >= lastUseTime + cooldown; // 지났으면 true
@@ -13,7 +13,7 @@ public abstract class Skill : MonoBehaviour
     public virtual void Initialize(PlayerController _player)
     {
         player = _player;
-        damage = _player.attack;
+        damage = _player.Attack;
     }
 
     public void UseSkill()

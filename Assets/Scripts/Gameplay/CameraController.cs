@@ -4,11 +4,11 @@ public class CameraController : MonoBehaviour
 {
     // 카메라 변수
     public Transform target;
-    public float smoothSpeed = 0.125f;
-    public Vector3 offset;
+    [SerializeField] private float smoothSpeed = 0.125f;
+    [SerializeField] private Vector3 offset;
 
     // 맵 범위
-    public float maxX, minX, maxY, minY;
+    private float maxX, minX, maxY, minY;
 
     public void MapRange(float minX, float maxX, float minY, float maxY)
     {

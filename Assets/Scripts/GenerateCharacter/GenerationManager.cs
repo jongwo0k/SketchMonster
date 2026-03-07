@@ -5,10 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
-public class GameManager : MonoBehaviour
+public class GenerationManager : MonoBehaviour
 {
     // 중앙 관리 지점, 모든 스크립트에서 접근 가능
-    public static GameManager Instance { get; private set; }
+    public static GenerationManager Instance { get; private set; }
 
     // AI 모델 관리
     [Header("Managers")]
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     [Header("Character Select UI")]
     [SerializeField] private List<RawImage> characterResultImages;
     [SerializeField] private List<Button> characterSelectButtons;
-    [SerializeField] public List<TextMeshProUGUI> characterStatTexts;
+    [SerializeField] private List<TextMeshProUGUI> characterStatTexts;
 
 
     // 생성된 이미지(캐릭터) 임시 저장

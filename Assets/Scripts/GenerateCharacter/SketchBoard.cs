@@ -56,7 +56,7 @@ public class SketchBoard : MonoBehaviour
     private GraphicRaycaster graphicRaycaster;
     private EventSystem eventSystem;
     private Canvas parentCanvas;
-    private GameManager gameManager;
+    private GenerationManager generationManager;
 
     // Buffer
     private Color32[] pixelBuffer;
@@ -64,7 +64,7 @@ public class SketchBoard : MonoBehaviour
 
     void Start()
     {
-        if (!TryInitializeGameManager()) return;
+        if (!TryInitializeGenerationManager()) return;
         if (!TryInitializeCanvasComponents()) return;
 
         InitializeUI();
@@ -94,12 +94,12 @@ public class SketchBoard : MonoBehaviour
     }
 
     // ------------------------------ 초기화 ---------------------------------
-    private bool TryInitializeGameManager()
+    private bool TryInitializeGenerationManager()
     {
-        gameManager = GameManager.Instance;
-        if (gameManager == null)
+        generationManager = GenerationManager.Instance;
+        if (generationManager == null)
         {
-            Debug.LogError("GameManager not found");
+            Debug.LogError("GenerationManager not found");
             enabled = false; // 스크립트 비활성화
             return false;
         }
@@ -363,7 +363,7 @@ public class SketchBoard : MonoBehaviour
         texture.Apply();
 
         Debug.Log($"Stroke Count: {strokeCount}, Remain Time: {remainSeconds} sec");
-        gameManager.StartCharacterCreation(texture, strokeCount, remainSeconds);
+        generationManager.StartCharacterCreation(texture, strokeCount, remainSeconds);
     }
 
     void OnDestroy()

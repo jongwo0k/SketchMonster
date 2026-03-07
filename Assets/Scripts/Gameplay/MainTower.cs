@@ -10,12 +10,12 @@ public class MainTower : MonoBehaviour, IDamageable
     bool isUpgrade = false;
 
     // Tower 능력치
-    public float maxHP;
-    public float HP;
-    public float attack;
-    public float attackCoolTime;
-    public float fireTimer;
-    public int towerLevel = 1;
+    private float maxHP;
+    private float HP;
+    private float attack;
+    private float attackCoolTime;
+    private float fireTimer;
+    private int towerLevel = 1;
 
     // UI
     [SerializeField] private Slider HP_Bar;
@@ -93,7 +93,7 @@ public class MainTower : MonoBehaviour, IDamageable
 
         if (HP <= 0)
         {
-            UI_Manager.Instance.GameIsOver();
+            EventManager.GameOver();
         }
 
         ObjectPoolManager.Instance.Spawn(PoolType.HitParticle, transform.position, Quaternion.identity);

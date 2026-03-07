@@ -4,7 +4,7 @@ using System.Collections;
 public class Projectile : MonoBehaviour
 {
     [Header("Projectile")]
-    [SerializeField] public float attack = 1f;
+    [SerializeField] private float attack = 1f;
 
     private Rigidbody2D rb;
 

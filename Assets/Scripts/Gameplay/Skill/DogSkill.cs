@@ -33,13 +33,13 @@ public class DogSkill : Skill
         Quaternion effectRot = Quaternion.Euler(0f, 0f, rotZ);
 
         // 범위 표시
-        GameObject effectObj = ObjectPoolManager.Instance.Spawn(PoolType.BarkEffect, player.firePoint.position, effectRot);
+        GameObject effectObj = ObjectPoolManager.Instance.Spawn(PoolType.BarkEffect, player.FirePoint.position, effectRot);
         if (effectObj != null)
         {
             BarkEffect effect = effectObj.GetComponent<BarkEffect>();
             if (effect != null)
             {
-                Vector3 firePoint = player.firePoint.localPosition;
+                Vector3 firePoint = player.FirePoint.localPosition;
                 effect.PlayEffect(stats.radius, stats.angle, player.transform, effectRot, firePoint, stats.effectDuration);
             }
         }
@@ -49,7 +49,7 @@ public class DogSkill : Skill
 
     private void BarkDamage(Vector2 direction)
     {
-        Vector3 origin = player.firePoint.position;
+        Vector3 origin = player.FirePoint.position;
 
         // 주변 collider 탐색
         int enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY); // 팀킬 방지

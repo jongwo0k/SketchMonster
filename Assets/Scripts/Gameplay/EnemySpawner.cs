@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
 
     private MapGenerator mapGenerator;
     private float currentSpawnInterval;
+    private int currentStage;
 
     // 스프라이트 미리 저장
     private List<Sprite> enemySprites = new List<Sprite>();
@@ -34,6 +35,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void StartSpawnEnemy(int stageLevel)
     {
+        currentStage = stageLevel;
+
         // 맵 정보 불러오기
         mapGenerator = GetComponent<MapGenerator>();
 
@@ -72,7 +75,6 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemyScript = enemyObject.GetComponent<Enemy>();
 
         // Stage에 따라 능력치 상승
-        int currentStage = MapController.Instance.stageLevel;
         float HP = GameConfig.Data.enemyBaseHp + (currentStage * GameConfig.Data.enemyHpPerStage);
         float attack = GameConfig.Data.enemyBaseAttack + (currentStage * GameConfig.Data.enemyAttackPerStage);
         float speed = GameConfig.Data.enemyBaseSpeed + (currentStage * GameConfig.Data.enemySpeedPerStage);

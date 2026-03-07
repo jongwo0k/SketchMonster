@@ -9,17 +9,20 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Header("Attack")]
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform directionIndicator; // 조준 방향
-    [SerializeField] public Transform firePoint;          // 발사 지점
+    [SerializeField] private Transform firePoint;          // 발사 지점
 
     // 움직임
     [Header("Movement")]
-    [SerializeField] public float HP = 100f; // 테스트용 (캐릭터 스탯으로 업데이트)
-    [SerializeField] public float XP = 1f;
-    [SerializeField] public float attack = 10f;
-    [SerializeField] public float speed = 5f;
-    [SerializeField] public int level = 1;
+    private float HP;
     private float maxHP;
+    private float XP = 1f;
     private float maxXP;
+    private float attack;
+    private float speed;
+    private int level = 1;
+
+    public Transform FirePoint => firePoint;
+    public float Attack => attack;
 
     // UI
     [Header("UI")]
@@ -204,7 +207,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         if (HP <= 0)
         {
-            UI_Manager.Instance.GameIsOver();
+            EventManager.GameOver();
             ObjectPoolManager.Instance.Spawn(PoolType.DieParticle, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
         }
@@ -235,7 +238,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             maxXP *= GameConfig.Data.xpMultiplier; // 필요 경험치 증가
 
             SoundManager.Instance.PlayLevelUp();
-            UI_Manager.Instance.LevelUP();
+            EventManager.LevelUp(level);
         }
         else
         {

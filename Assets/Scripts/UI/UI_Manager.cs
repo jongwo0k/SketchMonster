@@ -5,8 +5,6 @@ using TMPro;
 
 public class UI_Manager : MonoBehaviour
 {
-    public static UI_Manager Instance { get; private set; }
-
     // UI Panel 관리
     [Header("Stage Panels")]
     [SerializeField] private Slider stageSlider;
@@ -24,23 +22,33 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private Slider volumeSlider;
     private bool isPaused = false;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
+    private int finalStage;
+    private int finalLevel = 1;
 
     private void Start()
     {
         Time.timeScale = 1f;
         volumeSlider.value = SoundManager.Instance.GetVolume();
+    }
+
+    // 이벤트 구독
+    private void OnEnable()
+    {
+        EventManager.OnGameOver += GameIsOver;
+        EventManager.OnStageClear += StageIsClear;
+        EventManager.OnLevelUp += LevelUP;
+        EventManager.OnStagePanel += UpdateStagePanel;
+        EventManager.OnStageSlider += UpdateStageSlider;
+    }
+
+    // 이벤트 해제
+    private void OnDisable()
+    {
+        EventManager.OnGameOver -= GameIsOver;
+        EventManager.OnStageClear -= StageIsClear;
+        EventManager.OnLevelUp -= LevelUP;
+        EventManager.OnStagePanel -= UpdateStagePanel;
+        EventManager.OnStageSlider -= UpdateStageSlider;
     }
 
     private void Update()
@@ -95,17 +103,15 @@ public class UI_Manager : MonoBehaviour
     }
 
     // GameOver
-    public void GameIsOver()
+    private void GameIsOver()
     {
         gameOver.SetActive(true);
-        int finalStage = MapController.Instance.stageLevel;
         gameOverText.text = "Stage: " + finalStage;
 
 #if !UNITY_WEBGL // Web 에선 record X
         var (data, _) = DataManager.LoadCharacter(GameSession.SelectedCharacterId);
-        if(data != null)
+        if (data != null)
         {
-            int finalLevel = PlayerController.Instance.level;
             DataManager.SaveGameResult(data, finalStage, finalLevel);
         }
 #endif
@@ -115,7 +121,7 @@ public class UI_Manager : MonoBehaviour
     }
 
     // NextStage
-    public void StageIsClear()
+    private void StageIsClear()
     {
         nextStage.SetActive(true);
         SoundManager.Instance.PlayStageClear();
@@ -126,12 +132,13 @@ public class UI_Manager : MonoBehaviour
     {
         Time.timeScale = 1f;
         nextStage.SetActive(false);
-        MapController.Instance.StartNextStage();
+        EventManager.NextStage();
     }
 
     // LevelUp
-    public void LevelUP()
+    private void LevelUP(int level)
     {
+        finalLevel = level;
         levelUp.SetActive(true);
         Time.timeScale = 0f;
     }
@@ -159,12 +166,13 @@ public class UI_Manager : MonoBehaviour
     }
 
     // Update UI Panels
-    public void UpdateStagePanel(int stageLevel)
+    private void UpdateStagePanel(int stageLevel)
     {
+        finalStage = stageLevel;
         stageText.text = "Stage: " + stageLevel;
     }
 
-    public void UpdateStageSlider(float value)
+    private void UpdateStageSlider(float value)
     {
         stageSlider.value = value;
     }
@@ -176,10 +184,5 @@ public class UI_Manager : MonoBehaviour
         gameOver.SetActive(false);
         GameSession.CleanSession();
         SceneManager.LoadScene(ConstString.SCENE_MENU);
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this) Instance = null;
     }
 }

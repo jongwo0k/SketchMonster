@@ -1,10 +1,7 @@
 using UnityEngine;
 
 public class MapController : MonoBehaviour
-
 {
-    public static MapController Instance { get; private set; }
-
     [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private PlayerSpawner playerSpawner;
     [SerializeField] private EnemySpawner enemySpawner;
@@ -14,21 +11,8 @@ public class MapController : MonoBehaviour
     // Stage 관리
     [Header("Stage")]
     private float stageDuration;
-    public float remainTime;
-    public int stageLevel = 1;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
+    private float remainTime;
+    private int stageLevel = 1;
 
     void Start()
     {
@@ -44,6 +28,18 @@ public class MapController : MonoBehaviour
         StartNewStage();
     }
 
+    // 이벤트 구독
+    private void OnEnable()
+    {
+        EventManager.OnNextStage += StartNextStage;
+    }
+
+    // 이벤트 해제
+    private void OnDisable()
+    {
+        EventManager.OnNextStage -= StartNextStage;
+    }
+
     // Update UI
     private void Update()
     {
@@ -57,11 +53,11 @@ public class MapController : MonoBehaviour
             remainTime -= Time.deltaTime;
             float value = (stageDuration - remainTime) / stageDuration;
 
-            UI_Manager.Instance.UpdateStageSlider(value);
+            EventManager.StageSlider(value);
         }
         else
         {
-            UI_Manager.Instance.StageIsClear();
+            EventManager.StageClear();
         }
     }
 
@@ -90,12 +86,12 @@ public class MapController : MonoBehaviour
 
         remainTime = stageDuration;
 
-        UI_Manager.Instance.UpdateStagePanel(stageLevel);
-        UI_Manager.Instance.UpdateStageSlider(0f);
+        EventManager.StagePanel(stageLevel);
+        EventManager.StageSlider(0f);
         enemySpawner.StartSpawnEnemy(stageLevel);
     }
 
-    public void StartNextStage()
+    private void StartNextStage()
     {
         stageLevel++;
         StartNewStage();
@@ -105,10 +101,5 @@ public class MapController : MonoBehaviour
     private void ClearRemainObjects()
     {
         ObjectPoolManager.Instance.ClearObjects();
-    }
-
-    void OnDestroy()
-    {
-        if (Instance == this) Instance = null;
     }
 }

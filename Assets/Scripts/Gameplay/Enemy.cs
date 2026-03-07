@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour, IDamageable
     private float speed = 5f;
 
     // Prefabs
-    [SerializeField] private GameObject experienceOrb;
     private Transform targetTower;
     private Transform targetPlayer;
 
