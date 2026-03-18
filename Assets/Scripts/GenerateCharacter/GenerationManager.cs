@@ -89,10 +89,14 @@ public class GenerationManager : MonoBehaviour
         }
         generatedCharacters = new List<CharacterData>();
 
+        // CNN은 1회, 재활용
+        int classIndex = modelManager.RunClassifier(sketch);
+        string className = modelManager.classNames[classIndex];
+
         // 이미지 3장 생성
         for (int i = 0; i < 3; i++)
         {
-            yield return GenerateCharacter(i, sketch, strokeCount, remainSeconds); // 순차적
+            yield return GenerateCharacter(i, classIndex, className, strokeCount, remainSeconds); // 순차적
         }
 
         // UI 전환 (로딩 창 활용)
@@ -103,11 +107,9 @@ public class GenerationManager : MonoBehaviour
     }
 
     // 캐릭터 생성 (실제 동작)
-    private IEnumerator GenerateCharacter(int index, Texture2D sketch, int strokeCount, int remainSeconds)
+    private IEnumerator GenerateCharacter(int index, int classIndex, string className, int strokeCount, int remainSeconds)
     {
         // AI 모델이 생성
-        int classIndex = modelManager.RunClassifier(sketch);
-        string className = modelManager.classNames[classIndex];
         Texture generatedTexture = modelManager.RunGenerator(classIndex);
 
         if (characterResultImages[index].texture != null)

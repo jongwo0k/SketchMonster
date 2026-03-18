@@ -3352,7 +3352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc79fbcfdc956134bb4260e8c2ad86d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cnnModelAsset: {fileID: 5022602860645237092, guid: afc8b734df489824a885bdb15a535570, type: 3}
+  cnnModelAsset: {fileID: 5022602860645237092, guid: 377e5ad20d0bc8b4d9c0ef65e55432aa, type: 3}
   ganModelAsset: {fileID: 5022602860645237092, guid: 6a475d17fb564b1478512c514c7f3b15, type: 3}
 --- !u!114 &1893376539 stripped
 MonoBehaviour:
@@ -3526,7 +3526,6 @@ MonoBehaviour:
   submitButtonBottom: {fileID: 2097809526}
   canvasSize: 512
   brushSize: 5
-  timerDuration: 20
 --- !u!4 &2051434005
 Transform:
   m_ObjectHideFlags: 0

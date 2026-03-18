@@ -4,7 +4,18 @@ public static class ImagePreprocess
 {
     // Buffer
     private static Color32[] workBuffer;
-    private static Color32[] tempBuffer;
+    private static Color32[] tempBuffer = new Color32[128 * 128];
+    private static Color32[] finalBuffer = new Color32[128 * 128];
+
+    // Gaussian Kernel (5x5)
+    private static readonly int[] gaussianKernel = new int[]
+    {
+        1,  4,  7,  4, 1,
+        4, 16, 26, 16, 4,
+        7, 26, 41, 26, 7,
+        4, 16, 26, 16, 4,
+        1,  4,  7,  4, 1
+    };
 
     // 배경 제거 (특정 색 범위 투명화 alpha=0)
     public static Texture2D RemoveBackground(Texture inputTexture)
@@ -60,20 +71,16 @@ public static class ImagePreprocess
         int height = original.height;
         int totalPixels = width * height;
 
-        // 버퍼 초기화
+        // 버퍼 초기화 (원본 크기)
         if (workBuffer == null || workBuffer.Length != totalPixels)
         {
             workBuffer = new Color32[totalPixels];
-            tempBuffer = new Color32[totalPixels];
         }
 
         Color32[] pixels = original.GetPixels32();
         System.Array.Copy(pixels, workBuffer, totalPixels);
 
         ConvertToGrayscale(workBuffer, width, height);
-        GaussianBlur(workBuffer, tempBuffer, width, height);
-        BinarizeImage(workBuffer, width, height, 100);
-
         Rect bounds = FindDrawingBounds(workBuffer, width, height);
 
         int cropW = (int)bounds.width;
@@ -83,11 +90,12 @@ public static class ImagePreprocess
         int maxSize = Mathf.Max(cropW, cropH);
         Color32[] centered = CenterOnCanvas(cropped, cropW, cropH, maxSize);
 
-        Color32[] resized = ResizePixels(centered, maxSize, maxSize, 128, 128);
+        ResizePixels(centered, maxSize, maxSize, finalBuffer, 128, 128);
+        GaussianBlur(finalBuffer, tempBuffer, 128, 128); // 블러 적용 순서 변경
 
         // 최종 Texture
         Texture2D result = new Texture2D(128, 128, TextureFormat.RGB24, false);
-        result.SetPixels32(resized);
+        result.SetPixels32(finalBuffer);
         result.Apply();
 
         return result;
@@ -104,48 +112,35 @@ public static class ImagePreprocess
         }
     }
 
-    // Gaussian Blur (5x5 kernel)
+    // Gaussian Blur
     private static void GaussianBlur(Color32[] pixels, Color32[] temp, int width, int height)
     {
-        // temp에 원본 복사
         System.Array.Copy(pixels, temp, pixels.Length);
 
-        int kernelSize = 5;
-        int halfKernel = kernelSize / 2;
+        int halfKernel = 2; // 5x5
+        int gaussianKernelSum = 273;
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
                 int sum = 0;
-                int count = 0;
 
                 for (int ky = -halfKernel; ky <= halfKernel; ky++)
                 {
                     for (int kx = -halfKernel; kx <= halfKernel; kx++)
                     {
-                        // 경계
                         int px = Mathf.Clamp(x + kx, 0, width - 1);
                         int py = Mathf.Clamp(y + ky, 0, height - 1);
 
-                        sum += temp[py * width + px].r;
-                        count++;
+                        int kernelIdx = (ky + halfKernel) * 5 + (kx + halfKernel);
+                        sum += temp[py * width + px].r * gaussianKernel[kernelIdx];
                     }
                 }
 
-                byte avg = (byte)(sum / count);
+                byte avg = (byte)(sum / gaussianKernelSum);
                 pixels[y * width + x] = new Color32(avg, avg, avg, 255);
             }
-        }
-    }
-
-    // 이진화 (threshold)
-    private static void BinarizeImage(Color32[] pixels, int width, int height, int threshold)
-    {
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            byte value = pixels[i].r > threshold ? (byte)255 : (byte)0;
-            pixels[i] = new Color32(value, value, value, 255);
         }
     }
 
@@ -160,7 +155,7 @@ public static class ImagePreprocess
         {
             for (int x = 0; x < width; x++)
             {
-                if (pixels[y * width + x].r < 128)  // 검은 픽셀
+                if (pixels[y * width + x].r < 200) // 검은 픽셀
                 {
                     found = true;
                     if (x < minX) minX = x;
@@ -174,7 +169,7 @@ public static class ImagePreprocess
         // 그림이 없는 경우
         if (!found) return new Rect(0, 0, width, height);
 
-        // Padding (끊김 방지)
+        // Padding (끊김 방지, 여백)
         int pad = 10;
         minX = Mathf.Max(0, minX - pad);
         minY = Mathf.Max(0, minY - pad);
@@ -235,29 +230,46 @@ public static class ImagePreprocess
         return result;
     }
 
-    // Resize
-    private static Color32[] ResizePixels(Color32[] source, int srcW, int srcH, int targetW, int targetH)
+    // Bilinear Resize
+    private static void ResizePixels(Color32[] source, int srcW, int srcH, Color32[] dest, int targetW, int targetH)
     {
-        Color32[] result = new Color32[targetW * targetH];
-
         float ratioX = (float)srcW / targetW;
         float ratioY = (float)srcH / targetH;
 
         for (int y = 0; y < targetH; y++)
         {
+            // src 좌표 (중심 기준)
+            float srcY = (y + 0.5f) * ratioY - 0.5f;
+            int y0 = Mathf.FloorToInt(srcY);
+            int y1 = y0 + 1;
+            float fy = srcY - y0;
+
+            y0 = Mathf.Clamp(y0, 0, srcH - 1);
+            y1 = Mathf.Clamp(y1, 0, srcH - 1);
+
             for (int x = 0; x < targetW; x++)
             {
-                // 가장 가까운 픽셀 좌표 계산
-                int srcX = Mathf.FloorToInt(x * ratioX);
-                int srcY = Mathf.FloorToInt(y * ratioY);
+                float srcX = (x + 0.5f) * ratioX - 0.5f;
+                int x0 = Mathf.FloorToInt(srcX);
+                int x1 = x0 + 1;
+                float fx = srcX - x0;
 
-                int srcIdx = srcY * srcW + srcX;
-                int dstIdx = y * targetW + x;
+                x0 = Mathf.Clamp(x0, 0, srcW - 1);
+                x1 = Mathf.Clamp(x1, 0, srcW - 1);
 
-                result[dstIdx] = source[srcIdx];
+                // 인접 픽셀
+                float topLeft = source[y0 * srcW + x0].r; // grayscale, r만
+                float topRight = source[y0 * srcW + x1].r;
+                float bottomLeft = source[y1 * srcW + x0].r;
+                float bottomRight = source[y1 * srcW + x1].r;
+
+                // Bilinear 보간
+                float top = topLeft + (topRight - topLeft) * fx;
+                float bottom = bottomLeft + (bottomRight - bottomLeft) * fx;
+                byte value = (byte)Mathf.Clamp(top + (bottom - top) * fy, 0f, 255f);
+
+                dest[y * targetW + x] = new Color32(value, value, value, 255);
             }
         }
-
-        return result;
     }
 }

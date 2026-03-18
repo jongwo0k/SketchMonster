@@ -202,7 +202,7 @@ onnx로 변환이 가능한 구조 사용
 
 ## CNN
 
-LeNet 기반 스케치 분류 모델
+VGG 기반 스케치 분류 모델
 
 <details>
 <summary>Code</summary>
@@ -212,17 +212,23 @@ class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
         self.pool = nn.MaxPool2d(2, 2)
         self.dropout = nn.Dropout(0.25)
-        self.fc1 = nn.Linear(64 * 32 * 32, 128)
-        self.fc2 = nn.Linear(128, 3)
+        self.fc1 = nn.Linear(128 * 16 * 16, 256)
+        self.bn_fc1 = nn.BatchNorm1d(256)
+        self.fc2 = nn.Linear(256, 3)
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.reshape(-1, 64 * 32 * 32)
-        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        x = self.pool(F.relu(self.bn3(self.conv3(x))))
+        x = torch.flatten(x, 1)
+        x = self.dropout(F.relu(self.bn_fc1(self.fc1(x))))
         return self.fc2(x)
 ```
 </details>
