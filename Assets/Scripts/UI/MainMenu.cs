@@ -35,12 +35,10 @@ public class MainMenu : MonoBehaviour
 #endif
     }
 
-    /*
     public void OnHowToPlayPanelButtonClicked()
     {
         howtoplayPanel.SetActive(true);
     }
-    */
 
     public void OnExitButtonClicked()
     {
@@ -53,7 +51,7 @@ public class MainMenu : MonoBehaviour
     
     public void CloseButtonClicked()
     {
-        // howtoplayPanel.SetActive(false);
+        howtoplayPanel.SetActive(false);
         recordPanel.SetActive(false);
     }
     
