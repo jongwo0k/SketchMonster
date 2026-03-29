@@ -22,13 +22,22 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private Slider volumeSlider;
     private bool isPaused = false;
 
+    // 스테이지 관리
     private int finalStage;
     private int finalLevel = 1;
+
+    // 마우스 커서 관리
+    private float cursorDelay = 2f;
+    private float cursorTimer;
+    private Vector3 lastMousePosition;
 
     private void Start()
     {
         Time.timeScale = 1f;
         volumeSlider.value = SoundManager.Instance.GetVolume();
+        lastMousePosition = Input.mousePosition;
+        cursorTimer = 0f;
+        Cursor.visible = false;
     }
 
     // 이벤트 구독
@@ -59,6 +68,40 @@ public class UI_Manager : MonoBehaviour
             if (!gameOver.activeSelf && !levelUp.activeSelf && !nextStage.activeSelf)
             {
                 Pause();
+            }
+        }
+
+        CursorVisibility();
+    }
+
+    // 마우스 커서 관리
+    private void CursorVisibility()
+    {
+        bool isActiveUI = isPaused || gameOver.activeSelf || levelUp.activeSelf || nextStage.activeSelf;
+
+        if (isActiveUI)
+        {
+            Cursor.visible = true;
+            lastMousePosition = Input.mousePosition;
+            cursorTimer = 0f;
+        }
+        else
+        {
+            if (Input.mousePosition != lastMousePosition)
+            {
+                Cursor.visible = true;
+                cursorTimer = cursorDelay;
+                lastMousePosition = Input.mousePosition;
+            }
+
+            if (cursorTimer > 0f)
+            {
+                cursorTimer -= Time.unscaledDeltaTime;
+            }
+
+            if (cursorTimer <= 0f)
+            {
+                Cursor.visible = false;
             }
         }
     }

@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = true;
         if (howtoplayPanel != null) howtoplayPanel.SetActive(false);
         if (recordPanel != null) recordPanel.SetActive(false);
         volumeSlider.value = SoundManager.Instance.GetVolume();

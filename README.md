@@ -165,7 +165,7 @@ Magenta 배경 적용
 **Start Menu**
 - 새 게임 시작
 - 게임 기록 랭킹 시스템
-- (미구현: How To Play)
+- How To Play
 - 게임 종료
 
 **Draw Sketch**
