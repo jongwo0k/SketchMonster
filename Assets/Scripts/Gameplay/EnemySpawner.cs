@@ -43,6 +43,8 @@ public class EnemySpawner : MonoBehaviour
         // 스테이지에 따라 생성 빈도 조정
         currentSpawnInterval = Mathf.Max(GameConfig.Data.minSpawnInterval, GameConfig.Data.initialSpawnInterval - ((stageLevel - 1) * GameConfig.Data.spawnIntervalDecrease));
 
+        Debug.Log($"[Stage {currentStage}] Spawn Interval: {currentSpawnInterval}");
+
         // 이전 스테이지 종료, 새로 시작
         StopAllCoroutines();
         StartCoroutine(SpawnLoop());
@@ -79,9 +81,32 @@ public class EnemySpawner : MonoBehaviour
         float attack = GameConfig.Data.enemyBaseAttack + (currentStage * GameConfig.Data.enemyAttackPerStage);
         float speed = GameConfig.Data.enemyBaseSpeed + (currentStage * GameConfig.Data.enemySpeedPerStage);
 
+        // enemy type 분리 (느리고 강한 적, 빠르고 약한 적)
+        int enemyType = Random.Range(0, enemySprites.Count);
+        Sprite enemySprite = enemySprites[enemyType];
+
+        float hpMultiplier, attackMultiplier, speedMultiplier;
+        switch (enemyType)
+        {
+            case 0: // runner type
+                hpMultiplier = GameConfig.Data.runnerHpMultiplier;
+                attackMultiplier = GameConfig.Data.runnerAttackMultiplier;
+                speedMultiplier = GameConfig.Data.runnerSpeedMultiplier;
+                break;
+            case 1: // tanker type
+                hpMultiplier = GameConfig.Data.tankerHpMultiplier;
+                attackMultiplier = GameConfig.Data.tankerAttackMultiplier;
+                speedMultiplier = GameConfig.Data.tankerSpeedMultiplier;
+                break;
+            default:
+                hpMultiplier = 1f;
+                attackMultiplier = 1f;
+                speedMultiplier = 1f;
+                break;
+        }
+
         // 외형, 능력치 부여
-        Sprite enemySprite = enemySprites[Random.Range(0, enemySprites.Count)];
-        enemyScript.Initialize(enemySprite, HP, attack, speed);
+        enemyScript.Initialize(enemySprite, HP * hpMultiplier, attack * attackMultiplier, speed * speedMultiplier);
     }
 
     // 끝에서 랜덤 생성

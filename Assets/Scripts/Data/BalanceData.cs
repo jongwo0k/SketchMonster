@@ -98,6 +98,15 @@ public class BalanceData : ScriptableObject
     public float enemyBaseSpeed = 5f;
     public float enemySpeedPerStage = 0.1f;
 
+    // 적 타입 별 능력치
+    [Header("Enemy Type Multiplier")]
+    public float runnerHpMultiplier = 0.8f;
+    public float runnerAttackMultiplier = 0.8f;
+    public float runnerSpeedMultiplier = 1.2f;
+    public float tankerHpMultiplier = 1.4f;
+    public float tankerAttackMultiplier = 1.2f;
+    public float tankerSpeedMultiplier = 0.6f;
+
     // 적 스폰률
     [Header("Enemy Spawn")]
     public float initialSpawnInterval = 3f;

@@ -186,6 +186,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             playerSkill.Initialize(this);
         }
+
+        Debug.Log($"[Player Stats] Class: {data.className}, Grade: {data.grade}, HP: {HP}, Attack: {attack}, Speed: {speed}, MaxXP: {maxXP}");
     }
 
     // 피격
@@ -237,6 +239,8 @@ public class PlayerController : MonoBehaviour, IDamageable
             XP -= maxXP;
             maxXP *= GameConfig.Data.xpMultiplier; // 필요 경험치 증가
 
+            Debug.Log($"Player Level: {level} - XP: {maxXP}");
+
             SoundManager.Instance.PlayLevelUp();
             EventManager.LevelUp(level);
         }
@@ -245,7 +249,6 @@ public class PlayerController : MonoBehaviour, IDamageable
             SoundManager.Instance.PlayGetExp();
         }
         XP_Bar.value = XP / maxXP;
-        
     }
 
     // 레벨업 선택지
@@ -256,6 +259,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         attack += level * GameConfig.Data.playerAttackPerLevel;
 
         HP_Bar.value = HP / maxHP;
+
+        Debug.Log($"Player Level: {level} - HP: {maxHP}, Attack: {attack}, Speed: {speed}");
     }
 
     public void RecoverHP()

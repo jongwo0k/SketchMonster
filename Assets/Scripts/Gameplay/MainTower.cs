@@ -113,6 +113,8 @@ public class MainTower : MonoBehaviour, IDamageable
         towerLevel++;
 
         HP_Bar.value = HP / maxHP;
+
+        Debug.Log($"Tower Level: {towerLevel} - HP: {maxHP}, Attack: {attack}, Cooltime: {attackCoolTime}");
     }
 
     // 사방으로 Projectile 발사

@@ -107,6 +107,10 @@ public class Enemy : MonoBehaviour, IDamageable
         // HP UI
         HP_Bar.gameObject.SetActive(true);
         HP_Bar.value = 1;
+
+#if UNITY_EDITOR
+        Debug.Log($"[Enemy Stats] HP: {maxHP}, Attack: {attack}, Speed: {speed}");
+#endif
     }
 
     // MainTower / Player 중 가까운 대상 찾기
