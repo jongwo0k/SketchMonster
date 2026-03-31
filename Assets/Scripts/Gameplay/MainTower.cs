@@ -13,9 +13,8 @@ public class MainTower : MonoBehaviour, IDamageable
     private float maxHP;
     private float HP;
     private float attack;
-    private float attackCoolTime;
+    private float attackCooldown;
     private float fireTimer;
-    private int towerLevel = 1;
 
     // UI
     [SerializeField] private Slider HP_Bar;
@@ -38,7 +37,7 @@ public class MainTower : MonoBehaviour, IDamageable
         // Tower 능력치 값 불러오기
         maxHP = GameConfig.Data.towerBaseHp;
         attack = GameConfig.Data.towerBaseAttack;
-        attackCoolTime = GameConfig.Data.towerAttackCooldown;
+        attackCooldown = GameConfig.Data.towerAttackCooldown;
         HP = maxHP;
 
         // 텍스쳐 불러오기
@@ -76,7 +75,7 @@ public class MainTower : MonoBehaviour, IDamageable
         if (fireTimer <= 0f)
         {
             Fire();
-            fireTimer = attackCoolTime;
+            fireTimer = attackCooldown;
         }
     }
 
@@ -103,18 +102,23 @@ public class MainTower : MonoBehaviour, IDamageable
     // 레벨업 선택지
     public void TowerLevelUP()
     {
-        isUpgrade = true;
-
-        fireTimer = 0f;
-        attackCoolTime = Mathf.Max(GameConfig.Data.towerMinCooldown, attackCoolTime * GameConfig.Data.towerCooldownReduction);
-        maxHP += towerLevel * GameConfig.Data.towerHpPerLevel;
-        HP += towerLevel * GameConfig.Data.towerHpPerLevel;
-        attack += towerLevel * GameConfig.Data.towerAttackPerLevel;
-        towerLevel++;
+        if (!isUpgrade)
+        {
+            isUpgrade = true;
+            fireTimer = 0f;
+        }
+        else
+        {
+            attackCooldown = Mathf.Max(GameConfig.Data.towerMinCooldown, attackCooldown * GameConfig.Data.towerCooldownReduction);
+        }
+            
+        maxHP += GameConfig.Data.towerHpPerLevel;
+        HP += GameConfig.Data.towerHpPerLevel;
+        attack += GameConfig.Data.towerAttackPerLevel;
 
         HP_Bar.value = HP / maxHP;
 
-        Debug.Log($"Tower Level: {towerLevel} - HP: {maxHP}, Attack: {attack}, Cooltime: {attackCoolTime}");
+        Debug.Log($"[Tower Stats] HP: {maxHP}, Attack: {attack}, Cooldown: {attackCooldown}");
     }
 
     // 사방으로 Projectile 발사

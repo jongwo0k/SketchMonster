@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Header("Movement")]
     private float HP;
     private float maxHP;
-    private float XP = 1f;
+    private float XP = 0f;
     private float maxXP;
     private float attack;
     private float speed;
@@ -254,13 +254,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     // 레벨업 선택지
     public void PlayerLevelUP()
     {
-        maxHP += level * GameConfig.Data.playerHpPerLevel;
-        HP += level * GameConfig.Data.playerHpPerLevel;
-        attack += level * GameConfig.Data.playerAttackPerLevel;
+        maxHP += GameConfig.Data.playerHpPerLevel;
+        HP += GameConfig.Data.playerHpPerLevel;
+        attack += GameConfig.Data.playerAttackPerLevel;
 
         HP_Bar.value = HP / maxHP;
 
-        Debug.Log($"Player Level: {level} - HP: {maxHP}, Attack: {attack}, Speed: {speed}");
+        Debug.Log($"[Player Stats] HP: {maxHP}, Attack: {attack}, Speed: {speed}");
     }
 
     public void RecoverHP()
