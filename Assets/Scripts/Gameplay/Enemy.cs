@@ -119,11 +119,11 @@ public class Enemy : MonoBehaviour, IDamageable
         // 파괴 될경우?
 
         // 거리 계산
-        float distToTower = Vector2.Distance(transform.position, targetTower.position);
-        float distToPlayer = Vector2.Distance(transform.position, targetPlayer.position);
+        float sqrDistToTower = (transform.position - targetTower.position).sqrMagnitude;
+        float sqrDistToPlayer = (transform.position - targetPlayer.position).sqrMagnitude;
 
         // 가까운 쪽 타겟팅
-        if (distToPlayer < distToTower)
+        if (sqrDistToPlayer < sqrDistToTower)
         {
             return targetPlayer;
         }

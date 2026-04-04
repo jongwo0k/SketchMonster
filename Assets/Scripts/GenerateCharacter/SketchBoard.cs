@@ -186,11 +186,12 @@ public class SketchBoard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
     // 펜 굵기 만큼 점으로 그리기
     private void DrawDot(int x, int y)
     {
+        int sqrBrushSize = brushSize * brushSize;
         for (int i = -brushSize; i < brushSize; i++)
         {
             for (int j = -brushSize; j < brushSize; j++)
             {
-                if (new Vector2(i, j).magnitude < brushSize)
+                if (i * i + j * j < sqrBrushSize)
                 {
                     int px = x + i;
                     int py = y + j;
