@@ -2,17 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 
-public class SketchBoard : MonoBehaviour
+public class SketchBoard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     // 인스펙터 변수
     // 그림판 영역
     [Header("UI Components")]
-    [SerializeField] private RawImage drawingArea;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI resultText;
+    private RawImage drawingArea;
 
     [Header("Top Buttons")]
     [SerializeField] private Button penButton;
@@ -33,39 +32,38 @@ public class SketchBoard : MonoBehaviour
 
     // 그림판 변수
     private Texture2D texture;
-    private Color penColor = Color.black;
-    private Color eraserColor = Color.white;
-    private Color currentColor;
+    private Color32 penColor = new Color32(0, 0, 0, 255);
+    private Color32 eraserColor = new Color32(255, 255, 255, 255);
+    private Color32 currentColor;
     private Vector2 lastMousePosition;                  // 이전 프레임의 마우스 위치
     private bool isDrawing = false;
     private bool isSubmitted = false;
 
     // 능력치에 사용될 변수
-    private float timer;            // remainTime
+    private float timer;                                // remainTime
     private int strokeCount = 0;
-    
+
     // 그림판 모드
-    private enum DrawMode { 
+    private enum DrawMode
+    {
         None,
         Pen,
         Eraser
     }
     private DrawMode currentMode = DrawMode.Pen;
 
-    // UI Raycast
-    private GraphicRaycaster graphicRaycaster;
-    private EventSystem eventSystem;
-    private Canvas parentCanvas;
     private GenerationManager generationManager;
 
     // Buffer
     private Color32[] pixelBuffer;
     private bool isDirty = false;
+    private bool isInitialized = false;
 
     void Start()
     {
         if (!TryInitializeGenerationManager()) return;
-        if (!TryInitializeCanvasComponents()) return;
+
+        drawingArea = GetComponent<RawImage>();
 
         InitializeUI();
         InitializeListeners();
@@ -74,16 +72,10 @@ public class SketchBoard : MonoBehaviour
         StartCoroutine(InitAfterLayout());
     }
 
-    void Update()
-    {
-        if (isSubmitted || timer <= 0) return; // Timer 종료 or 제출
-        HandleDrawingInput();
-    }
-
     // Apply 일괄 적용
     void LateUpdate()
     {
-        if(texture == null) return;
+        if (texture == null) return;
 
         if (isDirty)
         {
@@ -94,6 +86,13 @@ public class SketchBoard : MonoBehaviour
     }
 
     // ------------------------------ 초기화 ---------------------------------
+    private void OnEnable()
+    {
+        if (!isInitialized) return;
+
+        ResetBoard();
+    }
+
     private bool TryInitializeGenerationManager()
     {
         generationManager = GenerationManager.Instance;
@@ -103,38 +102,6 @@ public class SketchBoard : MonoBehaviour
             enabled = false; // 스크립트 비활성화
             return false;
         }
-        return true;
-    }
-
-    private bool TryInitializeCanvasComponents()
-    {
-        // 캔버스
-        parentCanvas = drawingArea.GetComponentInParent<Canvas>();
-        if (parentCanvas == null)
-        {
-            Debug.LogError("drawingArea Error");
-            enabled = false;
-            return false;
-        }
-
-        // Raycast
-        graphicRaycaster = parentCanvas.GetComponent<GraphicRaycaster>();
-        if (graphicRaycaster == null)
-        {
-            Debug.LogError("graphicRaycaster Error");
-            enabled = false;
-            return false;
-        }
-
-        // Event
-        eventSystem = EventSystem.current;
-        if (eventSystem == null)
-        {
-            Debug.LogError("EventSystem not found");
-            enabled = false;
-            return false;
-        }
-
         return true;
     }
 
@@ -171,65 +138,50 @@ public class SketchBoard : MonoBehaviour
         ClearCanvas();
         SetPenMode(); // 기본 모드 - Pen
         StartCoroutine(CountdownTimer());
+
+        isInitialized = true;
+    }
+
+    // ------------------------------ 입력 처리 ---------------------------------
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (isSubmitted || timer <= 0) return;
+        if (currentMode == DrawMode.None) return;
+
+        isDrawing = true;
+        if (currentMode == DrawMode.Pen) strokeCount++;
+        lastMousePosition = GetLocalPoint(eventData);
+
+        DrawLine(lastMousePosition, lastMousePosition);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!isDrawing) return;
+        if (isSubmitted || timer <= 0) return;
+
+        Vector2 localPoint = GetLocalPoint(eventData);
+        DrawLine(lastMousePosition, localPoint);
+        lastMousePosition = localPoint;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isDrawing = false;
+    }
+
+    private Vector2 GetLocalPoint(PointerEventData eventData)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            drawingArea.rectTransform,
+            eventData.position,
+            eventData.pressEventCamera,
+            out Vector2 localPoint
+        );
+        return localPoint;
     }
 
     // ------------------------------ 그리기 ---------------------------------
-    private void HandleDrawingInput()
-    {
-        // 모드에 따라 카메라 조절
-        Camera cam = parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : parentCanvas.worldCamera;
-
-        // 마우스, drawingArea 좌표 일치
-        bool isInside = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea.rectTransform, Input.mousePosition, cam, out Vector2 localPoint);
-
-        bool blockedByOtherUI = IsOnInteractiveUI();
-
-        // 마우스 처음 눌렀을 때
-        if (Input.GetMouseButtonDown(0) && isInside && currentMode != DrawMode.None && !blockedByOtherUI)
-        {
-            isDrawing = true;
-            if (currentMode == DrawMode.Pen) strokeCount++;
-            lastMousePosition = localPoint;
-        }
-
-        // 누른 상태로 드래그
-        if (isDrawing && Input.GetMouseButton(0) && isInside)
-        {
-            DrawLine(lastMousePosition, localPoint);
-            lastMousePosition = localPoint;
-        }
-
-        // 마우스에서 손을 뗌
-        if (Input.GetMouseButtonUp(0))
-        {
-            isDrawing = false;
-        }
-    }
-
-    // 버튼 클릭과 스케치 하려고 클릭한 경우 구분
-    private bool IsOnInteractiveUI()
-    {
-        PointerEventData ped = new PointerEventData(eventSystem) { position = Input.mousePosition };
-        List<RaycastResult> results = new List<RaycastResult>();
-        graphicRaycaster.Raycast(ped, results);
-
-        // Raycast 가장 위에 있는 UI 요소 기준
-        foreach (var r in results)
-        {
-            GameObject go = r.gameObject;
-            if (go == drawingArea.gameObject) return false;
-
-            if (go.transform.IsChildOf(drawingArea.transform))
-            {
-                if (go.GetComponent<Selectable>() != null) return true;
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
 
     // 펜 굵기 만큼 점으로 그리기
     private void DrawDot(int x, int y)
@@ -253,7 +205,7 @@ public class SketchBoard : MonoBehaviour
 
     // 마우스 이동 시 점 끊김 보간
     private void DrawLine(Vector2 start, Vector2 end)
-    { 
+    {
         Rect rect = drawingArea.rectTransform.rect;
         float displayWidth = rect.width;
         float displayHeight = rect.height;
