@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Bubble : MonoBehaviour
 {
@@ -8,11 +9,14 @@ public class Bubble : MonoBehaviour
     private float radius;
     private float tickInterval; // 데미지 간격
 
-    private int enemyLayer; // 팀킬 방지
-    
+    private readonly List<Collider2D> hitList = new List<Collider2D>();
+    private ContactFilter2D enemyFilter;
+
     private void Awake()
     {
-        enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY);
+        enemyFilter = new ContactFilter2D();
+        enemyFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_ENEMY));
+        enemyFilter.useLayerMask = true;
     }
 
     public void Initialize(float playerAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval)
@@ -54,9 +58,9 @@ public class Bubble : MonoBehaviour
     private void BubbleDamage()
     {
         // 주변 collider 탐색
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius, enemyLayer);
+        Physics2D.OverlapCircle(transform.position, radius, enemyFilter, hitList);
 
-        foreach (var hit in hits)
+        foreach (var hit in hitList)
         {
             // 적이 범위 내에 있으면 데미지
             if (hit.TryGetComponent<IDamageable>(out IDamageable target))

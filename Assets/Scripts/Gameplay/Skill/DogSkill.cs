@@ -1,8 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class DogSkill : Skill
 {
     private BarkSkillStats stats;
+
+    private readonly List<Collider2D> hitList = new List<Collider2D>();
+    private ContactFilter2D enemyFilter;
 
     public override void Initialize(PlayerController _player)
     {
@@ -10,6 +14,10 @@ public class DogSkill : Skill
         stats = GameConfig.Data.barkStats;
         this.cooldown = stats.cooldown;
         this.damage *= stats.damageMultiplier;
+
+        enemyFilter = new ContactFilter2D();
+        enemyFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_ENEMY));
+        enemyFilter.useLayerMask = true;
     }
 
     protected override void Execute()
@@ -17,7 +25,7 @@ public class DogSkill : Skill
         BarkSkill();
     }
 
-    // Bark: 제자리에서 전방 공격, 범위 내 적 처치
+    // Bark: 제자리에서 전방 공격, 범위 내 적에게 데미지
     private void BarkSkill()
     {
         // 진행방향 유지
@@ -52,12 +60,11 @@ public class DogSkill : Skill
         Vector3 origin = player.FirePoint.position;
 
         // 주변 collider 탐색
-        int enemyLayer = LayerMask.GetMask(ConstString.LAYER_ENEMY); // 팀킬 방지
-        Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stats.radius, enemyLayer);
+        Physics2D.OverlapCircle(origin, stats.radius, enemyFilter, hitList);
 
-        foreach (var hit in hits)
+        foreach (var hit in hitList)
         {
-            // 적이 범위 내에 있으면 처치
+            // 적이 범위 내에 있으면 데미지
             Vector2 toEnemy = (hit.transform.position - origin).normalized;
             float angleToEnemy = Vector2.Angle(direction, toEnemy);
 
