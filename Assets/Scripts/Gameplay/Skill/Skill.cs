@@ -3,7 +3,6 @@ using UnityEngine;
 public abstract class Skill : MonoBehaviour
 {
     protected PlayerController player;
-    protected float damage;
 
     protected float cooldown = 5f; // 임시
     protected float lastUseTime = float.NegativeInfinity;
@@ -13,7 +12,6 @@ public abstract class Skill : MonoBehaviour
     public virtual void Initialize(PlayerController _player)
     {
         player = _player;
-        damage = _player.Attack;
     }
 
     public void UseSkill()

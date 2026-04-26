@@ -13,7 +13,6 @@ public class DogSkill : Skill
         base.Initialize(_player);
         stats = GameConfig.Data.barkStats;
         this.cooldown = stats.cooldown;
-        this.damage *= stats.damageMultiplier;
 
         enemyFilter = new ContactFilter2D();
         enemyFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_ENEMY));
@@ -58,6 +57,7 @@ public class DogSkill : Skill
     private void BarkDamage(Vector2 direction)
     {
         Vector3 origin = player.FirePoint.position;
+        float currentDamage = player.Attack * stats.damageMultiplier;
 
         // 주변 collider 탐색
         Physics2D.OverlapCircle(origin, stats.radius, enemyFilter, hitList);
@@ -72,7 +72,7 @@ public class DogSkill : Skill
             {
                 if (hit.TryGetComponent<IDamageable>(out IDamageable target))
                 {
-                    target.TakeDamage(damage);
+                    target.TakeDamage(currentDamage);
                 }
             }
         }
