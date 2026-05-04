@@ -392,6 +392,7 @@ EventManager를 작성해 event 기반으로 호출하도록 해 결합을 해�
 
 결정: Bark, Bubble 스킬의 충돌 처리에 List + ContactFilter2D 방식 채택
 (Bird의 Dash 스킬은 직접 충돌하기 때문에 별개)
+(Trigger Collider 감지를 위해 useTriggers = true 명시 필요)
 
 # Troubleshooting
 
@@ -452,9 +453,10 @@ Find계열 함수를 사용한 방식은 전체를 탐색해 성능에 부담을
 **해결책**
 
 Objectpooling
-- 미리 오브젝트들을 생성해서 List(활성, 일괄), Queue(재사용)에 저장해 상태를 관리하고 사용시에만 활성화한다.
+- 미리 오브젝트들을 생성해서 풀에 저장해 두고 사용시에만 활성화한다. (UnityEngine.Pool을 사용하도록 수정)
 - 미리 생성한 오브젝트만으로 부족할 경우에만 추가로 생성한다.
-- 추가 생성할 경우를 대비해 미리 프리팹 정보 캐싱해 두어 탐색 최적화
+- HashSet을 사용해 O(1)로 활성 오브젝트를 추적한다.
+- 추가 생성 시 사용할 오브젝트의 정보는 생성 시점에 함께 등록해 별도 캐싱 없이 재사용할 수 있도록 한다.
 - Projectile, Enemy, ExpOrb처럼 생성 빈도가 높은 오브젝트들을 통합해서 관리할 수 있다.
 
 ## Bark Skill 이펙트 개선

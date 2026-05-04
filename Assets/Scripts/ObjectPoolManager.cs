@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 // 오브젝트 종류
 public enum PoolType
@@ -29,9 +30,8 @@ public class ObjectPoolManager : MonoBehaviour
 
     [SerializeField] private List<PoolInfo> poolInfoList;
 
-    private Dictionary<PoolType, Queue<GameObject>> poolDictionary; // 재사용 대기
-    private Dictionary<PoolType, List<GameObject>> activeObjects;   // 활성화, 전체
-    private Dictionary<PoolType, PoolInfo> poolInfoCache;           // 캐싱
+    private Dictionary<PoolType, IObjectPool<GameObject>> poolDictionary; // 재사용 대기
+    private Dictionary<PoolType, HashSet<GameObject>> activeObjects;      // 활성화, 전체
 
     private void Awake()
     {
@@ -43,25 +43,40 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void InitializePool()
     {
-        poolDictionary = new Dictionary<PoolType, Queue<GameObject>>();
-        activeObjects = new Dictionary<PoolType, List<GameObject>>();
-        poolInfoCache = new Dictionary<PoolType, PoolInfo>();
+        poolDictionary = new Dictionary<PoolType, IObjectPool<GameObject>>();
+        activeObjects = new Dictionary<PoolType, HashSet<GameObject>>();
 
         foreach (var info in poolInfoList)
         {
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-            List<GameObject> activeList = new List<GameObject>();
-            poolInfoCache.Add(info.type, info);
+            activeObjects.Add(info.type, new HashSet<GameObject>());
+
+            IObjectPool<GameObject> pool = new ObjectPool<GameObject>(
+                createFunc: () => CreateNewObject(info),
+                actionOnGet: (obj) =>
+                {
+                    activeObjects[info.type].Add(obj);
+                },
+                actionOnRelease: (obj) =>
+                {
+                    obj.SetActive(false);
+                    activeObjects[info.type].Remove(obj);
+                },
+                actionOnDestroy: (obj) => Destroy(obj),
+                defaultCapacity: info.initialCount
+            );
+
+            poolDictionary.Add(info.type, pool);
 
             // 미리 생성
+            var prewarmList = new List<GameObject>(info.initialCount);
             for (int i = 0; i < info.initialCount; i++)
             {
-                GameObject obj = CreateNewObject(info);
-                objectPool.Enqueue(obj);
+                prewarmList.Add(pool.Get());
             }
-
-            poolDictionary.Add(info.type, objectPool);
-            activeObjects.Add(info.type, activeList);
+            foreach (var obj in prewarmList)
+            {
+                pool.Release(obj);
+            }
         }
     }
 
@@ -75,42 +90,22 @@ public class ObjectPoolManager : MonoBehaviour
     // 풀에서 꺼내 사용
     public GameObject Spawn(PoolType type, Vector3 position, Quaternion rotation)
     {
-        if (!poolDictionary.ContainsKey(type)) return null;
+        if (!poolDictionary.TryGetValue(type, out var pool)) return null;
 
-        GameObject obj;
-
-        // 대기 풀에 있을 때
-        if (poolDictionary[type].Count > 0)
-        {
-            obj = poolDictionary[type].Dequeue();
-        }
-        // 없으면 생성
-        else
-        {
-            var info = poolInfoCache[type];
-            obj = CreateNewObject(info);
-        }
-
-        obj.transform.position = position;
-        obj.transform.rotation = rotation;
+        GameObject obj = pool.Get();
+        obj.transform.SetPositionAndRotation(position, rotation);
         obj.SetActive(true);
-
-        // 활성화 목록에 등록
-        activeObjects[type].Add(obj);
 
         return obj;
     }
 
-    // 비활성화 (Destroy)
+    // 비활성화 (재사용 대기)
     public void Despawn(GameObject obj, PoolType type)
     {
-        if (!activeObjects.ContainsKey(type)) return;
+        if (!poolDictionary.TryGetValue(type, out var pool)) return;
         if (!obj.activeSelf) return;
 
-        obj.SetActive(false);
-
-        activeObjects[type].Remove(obj);
-        poolDictionary[type].Enqueue(obj);
+        pool.Release(obj);
     }
 
     // 전체 정리
