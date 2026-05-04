@@ -17,6 +17,7 @@ public class Bubble : MonoBehaviour
         enemyFilter = new ContactFilter2D();
         enemyFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_ENEMY));
         enemyFilter.useLayerMask = true;
+        enemyFilter.useTriggers = true;
     }
 
     public void Initialize(float playerAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval)

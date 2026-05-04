@@ -17,6 +17,7 @@ public class DogSkill : Skill
         enemyFilter = new ContactFilter2D();
         enemyFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_ENEMY));
         enemyFilter.useLayerMask = true;
+        enemyFilter.useTriggers = true;
     }
 
     protected override void Execute()
