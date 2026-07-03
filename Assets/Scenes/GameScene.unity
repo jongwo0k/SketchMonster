@@ -26523,10 +26523,6 @@ MonoBehaviour:
   target: {fileID: 0}
   smoothSpeed: 0.125
   offset: {x: 0, y: 0, z: 0}
-  maxX: 20
-  minX: -2.5
-  maxY: 13
-  minY: 0.5
 --- !u!1 &880057197
 GameObject:
   m_ObjectHideFlags: 0
@@ -28967,13 +28963,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 375705672}
-  width: 140
-  height: 68
   mapTheme:
   - wallTile: {fileID: 11400000, guid: 89990f41a7616b844993dd4169e5ec2a, type: 2}
     floorTile: {fileID: 11400000, guid: a33311710f5aac04e9c9c0bf17e71226, type: 2}
-  - wallTile: {fileID: 11400000, guid: 67287aaf7bf2296478a93f1c0552777c, type: 2}
-    floorTile: {fileID: 11400000, guid: a912e063b8010764a9b43e3da7439116, type: 2}
+  - wallTile: {fileID: 11400000, guid: 05b3111be6879cb4fb2aedc0d07942ec, type: 2}
+    floorTile: {fileID: 11400000, guid: 78f4323dc5b1f204095cfe39e92ea2ce, type: 2}
   - wallTile: {fileID: 11400000, guid: e8ac82b73975b5746a7c437ccb79b547, type: 2}
     floorTile: {fileID: 11400000, guid: 7732a5c28e1ecf14799c6653e076867a, type: 2}
   - wallTile: {fileID: 11400000, guid: 2931d788d24a08b43bce2498a61eda2d, type: 2}
@@ -28996,9 +28990,6 @@ MonoBehaviour:
   playerSpawner: {fileID: 2039359520}
   enemySpawner: {fileID: 2039359524}
   mainCamera: {fileID: 723164561}
-  remainTime: 0
-  stageDuration: 60
-  stageLevel: 1
 --- !u!4 &2039359523
 Transform:
   m_ObjectHideFlags: 0
@@ -29026,8 +29017,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e702da9f4a2c0045b9480f729c758f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialSpawnInterval: 3
-  spawnIntervalDecrease: 0.1
 --- !u!1 &2131820502
 GameObject:
   m_ObjectHideFlags: 0
