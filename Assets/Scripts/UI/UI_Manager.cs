@@ -148,6 +148,10 @@ public class UI_Manager : MonoBehaviour
     // GameOver
     private void GameIsOver()
     {
+        if (gameOver.activeSelf) return;
+        levelUp.SetActive(false);
+        nextStage.SetActive(false);
+
         gameOver.SetActive(true);
         gameOverText.text = "Stage: " + finalStage;
 
@@ -181,6 +185,8 @@ public class UI_Manager : MonoBehaviour
     // LevelUp
     private void LevelUP(int level)
     {
+        if (gameOver.activeSelf) return;
+
         finalLevel = level;
         levelUp.SetActive(true);
         Time.timeScale = 0f;

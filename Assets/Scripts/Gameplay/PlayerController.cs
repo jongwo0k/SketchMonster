@@ -193,6 +193,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     // 피격
     public void TakeDamage(float damage)
     {
+        if (HP <= 0f) return;
+
         // Dash중엔 무적
         if (isDash)
         {

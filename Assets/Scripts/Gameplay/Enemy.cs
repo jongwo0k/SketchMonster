@@ -136,6 +136,8 @@ public class Enemy : MonoBehaviour, IDamageable
     // 데미지 처리
     public void TakeDamage(float damage)
     {
+        if (isDead) return;
+
         HP -= damage;
 
         HP_Bar.value = HP / maxHP;

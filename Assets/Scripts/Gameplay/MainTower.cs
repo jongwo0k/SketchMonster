@@ -82,6 +82,8 @@ public class MainTower : MonoBehaviour, IDamageable
     // 피격
     public void TakeDamage(float damage)
     {
+        if (HP <= 0f) return;
+
         HP -= damage;
 
         HP_Bar.value = HP / maxHP;
