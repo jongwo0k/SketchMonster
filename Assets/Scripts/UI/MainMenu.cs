@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -11,13 +12,24 @@ public class MainMenu : MonoBehaviour
     [Header("Volume")]
     [SerializeField] private Slider volumeSlider;
 
+    [Header("Web")]
+    [SerializeField] private Button recordButton;
+    [SerializeField] private TextMeshProUGUI recordText;
+    [SerializeField] private Button exitButton;
+    [SerializeField] private TextMeshProUGUI exitText;
+
     void Start()
     {
         Cursor.visible = true;
         if (howtoplayPanel != null) howtoplayPanel.SetActive(false);
         if (recordPanel != null) recordPanel.SetActive(false);
         volumeSlider.value = SoundManager.Instance.GetVolume();
-#if !UNITY_WEBGL // Web 빌드에선 저장 X
+#if UNITY_WEBGL
+        if (recordButton != null) recordButton.interactable = false;
+        if (recordText != null) recordText.text = "Character Record <size=60%>(Download Only)</size>";
+        if (exitButton != null) exitButton.interactable = false;
+        if (exitText != null) exitText.text = "Exit <size=60%>(Browser)</size>";
+#else // Web 빌드에선 저장 X
         DataManager.InitStorage();
 #endif
     }
