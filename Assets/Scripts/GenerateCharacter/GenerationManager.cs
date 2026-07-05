@@ -81,6 +81,7 @@ public class GenerationManager : MonoBehaviour
         // UI 전환 (로딩 창 활용)
         drawingPanel.SetActive(false);
         loadingPanel.SetActive(true);
+        yield return null;
 
         // 초기화
         if (generatedCharacters != null && generatedCharacters.Count > 0)

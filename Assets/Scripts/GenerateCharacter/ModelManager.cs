@@ -59,7 +59,7 @@ public class ModelManager : MonoBehaviour
 
         cnnWorker.Schedule(inputTensor);
 
-        using var outputTensor = cnnWorker.PeekOutput() as Tensor<float>;
+        var outputTensor = cnnWorker.PeekOutput() as Tensor<float>;
         if (outputTensor == null) // default bird
         {
             Debug.LogError("CNN tensor null");
@@ -95,8 +95,8 @@ public class ModelManager : MonoBehaviour
         ganWorker.SetInput(ConstString.GAN_LATENT_INPUT_NAME, latentTensor);
         ganWorker.SetInput(ConstString.GAN_LABEL_INPUT_NAME, labelTensor);
         ganWorker.Schedule();
-
-        using var outputTensor = ganWorker.PeekOutput(ConstString.GAN_OUTPUT_NAME) as Tensor<float>;
+        
+        var outputTensor = ganWorker.PeekOutput(ConstString.GAN_OUTPUT_NAME) as Tensor<float>;
         if (outputTensor == null) // 생성 실패
         {
             Debug.LogError("GAN tensor null");
