@@ -170,6 +170,8 @@ public class UI_Manager : MonoBehaviour
     // NextStage
     private void StageIsClear()
     {
+        if (gameOver.activeSelf) return; // 동시에 Boss 투사체 적중, clear vs gameover 우선 순위 고려
+
         nextStage.SetActive(true);
         SoundManager.Instance.PlayStageClear();
         Time.timeScale = 0f;

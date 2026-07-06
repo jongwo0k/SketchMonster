@@ -5,6 +5,7 @@ public class Projectile : MonoBehaviour
 {
     [Header("Projectile")]
     [SerializeField] private float attack = 1f;
+    [SerializeField] private PoolType poolType = PoolType.Projectile; // Boss Projectile 별도
 
     private Rigidbody2D rb;
 
@@ -30,7 +31,7 @@ public class Projectile : MonoBehaviour
         if (collision.TryGetComponent<IDamageable>(out var target))
         {
             target.TakeDamage(attack);
-            ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
+            ObjectPoolManager.Instance.Despawn(gameObject, poolType);
         }
     }
 
@@ -44,6 +45,6 @@ public class Projectile : MonoBehaviour
     IEnumerator AutoDespawn()
     {
         yield return new WaitForSeconds(GameConfig.Data.projectileDestroyTime);
-        ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Projectile);
+        ObjectPoolManager.Instance.Despawn(gameObject, poolType);
     }
 }

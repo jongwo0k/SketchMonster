@@ -25493,6 +25493,10 @@ MonoBehaviour:
     prefab: {fileID: 5348607674775655467, guid: 6fad8f5ec1d604f4896c2920b49ddc92, type: 3}
     initialCount: 2
     container: {fileID: 880057198}
+  - type: 8
+    prefab: {fileID: 7890512036339493354, guid: 9da3c323b8960884784fce1ef17bacee, type: 3}
+    initialCount: 20
+    container: {fileID: 1433405312}
 --- !u!4 &396305864
 Transform:
   m_ObjectHideFlags: 0
@@ -25514,6 +25518,7 @@ Transform:
   - {fileID: 527622142}
   - {fileID: 2016081483}
   - {fileID: 880057198}
+  - {fileID: 1433405312}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &453667551
@@ -27429,6 +27434,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424711046}
   m_CullTransparentMesh: 1
+--- !u!1 &1433405311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1433405312}
+  m_Layer: 0
+  m_Name: BossProjectile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1433405312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433405311}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 396305864}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1450118461
 GameObject:
   m_ObjectHideFlags: 0

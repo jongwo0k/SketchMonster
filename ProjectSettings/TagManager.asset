@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - MainTower
   - ExperienceOrb
+  - BossProjectile
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Projectile
   - MainTower
   - ExperienceOrb
-  - 
+  - BossProjectile
   - 
   - 
   - 

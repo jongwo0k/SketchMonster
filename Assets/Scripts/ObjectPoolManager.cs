@@ -13,6 +13,7 @@ public enum PoolType
     DieParticle,
     BarkEffect,
     BubbleSkill,
+    BossProjectile,
 }
 
 public class ObjectPoolManager : MonoBehaviour
