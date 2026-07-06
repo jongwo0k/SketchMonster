@@ -4,37 +4,39 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    bool isDead = false;
-    bool isDefeat = false;
+    protected bool isDead = false;
+    protected bool isDefeat = false;
 
     // 능력치
     [Header("Ability")]
-    private float HP = 100f; // 테스트용 (Stage마다 변경)
-    private float maxHP;
-    private float attack = 10f;
-    private float speed = 5f;
+    protected float HP = 100f; // 테스트용 (Stage마다 변경)
+    protected float maxHP;
+    protected float attack = 10f;
+    protected float speed = 5f;
 
     // Prefabs
-    private Transform targetTower;
-    private Transform targetPlayer;
+    protected Transform targetTower;
+    protected Transform targetPlayer;
 
     // UI
-    [SerializeField] private Slider HP_Bar;
+    [SerializeField] protected Slider HP_Bar;
 
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
-    private Collider2D col;
+    protected Rigidbody2D rb;
+    protected SpriteRenderer sr;
+    protected Collider2D col;
 
-    void Awake()
+    protected virtual PoolType PoolKind => PoolType.Enemy;
+
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
-        
+
         HP_Bar.gameObject.SetActive(false);
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         if (PlayerController.Instance != null)
         {
@@ -46,7 +48,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         rb.linearVelocity = Vector2.zero;
     }
@@ -59,6 +61,11 @@ public class Enemy : MonoBehaviour, IDamageable
             return;
         }
 
+        MoveToTarget();
+    }
+
+    protected virtual void MoveToTarget()
+    {
         // 목표를 향해 이동
         Transform currentTarget = FindClosestTarget();
         if (currentTarget == null)
@@ -85,13 +92,18 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (collision.TryGetComponent<IDamageable>(out var target))
         {
-            target.TakeDamage(attack);
-            Die(false);
+            OnContact(target);
         }
     }
 
+    protected virtual void OnContact(IDamageable target) // Enemy 즉사, Boss 넉백
+    {
+        target.TakeDamage(attack);
+        Die(false);
+    }
+
     // 초기화, EnemySpawner가 실행
-    public void Initialize(Sprite enemySprite, float hp, float enemyAttack, float enemySpeed)
+    public virtual void Initialize(Sprite enemySprite, float hp, float enemyAttack, float enemySpeed)
     {
         sr.sprite = enemySprite;
         maxHP = hp;
@@ -114,7 +126,7 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
     // MainTower / Player 중 가까운 대상 찾기
-    private Transform FindClosestTarget()
+    protected Transform FindClosestTarget()
     {
         // 파괴 될경우?
 
@@ -134,17 +146,13 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
     // 데미지 처리
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         if (isDead) return;
 
         HP -= damage;
 
-        HP_Bar.value = HP / maxHP;
-        if (HP_Bar.gameObject.activeSelf == false)
-        {
-            HP_Bar.gameObject.SetActive(true);
-        }
+        OnHPChanged();
 
         if (HP <= 0)
         {
@@ -158,8 +166,17 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
+    protected virtual void OnHPChanged() // Boss는 HP_Bar대신 타이머 슬라이더
+    {
+        HP_Bar.value = HP / maxHP;
+        if (HP_Bar.gameObject.activeSelf == false)
+        {
+            HP_Bar.gameObject.SetActive(true);
+        }
+    }
+
     // 사망
-    private void Die(bool playSound = true)
+    protected virtual void Die(bool playSound = true)
     {
         isDead = true;
 
@@ -184,6 +201,6 @@ public class Enemy : MonoBehaviour, IDamageable
     IEnumerator DespawnDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        ObjectPoolManager.Instance.Despawn(gameObject, PoolType.Enemy);
+        ObjectPoolManager.Instance.Despawn(gameObject, PoolKind);
     }
 }
