@@ -14,6 +14,7 @@ public enum PoolType
     BarkEffect,
     BubbleSkill,
     BossProjectile,
+    Boss,
 }
 
 public class ObjectPoolManager : MonoBehaviour

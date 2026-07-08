@@ -28966,6 +28966,7 @@ GameObject:
   - component: {fileID: 2039359521}
   - component: {fileID: 2039359520}
   - component: {fileID: 2039359524}
+  - component: {fileID: 2039359525}
   m_Layer: 0
   m_Name: MapController
   m_TagString: Untagged
@@ -29053,6 +29054,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e702da9f4a2c0045b9480f729c758f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2039359525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039359519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4aada740696bf4395d37635decf12f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossPrefab: {fileID: 8283848506304081260, guid: 91e1b70452d4b9e48a17e1873a43e33e, type: 3}
+  bossTemplates:
+  - sprite: {fileID: 4565300231373367833, guid: 0cfc5503e51b1d643869d52a40f22c79, type: 3}
+    bossClass: 0
+  - sprite: {fileID: -3371983390316584334, guid: 461e0603ccb6c4e4da7048addd42085c, type: 3}
+    bossClass: 1
+  - sprite: {fileID: -8499816039413157087, guid: 0332b2f45f58dbc408fb924ac74ff1c7, type: 3}
+    bossClass: 2
+  enemySpawner: {fileID: 2039359524}
 --- !u!1 &2131820502
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
@@ -32,6 +33,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private Skill playerSkill;
     private bool isDash = false;
+    private bool isKnockback = false; // 보스는 즉사X, 밀려나기만
+    private Coroutine knockbackRoutine;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -109,7 +112,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     // 물리처리
     void FixedUpdate()
     {
-        if (!isDash) // Dash중엔 X, 다른 class?
+        if (!isDash && !isKnockback) // Dash중엔 X, 다른 class?
         {
             rb.linearVelocity = movement.normalized * speed; // 대각선 보정
         }
@@ -123,6 +126,25 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             rb.linearVelocity = Vector2.zero;
         }
+    }
+
+    public void ApplyKnockback(Vector2 direction, float force, float duration)
+    {
+        if (knockbackRoutine != null) StopCoroutine(knockbackRoutine);
+        knockbackRoutine = StartCoroutine(KnockbackRoutine(direction, force, duration));
+    }
+
+    private IEnumerator KnockbackRoutine(Vector2 direction, float force, float duration)
+    {
+        isKnockback = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(direction * force, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(duration);
+
+        isKnockback = false;
+        rb.linearVelocity = Vector2.zero;
+        knockbackRoutine = null;
     }
 
     // 충돌

@@ -33,12 +33,15 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        // 맵 정보 불러오기
+        mapGenerator = GetComponent<MapGenerator>();
+    }
+
     public void StartSpawnEnemy(int stageLevel)
     {
         currentStage = stageLevel;
-
-        // 맵 정보 불러오기
-        mapGenerator = GetComponent<MapGenerator>();
 
         // 스테이지에 따라 생성 빈도 조정
         currentSpawnInterval = Mathf.Max(GameConfig.Data.minSpawnInterval, GameConfig.Data.initialSpawnInterval - ((stageLevel - 1) * GameConfig.Data.spawnIntervalDecrease));
@@ -110,7 +113,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // 끝에서 랜덤 생성
-    private Vector2 GetRandomSpawnPosition()
+    public Vector2 GetRandomSpawnPosition()
     {
         RectInt bounds = mapGenerator.MapBounds;
         MapSide side = (MapSide)Random.Range(0, 4); // 형 변환
