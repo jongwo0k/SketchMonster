@@ -29028,7 +29028,7 @@ MonoBehaviour:
   enemySpawner: {fileID: 2039359524}
   bossSpawner: {fileID: 2039359525}
   mainCamera: {fileID: 723164561}
-  startStage: 10
+  startStage: 1
 --- !u!4 &2039359523
 Transform:
   m_ObjectHideFlags: 0

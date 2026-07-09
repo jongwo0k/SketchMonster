@@ -11,9 +11,13 @@ public class Boss : Enemy
     {
         base.Initialize(bossSprite, hp, bossAttack, bossSpeed);
         isRuntimeSprite = runtimeSprite;
+        HP_Bar.gameObject.SetActive(false);
+    }
 
-        // 보스 HP 상단 타이머 슬라이더 사용 예정
-        // HP_Bar.gameObject.SetActive(false);
+    // 보스 체력 = 상단 슬라이더 (타이머)
+    protected override void OnHPChanged()
+    {
+        EventManager.StageSlider(HP / maxHP);
     }
 
     // 접촉 (넉백)
