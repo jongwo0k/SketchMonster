@@ -112,6 +112,11 @@ public class EnemySpawner : MonoBehaviour
         enemyScript.Initialize(enemySprite, HP * hpMultiplier, attack * attackMultiplier, speed * speedMultiplier);
     }
 
+    public void StopSpawning()
+    {
+        StopAllCoroutines();
+    }
+
     // 끝에서 랜덤 생성
     public Vector2 GetRandomSpawnPosition()
     {

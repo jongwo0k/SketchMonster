@@ -59,7 +59,7 @@ public class Boss : Enemy
     {
         // timeScale=0에서도
         yield return new WaitForSecondsRealtime(1f);
-        // EventManager.BossDefeated()
+        EventManager.BossDefeated();
         Destroy(gameObject);
     }
 
