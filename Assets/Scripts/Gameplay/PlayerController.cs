@@ -130,6 +130,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void ApplyKnockback(Vector2 direction, float force, float duration)
     {
+        if (!gameObject.activeSelf || HP <= 0f) return;
+
         if (knockbackRoutine != null) StopCoroutine(knockbackRoutine);
         knockbackRoutine = StartCoroutine(KnockbackRoutine(direction, force, duration));
     }
@@ -169,7 +171,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         directionIndicator.rotation = Quaternion.Euler(0f, 0f, angle + 90f); // 캐릭터는 아래를 보고 있는 것이 기본값
     }
 
-    // templete을 선택된 캐릭터로 교체
+    // template을 선택된 캐릭터로 교체
     public void Initialize(CharacterData data, Sprite characterSprite)
     {
         // 능력치 적용

@@ -49,7 +49,7 @@ public class BossSpawner : MonoBehaviour
 
         GameObject bossObject = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
         Boss boss = bossObject.GetComponent<Boss>();
-        boss.InitializeBoss(bossSprite, hp, attack, speed, runtimeSprite);
+        boss.InitializeBoss(bossSprite, bossClassName, hp, attack, speed, runtimeSprite);
 
         Debug.Log($"[Boss] Stage {stageLevel} - Class: {bossClassName}, HP: {hp}, Sprite: {(runtimeSprite ? "record" : "template")}");
     }

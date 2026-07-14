@@ -9,6 +9,8 @@ public static class ConstString
     public const string EXP_ORB = "ExperienceOrb";
     public const string TAG_ENEMY = "Enemy";
     public const string LAYER_ENEMY = "Enemy";
+    public const string LAYER_PLAYER = "Player";
+    public const string LAYER_TOWER = "MainTower";
 
     // Save Data 이름
     public const string GAME_RESULT_FILE = "GameResult.json";

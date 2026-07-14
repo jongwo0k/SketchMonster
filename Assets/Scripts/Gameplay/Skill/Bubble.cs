@@ -20,12 +20,14 @@ public class Bubble : MonoBehaviour
         enemyFilter.useTriggers = true;
     }
 
-    public void Initialize(float playerAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval)
+    public void Initialize(float baseAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval, LayerMask? targetMask = null)
     {
-        this.damage = playerAttack * damageMultiplier;
+        this.damage = baseAttack * damageMultiplier;
         this.duration = skillDuration;
         this.radius = skillRadius;
         this.tickInterval = interval;
+
+        enemyFilter.SetLayerMask(targetMask ?? LayerMask.GetMask(ConstString.LAYER_ENEMY));
 
         // 크기 조절
         transform.localScale = Vector3.one * (radius * 2f);
