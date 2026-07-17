@@ -38,6 +38,53 @@ public struct BubbleSkillStats // Fish
     public float tickInterval;
 }
 
+// 보스 능력치
+[System.Serializable]
+public class BossStats
+{
+    // 등장
+    [Header("Stage")]
+    public int bossStageInterval = 5;
+    public float spawnDelay = 2f; // 등장 전 대기시간
+    public float dieDelay = 1f;
+
+    // 기본 능력치
+    [Header("Boss Stats")]
+    public float baseHP = 500f;
+    public float hpPerStage = 100f;
+    public float baseAttack = 10f;
+    public float attackPerStage = 3f;
+    public float speed = 3f;
+
+    // 보스전
+    [Header("Combat")]
+    public float maxHitRatio = 0.1f; // 단일 데미지 상한 (즉사 방지)
+    public float knockbackForce = 10f;
+    public float knockbackDuration = 0.5f;
+
+    // 보스 패턴
+    [Header("Behavior")]
+    public float towerAttackRange = 10f;   // tower 앞 정지 거리
+    public float towerFireCooldown = 1.5f;
+    public float chaseFireCooldown = 2f;
+    public float hysteresisRatio = 0.8f;   // playerPriorityRatio * hysteresisRatio < 1 (타겟 변경 떨림 방지)
+    public float playerPriorityRatio = 1.1f;
+
+    // 보스 스킬
+    [Header("Skill")]
+    public float skillCooldown = 8f;
+    public float castDelay = 1f;
+    public float skillDamageMultiplier = 1.5f;
+    public float dashPower = 15f;
+    public float dashDuration = 0.5f;
+    public float barkRadius = 10f;
+    public float barkAngle = 90f;
+    public float barkEffectDuration = 0.3f;
+    public float bubbleDuration = 3f;
+    public float bubbleRadius = 5f;
+    public float bubbleTick = 0.5f;
+}
+
 [CreateAssetMenu(fileName = "BalanceData", menuName = "ScriptableObject/BalanceData")]
 public class BalanceData : ScriptableObject
 {
@@ -112,6 +159,10 @@ public class BalanceData : ScriptableObject
     public float initialSpawnInterval = 3f;
     public float spawnIntervalDecrease = 0.1f;
     public float minSpawnInterval = 0.5f;
+
+    // 보스 능력치
+    [Header("Boss")]
+    public BossStats bossStats;
 
     // 타워 기본 능력치
     [Header("Tower Base Stats")]

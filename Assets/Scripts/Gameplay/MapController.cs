@@ -101,7 +101,9 @@ public class MapController : MonoBehaviour
         SetCameraBoundary();
         EventManager.StagePanel(stageLevel);
 
-        isBossStage = (stageLevel % 5 == 0); // 임시
+        BossStats bossStats = GameConfig.Data.bossStats;
+
+        isBossStage = (stageLevel % bossStats.bossStageInterval == 0);
         if (isBossStage)
         {
             EventManager.StageSlider(1f); // 반대
@@ -136,7 +138,7 @@ public class MapController : MonoBehaviour
 
     private IEnumerator SpawnBossDelayed()
     {
-        yield return new WaitForSeconds(2f); // 임시
+        yield return new WaitForSeconds(GameConfig.Data.bossStats.spawnDelay);
         bossSpawner.SpawnBoss(stageLevel);
     }
 }

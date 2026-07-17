@@ -39,10 +39,12 @@ public class BossSpawner : MonoBehaviour
         }
 #endif
 
-        // 능력치 (임시)
-        float hp = 500f + stageLevel * 100f;
-        float attack = 15f + stageLevel * 2f;
-        float speed = 3f;
+        // 능력치
+        BossStats stats = GameConfig.Data.bossStats;
+        int bossLevel = Mathf.Max(1, stageLevel / stats.bossStageInterval);
+        float hp = stats.baseHP + ((bossLevel - 1) * stats.hpPerStage);
+        float attack = stats.baseAttack + ((bossLevel - 1) * stats.attackPerStage);
+        float speed = stats.speed;
 
         // 생성 위치
         Vector3 spawnPos = enemySpawner.GetRandomSpawnPosition();
@@ -72,7 +74,7 @@ public class BossSpawner : MonoBehaviour
         RecordData rd = DataManager.LoadRecordData();
         if (rd == null || rd.records.Count == 0) return false;
 
-        int bossIndex = stageLevel / 5;
+        int bossIndex = stageLevel / GameConfig.Data.bossStats.bossStageInterval;
         int rankFromBottom = (bossIndex - 1) % rd.records.Count;
         PlayData pick = rd.records[rd.records.Count - 1 - rankFromBottom];
 

@@ -8,36 +8,13 @@ public class Boss : Enemy
     private bool isRuntimeSprite = false; // Record
 
     protected override PoolType PoolKind => PoolType.Boss; // Pool 사용 안함
-
-    // 임시
-    // Boss Attack
-    private const float towerAttackRange = 10f;   // 정지
-    private const float towerFireCooldown = 1.5f;
-    private const float chaseFireCooldown = 2f;
-    private const float hysteresisRatio = 0.8f;   // 타겟 변경 시 떨림 방지
-    private const float playerPriorityRatio = 1.1f;
-
-    // Boss Skill
-    private const float skillCooldown = 8f;
-    private const float castDelay = 1f;           // 스킬 사용 전 딜레이
-    private const float skillDamageMultiplier = 1.5f;
-
-    // Bird
-    private const float dashPower = 15f;
-    private const float dashDuration = 0.5f;
-
-    // Dog
-    private const float barkRadius = 10f;
-    private const float barkAngle = 90f;
-
-    // Fish
-    private const float bubbleDuration = 3f;
-    private const float bubbleRadius = 4f;
-    private const float bubbleTick = 0.5f;
-
+    
+    private BossStats stats;
     private Transform currentTarget;
+
     private float fireTimer;
     private float skillTimer;
+    
     private bool isCasting = false;
     private bool isDashing = false;
 
@@ -48,6 +25,8 @@ public class Boss : Enemy
     protected override void Awake()
     {
         base.Awake();
+
+        stats = GameConfig.Data.bossStats;
 
         playerFilter = new ContactFilter2D();
         playerFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_PLAYER, ConstString.LAYER_TOWER));
@@ -61,7 +40,7 @@ public class Boss : Enemy
         bossClassName = className;
         isRuntimeSprite = runtimeSprite;
         HP_Bar.gameObject.SetActive(false);
-        skillTimer = skillCooldown;
+        skillTimer = stats.skillCooldown;
     }
 
     protected override void MoveToTarget()
@@ -84,12 +63,12 @@ public class Boss : Enemy
         bool targetIsTower = (currentTarget == targetTower);
         float sqrDist = (currentTarget.position - transform.position).sqrMagnitude;
 
-        if (targetIsTower && sqrDist <= towerAttackRange * towerAttackRange)
+        if (targetIsTower && sqrDist <= stats.towerAttackRange * stats.towerAttackRange)
         {
             // 타워 도착 (기본 공격만)
             rb.linearVelocity = Vector2.zero;
             FaceDirection(currentTarget.position.x - transform.position.x);
-            TickFire(towerFireCooldown);
+            TickFire(stats.towerFireCooldown);
         }
         else
         {
@@ -101,12 +80,12 @@ public class Boss : Enemy
             if (!targetIsTower)
             {
                 // 플레이어 추적
-                TickFire(chaseFireCooldown); // 공격 속도 Tower > Player
+                TickFire(stats.chaseFireCooldown); // 공격 속도 Tower > Player
 
                 skillTimer -= Time.fixedDeltaTime;
                 if (skillTimer <= 0f)
                 {
-                    skillTimer = skillCooldown;
+                    skillTimer = stats.skillCooldown;
                     StartCoroutine(CastSkill());
                 }
             }
@@ -129,7 +108,7 @@ public class Boss : Enemy
         float sqrOther = (other.position - transform.position).sqrMagnitude;
 
         // Player 우선
-        float threshold = (other == targetPlayer) ? (sqrCur * playerPriorityRatio * playerPriorityRatio) : (sqrCur * hysteresisRatio * hysteresisRatio);
+        float threshold = (other == targetPlayer) ? (sqrCur * stats.playerPriorityRatio * stats.playerPriorityRatio) : (sqrCur * stats.hysteresisRatio * stats.hysteresisRatio);
         if (sqrOther < threshold)
         {
             currentTarget = other;
@@ -173,7 +152,7 @@ public class Boss : Enemy
         Vector2 lockedDir = (targetPlayer.position - transform.position).normalized;
         Vector3 lockedPos = targetPlayer.position;
 
-        yield return new WaitForSeconds(castDelay);
+        yield return new WaitForSeconds(stats.castDelay);
 
         if (isDead) { isCasting = false; yield break; } // 시전 중 사망 = 취소
 
@@ -195,9 +174,9 @@ public class Boss : Enemy
         isDashing = true;
 
         rb.linearVelocity = Vector2.zero;
-        rb.AddForce(dir * dashPower, ForceMode2D.Impulse);
+        rb.AddForce(dir * stats.dashPower, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(dashDuration);
+        yield return new WaitForSeconds(stats.dashDuration);
 
         isDashing = false;
         rb.linearVelocity = Vector2.zero;
@@ -207,21 +186,21 @@ public class Boss : Enemy
     private void BarkSkill(Vector2 dir)
     {
         SoundManager.Instance.PlayDogSkill();
-        float skillDamage = attack * skillDamageMultiplier;
+        float skillDamage = attack * stats.skillDamageMultiplier;
 
         float rotZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
         Quaternion effectRot = Quaternion.Euler(0f, 0f, rotZ);
         GameObject effectObj = ObjectPoolManager.Instance.Spawn(PoolType.BarkEffect, transform.position, effectRot);
         if (effectObj != null && effectObj.TryGetComponent<BarkEffect>(out var effect))
         {
-            effect.PlayEffect(barkRadius, barkAngle, transform, effectRot, Vector3.zero, 0.3f);
+            effect.PlayEffect(stats.barkRadius, stats.barkAngle, transform, effectRot, Vector3.zero, stats.barkEffectDuration);
         }
 
-        Physics2D.OverlapCircle(transform.position, barkRadius, playerFilter, barkHits);
+        Physics2D.OverlapCircle(transform.position, stats.barkRadius, playerFilter, barkHits);
         foreach (var hit in barkHits)
         {
             Vector2 toTarget = (hit.transform.position - transform.position).normalized;
-            if (Vector2.Angle(dir, toTarget) <= barkAngle / 2f && hit.TryGetComponent<IDamageable>(out var t))
+            if (Vector2.Angle(dir, toTarget) <= stats.barkAngle / 2f && hit.TryGetComponent<IDamageable>(out var t))
             {
                 t.TakeDamage(skillDamage);
             }
@@ -236,7 +215,7 @@ public class Boss : Enemy
         GameObject obj = ObjectPoolManager.Instance.Spawn(PoolType.BubbleSkill, pos, Quaternion.identity);
         if (obj != null && obj.TryGetComponent<Bubble>(out var bubble))
         {
-            bubble.Initialize(attack, skillDamageMultiplier, bubbleDuration, bubbleRadius, bubbleTick, LayerMask.GetMask(ConstString.LAYER_PLAYER));
+            bubble.Initialize(attack, stats.skillDamageMultiplier, stats.bubbleDuration, stats.bubbleRadius, stats.bubbleTick, LayerMask.GetMask(ConstString.LAYER_PLAYER));
         }
     }
 
@@ -253,7 +232,7 @@ public class Boss : Enemy
         {
             player.TakeDamage(attack);
             Vector2 dir = (player.transform.position - transform.position).normalized;
-            player.ApplyKnockback(dir, 10f, 0.5f); // 임시
+            player.ApplyKnockback(dir, stats.knockbackForce, stats.knockbackDuration);
         }
         else // 타워
         {
@@ -264,7 +243,7 @@ public class Boss : Enemy
     // 보스는 대시(float.MaxValue)로 즉사X
     public override void TakeDamage(float damage)
     {
-        float clamped = Mathf.Min(damage, maxHP * 0.1f); // 임시
+        float clamped = Mathf.Min(damage, maxHP * stats.maxHitRatio);
         base.TakeDamage(clamped);
     }
 
@@ -289,7 +268,7 @@ public class Boss : Enemy
     private IEnumerator DieRoutine()
     {
         // timeScale=0에서도
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(stats.dieDelay);
         EventManager.BossDefeated();
         Destroy(gameObject);
     }
@@ -309,8 +288,10 @@ public class Boss : Enemy
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
+        if (stats == null) return;
+
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, towerAttackRange);
+        Gizmos.DrawWireSphere(transform.position, stats.towerAttackRange);
 
         if (currentTarget != null)
         {
