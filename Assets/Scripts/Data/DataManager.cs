@@ -98,7 +98,7 @@ public static class DataManager
         {
             if (a.maxStage != b.maxStage) return b.maxStage.CompareTo(a.maxStage); // 높은 스테이지 달성
             if (a.level != b.level) return b.level.CompareTo(a.level);             // 높은 레벨 달성
-            return b.playDate.CompareTo(a.playDate);                               // 최근 플레이
+            return a.playDate.CompareTo(b.playDate);                               // 이전 기록 우선
         });
 
         // 10개 까지만 저장
