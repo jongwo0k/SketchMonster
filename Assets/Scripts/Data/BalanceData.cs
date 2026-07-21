@@ -83,6 +83,7 @@ public class BossStats
     public float bubbleDuration = 3f;
     public float bubbleRadius = 5f;
     public float bubbleTick = 0.5f;
+    public float bubbleFirstTickDelay = 0.5f;
 }
 
 [CreateAssetMenu(fileName = "BalanceData", menuName = "ScriptableObject/BalanceData")]

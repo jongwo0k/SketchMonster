@@ -8,26 +8,34 @@ public class Bubble : MonoBehaviour
     private float duration;
     private float radius;
     private float tickInterval; // 데미지 간격
+    private float firstTickDelay;
 
     private readonly List<Collider2D> hitList = new List<Collider2D>();
     private ContactFilter2D enemyFilter;
+    private SpriteRenderer sr;
+    private Color defaultColor;
 
     private void Awake()
     {
+        sr = GetComponent<SpriteRenderer>();
+        defaultColor = sr.color;
         enemyFilter = new ContactFilter2D();
         enemyFilter.SetLayerMask(LayerMask.GetMask(ConstString.LAYER_ENEMY));
         enemyFilter.useLayerMask = true;
         enemyFilter.useTriggers = true;
     }
 
-    public void Initialize(float baseAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval, LayerMask? targetMask = null)
+    public void Initialize(float baseAttack, float damageMultiplier, float skillDuration, float skillRadius, float interval, LayerMask? targetMask = null, float firstTickDelay = 0f, Color? overrideColor = null)
     {
         this.damage = baseAttack * damageMultiplier;
         this.duration = skillDuration;
         this.radius = skillRadius;
         this.tickInterval = interval;
+        this.firstTickDelay = firstTickDelay;
 
         enemyFilter.SetLayerMask(targetMask ?? LayerMask.GetMask(ConstString.LAYER_ENEMY));
+
+        sr.color = overrideColor.HasValue ? new Color(overrideColor.Value.r, overrideColor.Value.g, overrideColor.Value.b, defaultColor.a) : defaultColor;
 
         // 크기 조절
         transform.localScale = Vector3.one * (radius * 2f);
@@ -38,8 +46,8 @@ public class Bubble : MonoBehaviour
 
     private IEnumerator BubbleSkill()
     {
-        float elapsedTime = 0f;         // 전체 지속 시간
-        float tickTimer = tickInterval; // 데미지 간격 (설치 시점부터 데미지 입히고 시작)
+        float elapsedTime = 0f;                          // 전체 지속 시간
+        float tickTimer = tickInterval - firstTickDelay; // 데미지 간격 (보스는 설치 시점엔 데미지 입히지 않음)
 
         while (elapsedTime < duration)
         {

@@ -22,6 +22,9 @@ public class Boss : Enemy
     private readonly List<Collider2D> barkHits = new();
     private ContactFilter2D playerFilter;
 
+    // Bubble 색
+    private static readonly Color BossBubbleColor = new Color(1f, 0.25f, 0.2f);
+
     protected override void Awake()
     {
         base.Awake();
@@ -215,7 +218,7 @@ public class Boss : Enemy
         GameObject obj = ObjectPoolManager.Instance.Spawn(PoolType.BubbleSkill, pos, Quaternion.identity);
         if (obj != null && obj.TryGetComponent<Bubble>(out var bubble))
         {
-            bubble.Initialize(attack, stats.skillDamageMultiplier, stats.bubbleDuration, stats.bubbleRadius, stats.bubbleTick, LayerMask.GetMask(ConstString.LAYER_PLAYER));
+            bubble.Initialize(attack, stats.skillDamageMultiplier, stats.bubbleDuration, stats.bubbleRadius, stats.bubbleTick, LayerMask.GetMask(ConstString.LAYER_PLAYER), stats.bubbleFirstTickDelay, BossBubbleColor);
         }
     }
 
