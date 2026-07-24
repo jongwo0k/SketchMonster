@@ -18,6 +18,9 @@ public class Boss : Enemy
     private bool isCasting = false;
     private bool isDashing = false;
 
+    private float lastPlayerContactTime = float.NegativeInfinity;
+    private float lastTowerContactTime = float.NegativeInfinity;
+
     // Bark 범위
     private readonly List<Collider2D> barkHits = new();
     private ContactFilter2D playerFilter;
@@ -233,12 +236,18 @@ public class Boss : Enemy
     {
         if (target is PlayerController player)
         {
+            if (Time.time < lastPlayerContactTime + stats.contactCooldown) return;
+            lastPlayerContactTime = Time.time;
+
             player.TakeDamage(attack);
             Vector2 dir = (player.transform.position - transform.position).normalized;
             player.ApplyKnockback(dir, stats.knockbackForce, stats.knockbackDuration);
         }
         else // 타워
         {
+            if (Time.time < lastTowerContactTime + stats.contactCooldown) return;
+            lastTowerContactTime = Time.time;
+
             target.TakeDamage(attack);
         }
     }
@@ -257,7 +266,7 @@ public class Boss : Enemy
         StopAllCoroutines();
 
         rb.linearVelocity = Vector2.zero;
-        col.enabled = false;
+        rb.simulated = false;
 
         ObjectPoolManager.Instance.Spawn(PoolType.DieParticle, transform.position, Quaternion.identity);
         if (playSound)
@@ -274,6 +283,14 @@ public class Boss : Enemy
         yield return new WaitForSecondsRealtime(stats.dieDelay);
         EventManager.BossDefeated();
         Destroy(gameObject);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<IDamageable>(out var target))
+        {
+            OnContact(target);
+        }
     }
 
     private void OnDestroy()

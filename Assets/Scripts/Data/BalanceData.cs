@@ -61,6 +61,7 @@ public class BossStats
     public float maxHitRatio = 0.1f; // 단일 데미지 상한 (즉사 방지)
     public float knockbackForce = 10f;
     public float knockbackDuration = 0.5f;
+    public float contactCooldown = 1f;
 
     // 보스 패턴
     [Header("Behavior")]
